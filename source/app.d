@@ -352,7 +352,6 @@ Wave generateGlassBreakWave(scope ref Random rng, in float duration, in int samp
     const frameCount = cast(int)(sampleRate * duration);
     SS[] data = new SS[frameCount];
 
-
     foreach (const i; 0 .. frameCount) {
         const float t = cast(float)i / frameCount;
 
