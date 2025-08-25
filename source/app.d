@@ -1,7 +1,7 @@
 import core.time : Duration;
 import std.stdio;
 import std.algorithm : minElement, maxElement;
-import std.random;
+import std.random : uniform, Random, unpredictableSeed;
 import std.math;
 
 import raylib;
@@ -298,7 +298,7 @@ Wave generateStaticWave(in float frequency, in float duration, in SampleRate sam
     const frameCount = cast(FrameCount)(sampleRate * duration);
     SS[] data = new SS[frameCount];
 	foreach (const i; 0 .. frameCount)
-        data[i] = cast(SS)(sin(2.0f * std.math.PI * frequency * i / sampleRate) * SS.max);
+        data[i] = cast(SS)(sin(2.0f * cast(float)std.math.PI * frequency * i / sampleRate) * SS.max);
 
 	debug data.showStats();
     return typeof(return)(frameCount: frameCount, sampleRate: sampleRate, sampleSize: 8 * SS.sizeof, channels: 1, data: &data[0]);
@@ -317,7 +317,7 @@ Wave generateBounceWave(in float startFreq, in float endFreq, in float duration,
         const amplitude = pow(1.0f - cast(float)i / frameCount, 2.0f); // Fast decay
 
         // Generate the sine wave sample
-        const sample = sin(2.0f * std.math.PI * currentFreq * i / sampleRate) * SS.max * amplitude;
+        const sample = sin(2.0f * cast(float)std.math.PI * currentFreq * i / sampleRate) * SS.max * amplitude;
         data[i] = cast(SS)(sample);
     }
 
@@ -337,7 +337,7 @@ Wave generateBoingWave(in float startFreq, in float endFreq, in float duration, 
     }
 
     float amplitudeEnvelope(float t) {
-        return pow(1.0f - t, 4.0f); // a very fast, percussive decay
+        return pow(1 - t, 4.0f); // a very fast, percussive decay
     }
 
     foreach (const i; 0 .. frameCount) {
@@ -368,7 +368,7 @@ Wave generateGlassBreakWave(scope ref Random rng, in float duration, in float am
         const tinkleAmp = 0.5f * (1.0f - t); // Slower, linear decay for the high-frequency tone
         // Generate a high-frequency sine wave for the "tinkle"
         // This makes it sound less like static and more like breaking glass
-        const tinkleSample = sin(2.0f * std.math.PI * 10000.0f * i / sampleRate) * SS.max * tinkleAmp;
+        const tinkleSample = sin(2.0f * cast(float)std.math.PI * 10000.0f * i / sampleRate) * SS.max * tinkleAmp;
 
         const combinedSample = amplitude*(noiseSample * 0.7f + tinkleSample * 0.3f);
 
