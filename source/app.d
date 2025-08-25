@@ -328,15 +328,10 @@ Wave generateStaticWave(in float frequency, in float duration, in SampleRate sam
 Wave generateBounceWave(in float startFreq, in float endFreq, in float duration, in SampleRate sampleRate) pure nothrow {
     const frameCount = cast(FrameCount)(sampleRate * duration);
     Sample[] data = new Sample[frameCount];
-
     foreach (const i; 0 .. frameCount) {
-        // Calculate the current frequency using an exponential sweep for a natural chirp effect
+        // calculate the current frequency using an exponential sweep for a natural chirp effect
         const currentFreq = startFreq * pow(endFreq / startFreq, cast(float)i / frameCount);
-
-        // Calculate the current amplitude using a decay envelope
-        const amplitude = pow(1.0f - cast(float)i / frameCount, 2.0f); // Fast decay
-
-        // Generate the sine wave sample
+        const amplitude = pow(1.0f - cast(float)i / frameCount, 2.0f); // fast amplitude envelope decay
         const sample = sin(2.0f * cast(float)std.math.PI * currentFreq * i / sampleRate) * Sample.max * amplitude;
         data[i] = cast(Sample)(sample);
     }
