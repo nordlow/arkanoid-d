@@ -107,7 +107,7 @@ void main() @trusted {
 	const brickHeight = 30;
 	Brick[brickRows * brickCols] bricks;
 
-	for (int row = 0; row < brickRows; row++) {
+	foreach (const row; 0 .. brickRows) {
 		for (int col = 0; col < brickCols; col++) {
 			int index = row * brickCols + col;
 			bricks[index] = Brick(
@@ -202,7 +202,7 @@ void main() @trusted {
 				ball.velocity.x = 200 * (hitPos - 0.5f) * 2;
 			}
 
-			foreach (const i; 0 ..bricks.length) {
+			foreach (const i; 0 .. bricks.length) {
 				if (!bricks[i].active)
 					continue;
 
@@ -237,7 +237,7 @@ void main() @trusted {
 			}
 
 			bool allBricksDestroyed = true;
-			foreach (const i; 0 ..bricks.length) {
+			foreach (const i; 0 .. bricks.length) {
 				if (bricks[i].active) {
 					allBricksDestroyed = false;
 					break;
@@ -257,11 +257,11 @@ void main() @trusted {
 
 			paddle.position = Vec2(screenWidth / 2 - 60, screenHeight - 30);
 
-			for (int i = 0; i < bricks.length; i++) {
+			foreach (const i; 0 .. bricks.length) {
 				bricks[i].active = true;
 			}
 
-			for (int i = 0; i < maxBullets; i++) {
+			foreach (const i; 0 .. maxBullets) {
 				bullets[i].active = false;
 			}
 
@@ -274,7 +274,7 @@ void main() @trusted {
 
 		ClearBackground(Colors.BLACK);
 
-		for (int i = 0; i < bricks.length; i++) {
+		foreach (const i; 0 .. bricks.length) {
 			if (bricks[i].active) {
 				DrawRectangleV(bricks[i].position, bricks[i].size,
 				               bricks[i].color);
@@ -285,7 +285,7 @@ void main() @trusted {
 
 		DrawCircleV(ball.position, ball.radius, ball.color);
 
-		for (int i = 0; i < maxBullets; i++) {
+		foreach (const i; 0 .. maxBullets) {
 			if (bullets[i].active) {
 				DrawCircleV(bullets[i].position, bullets[i].radius, bullets[i].color);
 			}
