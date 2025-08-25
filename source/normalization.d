@@ -7,16 +7,34 @@ import waves : Sample;
 
 @safe:
 
-// Method 1: Peak Normalization (most common)
+import std.algorithm.searching : maxElement;
+import std.algorithm.iteration : map;
+import std.math : abs;
+
 float[] peakNormalize(scope return float[] data, in float targetLevel = 1.0f) pure nothrow @nogc {
-	import std.algorithm.searching : maxElement;
-	const peak = data.maxElement;
-	if (peak == 0)
-		return data; // avoid division by zero
+    float peak = 0.0f;
+    foreach (sample; data) {
+        const float absSample = abs(sample);
+        if (absSample > peak) {
+            peak = absSample;
+        }
+    }
+    if (peak == 0.0f)
+        return data; // avoid division by zero
     const float scaleFactor = targetLevel / peak;
     foreach (ref sample; data)
         sample *= scaleFactor;
-	return data;
+    return data;
+}
+
+float[] peakNormalizeAlgorithmic(scope return float[] data, in float targetLevel = 1.0f) pure nothrow {
+    const peak = data.map!(x => abs(x)).maxElement;
+    if (peak == 0.0f)
+        return data;
+    const float scaleFactor = targetLevel / peak;
+    foreach (ref sample; data)
+        sample *= scaleFactor;
+    return data;
 }
 
 // Method 2: RMS Normalization (for perceived loudness)
