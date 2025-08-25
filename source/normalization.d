@@ -3,13 +3,13 @@ module normalization;
 
 import std.math : sqrt, abs;
 import std.algorithm.comparison : min, max, clamp;
-import std.algorithm.searching : maxElement;
 import waves : Sample;
 
 @safe:
 
 // Method 1: Peak Normalization (most common)
 float[] peakNormalize(scope return float[] data, in float targetLevel = 1.0f) pure nothrow @nogc {
+	import std.algorithm.searching : maxElement;
 	const peak = data.maxElement;
 	if (peak == 0)
 		return data; // avoid division by zero
