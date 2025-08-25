@@ -76,8 +76,8 @@ void main() @trusted {
 	auto paddleSound = generateBoingWave(300.0f, 1000.0f, 0.30f, sampleRate).LoadSoundFromWave();
     auto wallSound = generateBoingWave(300.0f, 150.0f, 0.30f, sampleRate).LoadSoundFromWave();
     auto brickSound = rng.generateGlassBreakWave(0.60f, 0.2f, sampleRate).LoadSoundFromWave();
-	// auto shootSound = generateBounceWave(400.0f, 200.0f, 0.3f, sampleRate).LoadSoundFromWave();
-	auto shootSound = generatePianoTone(200.0f, 1.0f, 1.0f, sampleRate).LoadSoundFromWave();
+	auto shootSound = generateBounceWave(400.0f, 200.0f, 0.3f, sampleRate).LoadSoundFromWave();
+	// auto shootSound = generatePianoTone(200.0f, 1.0f, 1.0f, sampleRate).LoadSoundFromWave();
 	// auto shootSound = rng.generateScreamWave(0.3f, sampleRate).LoadSoundFromWave();
 
 	const pianoKeys = __traits(allMembers, Key);
@@ -85,7 +85,7 @@ void main() @trusted {
 	pianoSounds.reserve(pianoKeys.length);
 	foreach (const i, const key; pianoKeys) {
 		const f = cast(float)__traits(getMember, Key, key);
-		pianoSounds ~= generatePianoTone(f, 1.0f, 1.0f, sampleRate).LoadSoundFromWave();;
+		// pianoSounds ~= generatePianoTone(f, 1.0f, 1.0f, sampleRate).LoadSoundFromWave();;
 	}
 
 	Ball ball = {
@@ -431,50 +431,87 @@ Wave generateScreamWave(scope ref Random rng, in float duration, in SampleRate s
     return typeof(return)(frameCount: frameCount, sampleRate: sampleRate, sampleSize: 8 * Sample.sizeof, channels: 1, data: &data[0]);
 }
 
+version(none)
 Wave generatePianoTone(in float frequency, in float _amplitude, in float duration, in SampleRate sampleRate) pure nothrow {
     const frameCount = cast(FrameCount)(sampleRate * duration);
     auto data = new Sample[frameCount];
 
-    // ADSR envelope parameters for a piano-like sound
-    const float attackTime = 0.01f; // Short attack (10ms)
-    const float decayTime = 0.1f;  // Decay to sustain level
-    const float sustainLevel = 0.7f; // Sustain amplitude
-    const float releaseTime = 0.3f; // Release phase
+    // More realistic ADSR envelope parameters for grand piano
+    const float attackTime = 0.005f;  // Very sharp attack (5ms)
+    const float decayTime = 0.3f;     // Longer decay for piano character
+    const float sustainLevel = 0.2f;  // Lower sustain (piano notes decay significantly)
+    const float releaseTime = duration * 0.6f; // Longer, natural release
 
-    // Harmonic amplitudes for a piano-like timbre (fundamental + overtones)
-    immutable float[5] harmonicAmplitudes = [1.0, 0.5, 0.3, 0.2, 0.1]; // Fundamental + 4 harmonics
-    immutable float[5] harmonicFrequencies = [frequency, frequency * 2, frequency * 3, frequency * 4, frequency * 5];
+    // More realistic harmonic content based on piano string physics
+    // Piano harmonics are not perfect integer multiples due to string stiffness
+    immutable float[8] harmonicAmplitudes = [
+        1.0,    // Fundamental
+        0.6,    // 2nd harmonic (strong in piano)
+        0.25,   // 3rd harmonic
+        0.15,   // 4th harmonic
+        0.08,   // 5th harmonic
+        0.05,   // 6th harmonic
+        0.03,   // 7th harmonic
+        0.02    // 8th harmonic
+    ];
 
-    // Frequency-based amplitude boost for lower tones
-    const float referenceFrequency = 440.0; // A4 as reference (middle of piano range)
-    const float amplitudeBoost = (referenceFrequency / frequency) * 0.5; // Inverse scaling, capped for balance
+    // Slightly inharmonic frequencies (piano string stiffness effect)
+    const float inharmonicity = 0.0001f * (frequency / 440.0f); // Higher for higher frequencies
+    float[8] harmonicFrequencies;
+    foreach (j; 0 .. harmonicFrequencies.length) {
+        const float n = j + 1; // Harmonic number
+        harmonicFrequencies[j] = frequency * n * (1.0f + inharmonicity * n * n);
+    }
+
+    // Frequency-dependent amplitude and timbre adjustments
+    const float bassBoost = frequency < 200.0f ? 2.0f : 1.0f;
+    const float midBoost = (frequency >= 200.0f && frequency <= 2000.0f) ? 1.2f : 1.0f;
+    const float trebleRolloff = frequency > 2000.0f ? 0.7f : 1.0f;
+    const float amplitudeBoost = bassBoost * midBoost * trebleRolloff;
 
     foreach (const i; 0 .. frameCount) {
-        const float t = cast(float)i / sampleRate; // Time in seconds
+        const float t = cast(float)i / sampleRate;
         float amplitude = 0.0;
 
-        // Apply ADSR envelope
+        // More realistic ADSR envelope with exponential curves
         if (t < attackTime) {
-            // Attack phase: linear ramp up
-            amplitude = t / attackTime;
+            // Sharp attack with slight curve
+            const float attackProgress = t / attackTime;
+            amplitude = attackProgress * attackProgress; // Quadratic for sharper attack
         } else if (t < attackTime + decayTime) {
-            // Decay phase: linear decay to sustain level
-            amplitude = 1.0 - ((t - attackTime) / decayTime) * (1.0 - sustainLevel);
+            // Exponential decay
+            const float decayProgress = (t - attackTime) / decayTime;
+            amplitude = 1.0f - decayProgress * decayProgress * (1.0f - sustainLevel);
         } else if (t < duration - releaseTime) {
-            // Sustain phase
-            amplitude = sustainLevel;
+            // Sustain with slight natural decay
+            const float sustainProgress = (t - attackTime - decayTime) / (duration - releaseTime - attackTime - decayTime);
+            amplitude = sustainLevel * (1.0f - sustainProgress * 0.3f); // Gradual decay during sustain
         } else {
-            // Release phase: linear decay to 0
-            amplitude = sustainLevel * (1.0 - (t - (duration - releaseTime)) / releaseTime);
+            // Exponential release
+            const float releaseProgress = (t - (duration - releaseTime)) / releaseTime;
+            const float currentSustain = sustainLevel * (1.0f - 0.3f); // Account for sustain decay
+            amplitude = currentSustain * exp(-releaseProgress * 3.0f); // Exponential decay
         }
 
-        // Generate waveform with harmonics
+        // Generate waveform with realistic harmonics
         float sampleValue = 0.0;
-        foreach (j; 0 .. harmonicAmplitudes.length)
-            sampleValue += harmonicAmplitudes[j] * sin(2.0 * std.math.PI * harmonicFrequencies[j] * t);
+        foreach (j; 0 .. harmonicAmplitudes.length) {
+            // Add slight phase modulation for more organic sound
+            const float phaseModulation = sin(2.0 * std.math.PI * frequency * 0.1f * t) * 0.001f;
+            const float phase = 2.0 * std.math.PI * harmonicFrequencies[j] * t + phaseModulation;
 
-        // Apply amplitude envelope and frequency-based boost
-        data[i] = cast(Sample)(sampleValue * amplitude * amplitudeBoost * Sample.max / harmonicAmplitudes.length);
+            // Frequency-dependent harmonic decay over time
+            const float harmonicDecay = 1.0f - (t / duration) * (j * 0.1f);
+            sampleValue += harmonicAmplitudes[j] * harmonicDecay * sin(phase);
+        }
+
+        // Add subtle noise for realism (hammer noise, string resonance)
+        const float noiseLevel = 0.002f * amplitude;
+        const float noise = (cast(float)((i * 1103515245 + 12345) % 32768) / 16384.0f - 1.0f) * noiseLevel;
+
+        // Apply amplitude envelope and frequency-based adjustments
+        const float finalAmplitude = amplitude * amplitudeBoost * _amplitude;
+        data[i] = cast(Sample)((sampleValue + noise) * finalAmplitude * Sample.max * 0.3f);
     }
 
     debug data.showStats();
