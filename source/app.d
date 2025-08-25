@@ -125,7 +125,7 @@ void main() @trusted {
 
 	enum maxBullets = 10;
 	Bullet[maxBullets] bullets;
-	for (int i = 0; i < maxBullets; i++) {
+	foreach (const i; 0 .. maxBullets) {
 		bullets[i].active = false;
 		bullets[i].radius = 3;
 		bullets[i].color = Colors.YELLOW;
@@ -156,7 +156,7 @@ void main() @trusted {
 			}
 
 			if (IsKeyPressed(KeyboardKey.KEY_SPACE)) {
-				for (int i = 0; i < maxBullets; i++) {
+				foreach (const i; 0 .. maxBullets) {
 					if (!bullets[i].active) {
 						bullets[i].position = Vec2(paddle.position.x + paddle.size.x / 2, paddle.position.y);
 						bullets[i].active = true;
@@ -169,7 +169,7 @@ void main() @trusted {
 			ball.position.x += ball.velocity.x * deltaTime;
 			ball.position.y += ball.velocity.y * deltaTime;
 
-			for (int i = 0; i < maxBullets; i++) {
+			foreach (const i; 0 .. maxBullets) {
 				if (bullets[i].active) {
 					bullets[i].position.x += bullets[i].velocity.x * deltaTime;
 					bullets[i].position.y += bullets[i].velocity.y * deltaTime;
