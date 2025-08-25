@@ -13,4 +13,4 @@ example-test-*
 *.o
 *.obj
 *.lst
-/arkanoid
+/arkanoid*
