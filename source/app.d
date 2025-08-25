@@ -61,9 +61,11 @@ void main() {
 	}
 	const sampleRate = 44100;
 
-	auto paddleSound = generateBoingSound(300.0f, 150.0f, 0.30f, sampleRate);
-    auto wallSound = generateBoingSound(300.0f, 150.0f, 0.30f, sampleRate);
-    auto brickSound = generateGlassBreakSound(0.30f, sampleRate);
+    auto rng = Random(unpredictableSeed());
+
+	auto paddleSound = generateBoingWave(300.0f, 150.0f, 0.30f, sampleRate).LoadSoundFromWave();
+    auto wallSound = generateBoingWave(300.0f, 150.0f, 0.30f, sampleRate).LoadSoundFromWave();
+    auto brickSound = rng.generateGlassBreakSound(0.30f, sampleRate);
 	auto shootSound = generateBounceSound(400.0f, 200.0f, 0.3f, sampleRate);
 
 	Ball ball = {
@@ -316,7 +318,7 @@ Sound generateBounceSound(in float startFreq, in float endFreq, in float duratio
     return () @trusted { return LoadSoundFromWave(wave); }();
 }
 
-Sound generateBoingSound(in float startFreq, in float endFreq, in float duration, in int sampleRate) @safe nothrow {
+Wave generateBoingWave(in float startFreq, in float endFreq, in float duration, in int sampleRate) @safe nothrow {
     alias SS = short;
     const frameCount = cast(int)(sampleRate * duration);
     SS[] data = new SS[frameCount];
@@ -342,16 +344,14 @@ Sound generateBoingSound(in float startFreq, in float endFreq, in float duration
         data[i] = cast(SS)(sample);
     }
 
-    auto wave = Wave(frameCount: frameCount, sampleRate: sampleRate, sampleSize: 8 * SS.sizeof, channels: 1, data: &data[0]);
-    return () @trusted { return LoadSoundFromWave(wave); }();
+    return Wave(frameCount: frameCount, sampleRate: sampleRate, sampleSize: 8 * SS.sizeof, channels: 1, data: &data[0]);
 }
 
-Sound generateGlassBreakSound(in float duration, in int sampleRate) @safe {
+Sound generateGlassBreakSound(scope ref Random rng, in float duration, in int sampleRate) @safe {
     alias SS = short;
     const frameCount = cast(int)(sampleRate * duration);
     SS[] data = new SS[frameCount];
 
-    auto rng = Random(unpredictableSeed());
 
     foreach (const i; 0 .. frameCount) {
         const float t = cast(float)i / frameCount;
