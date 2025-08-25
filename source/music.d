@@ -2,7 +2,7 @@ module music;
 
 @safe:
 
-enum MusicalKey : float {
+enum Key : float {
     A0 = 27.50f,
     ASharp0 = 29.14f,
     B0 = 30.87f,
@@ -91,4 +91,18 @@ enum MusicalKey : float {
     ASharp7 = 3729.31f,
     B7 = 3951.07f,
     C8 = 4186.01f
+}
+
+struct Coord {
+	Key[] keys;
+}
+
+struct CoordEvent {
+    Coord notes;
+    float attackTime;
+}
+
+struct PianoSheet {
+	CoordEvent[] rightHand;
+	CoordEvent[] leftHand;
 }
