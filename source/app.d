@@ -1,3 +1,4 @@
+import core.time : Duration;
 import std.stdio;
 import std.algorithm : minElement, maxElement;
 import std.random;
@@ -10,6 +11,7 @@ import raylib;
 alias Vec2 = Vector2;
 
 alias SampleRate = uint;
+alias FrameCount = uint;
 
 struct Ball {
 	Vec2 position;
@@ -294,7 +296,7 @@ alias SoundSample = short;
 
 Wave generateStaticWave(in float frequency, in float duration, in SampleRate sampleRate) pure nothrow {
 	alias SS = SoundSample;
-    const frameCount = cast(int)(sampleRate * duration);
+    const frameCount = cast(FrameCount)(sampleRate * duration);
     SS[] data = new SS[frameCount];
 	foreach (const i; 0 .. frameCount)
         data[i] = cast(SS)(sin(2.0f * std.math.PI * frequency * i / sampleRate) * SS.max);
@@ -306,7 +308,7 @@ Wave generateStaticWave(in float frequency, in float duration, in SampleRate sam
 
 Wave generateBounceWave(in float startFreq, in float endFreq, in float duration, in SampleRate sampleRate) pure nothrow {
     alias SS = short;
-    const frameCount = cast(int)(sampleRate * duration);
+    const frameCount = cast(FrameCount)(sampleRate * duration);
     SS[] data = new SS[frameCount];
 
     foreach (const i; 0 .. frameCount) {
@@ -328,7 +330,7 @@ Wave generateBounceWave(in float startFreq, in float endFreq, in float duration,
 
 Wave generateBoingWave(in float startFreq, in float endFreq, in float duration, in SampleRate sampleRate) pure nothrow {
     alias SS = short;
-    const frameCount = cast(int)(sampleRate * duration);
+    const frameCount = cast(FrameCount)(sampleRate * duration);
     SS[] data = new SS[frameCount];
 
     // Create a smooth frequency curve for the "boing"
@@ -356,9 +358,8 @@ Wave generateBoingWave(in float startFreq, in float endFreq, in float duration, 
 
 Wave generateGlassBreakWave(scope ref Random rng, in float duration, in float amplitude, in SampleRate sampleRate) @safe {
     alias SS = short;
-    const frameCount = cast(int)(sampleRate * duration);
+    const frameCount = cast(FrameCount)(sampleRate * duration);
     SS[] data = new SS[frameCount];
-
 
     foreach (const i; 0 .. frameCount) {
         const t = cast(float)i / frameCount;
