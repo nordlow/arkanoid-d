@@ -3,6 +3,7 @@ module waves;
 import std.random;
 import std.math;
 import waveform;
+import normalization;
 import raylib : Wave;
 
 alias SampleRate = uint;
@@ -131,90 +132,76 @@ Wave generateScreamWave(scope ref Random rng, in float duration, in SampleRate s
 Wave generatePianoWave(in float frequency, in float _amplitude, in float duration, in SampleRate sampleRate) pure nothrow {
     const frameCount = cast(FrameCount)(sampleRate * duration);
     auto data = new Sample[frameCount];
+    auto floatData = new float[frameCount]; // Work in float first
 
-    // More realistic ADSR envelope parameters for grand piano
-    const float attackTime = 0.005f;  // Very sharp attack (5ms)
-    const float decayTime = 0.3f;     // Longer decay for piano character
-    const float sustainLevel = 0.2f;  // Lower sustain (piano notes decay significantly)
-    const float releaseTime = duration * 0.6f; // Longer, natural release
+    // ADSR and harmonic parameters (same as before)
+    const float attackTime = 0.005f;
+    const float decayTime = 0.3f;
+    const float sustainLevel = 0.2f;
+    const float releaseTime = duration * 0.6f;
 
-	enum harmonicCount = 8;
-
-    // More realistic harmonic content based on piano string physics
-    // Piano harmonics are not perfect integer multiples due to string stiffness
-    immutable float[harmonicCount] harmonicAmplitudes = [
-        1.0,    // Fundamental
-        0.6,    // 2nd harmonic (strong in piano)
-        0.25,   // 3rd harmonic
-        0.15,   // 4th harmonic
-        0.08,   // 5th harmonic
-        0.05,   // 6th harmonic
-        0.03,   // 7th harmonic
-        0.02    // 8th harmonic
-    ];
-
-    // Slightly inharmonic frequencies (piano string stiffness effect)
-    const float inharmonicity = 0.0001f * (frequency / 440.0f); // Higher for higher frequencies
-    float[harmonicCount] harmonicFrequencies;
-    foreach (j; 0 .. harmonicFrequencies.length) {
-        const float n = j + 1; // Harmonic number
+    immutable float[8] harmonicAmplitudes = [1.0, 0.6, 0.25, 0.15, 0.08, 0.05, 0.03, 0.02];
+    const float inharmonicity = 0.0001f * (frequency / 440.0f);
+    float[8] harmonicFrequencies;
+    foreach (const j; 0 .. harmonicFrequencies.length) {
+        const float n = j + 1;
         harmonicFrequencies[j] = frequency * n * (1.0f + inharmonicity * n * n);
     }
 
-    // Frequency-dependent amplitude and timbre adjustments
     const float bassBoost = frequency < 200.0f ? 2.0f : 1.0f;
     const float midBoost = (frequency >= 200.0f && frequency <= 2000.0f) ? 1.2f : 1.0f;
     const float trebleRolloff = frequency > 2000.0f ? 0.7f : 1.0f;
     const float amplitudeBoost = bassBoost * midBoost * trebleRolloff;
 
+    // Generate samples in floating point
     foreach (const i; 0 .. frameCount) {
         const float t = cast(float)i / sampleRate;
         float amplitude = 0.0;
 
-        // More realistic ADSR envelope with exponential curves
+        // ADSR envelope (same as before)
         if (t < attackTime) {
-            // Sharp attack with slight curve
             const float attackProgress = t / attackTime;
-            amplitude = attackProgress * attackProgress; // Quadratic for sharper attack
+            amplitude = attackProgress * attackProgress;
         } else if (t < attackTime + decayTime) {
-            // Exponential decay
             const float decayProgress = (t - attackTime) / decayTime;
             amplitude = 1.0f - decayProgress * decayProgress * (1.0f - sustainLevel);
         } else if (t < duration - releaseTime) {
-            // Sustain with slight natural decay
             const float sustainProgress = (t - attackTime - decayTime) / (duration - releaseTime - attackTime - decayTime);
-            amplitude = sustainLevel * (1.0f - sustainProgress * 0.3f); // Gradual decay during sustain
+            amplitude = sustainLevel * (1.0f - sustainProgress * 0.3f);
         } else {
-            // Exponential release
             const float releaseProgress = (t - (duration - releaseTime)) / releaseTime;
-            const float currentSustain = sustainLevel * (1.0f - 0.3f); // Account for sustain decay
-            amplitude = currentSustain * exp(-releaseProgress * 3.0f); // Exponential decay
+            const float currentSustain = sustainLevel * (1.0f - 0.3f);
+            amplitude = currentSustain * exp(-releaseProgress * 3.0f);
         }
 
-        // Generate waveform with realistic harmonics
+        // Generate waveform
         float sampleValue = 0.0;
-        foreach (j; 0 .. harmonicAmplitudes.length) {
-            // Add slight phase modulation for more organic sound
+        foreach (const j; 0 .. harmonicAmplitudes.length) {
             const float phaseModulation = sin(2.0 * std.math.PI * frequency * 0.1f * t) * 0.001f;
             const float phase = 2.0 * std.math.PI * harmonicFrequencies[j] * t + phaseModulation;
-
-            // Frequency-dependent harmonic decay over time
             const float harmonicDecay = 1.0f - (t / duration) * (j * 0.1f);
             sampleValue += harmonicAmplitudes[j] * harmonicDecay * sin(phase);
         }
 
-        // Add subtle noise for realism (hammer noise, string resonance)
+        // Add subtle noise
         const float noiseLevel = 0.002f * amplitude;
         const float noise = (cast(float)((i * 1103515245 + 12345) % 32768) / 16384.0f - 1.0f) * noiseLevel;
 
-        // Apply amplitude envelope and frequency-based adjustments
-        const float finalAmplitude = amplitude * amplitudeBoost * _amplitude;
-        data[i] = cast(Sample)((sampleValue + noise) * finalAmplitude * Sample.max * 0.3f);
+        // Store in float array
+        floatData[i] = (sampleValue + noise) * amplitude * amplitudeBoost * _amplitude;
+    }
+
+    floatData.peakNormalize(0.95f); // Leave some headroom
+
+    foreach (const i; 0 .. frameCount) {
+        // Optional: Apply soft limiting instead of hard clipping
+        data[i] = floatData[i].softLimit(0.95f);
     }
 
     debug data.showStats();
     return typeof(return)(frameCount: frameCount, sampleRate: sampleRate, sampleSize: 8 * Sample.sizeof, channels: 1, data: &data[0]);
 }
+
 
 private void showStats(in Sample[] samples, in char[] funName = __FUNCTION__) {
 	import std.stdio : writeln;
