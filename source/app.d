@@ -318,7 +318,7 @@ Sound generateBounceSound(in float startFreq, in float endFreq, in float duratio
     return () @trusted { return LoadSoundFromWave(wave); }();
 }
 
-Wave generateBoingWave(in float startFreq, in float endFreq, in float duration, in int sampleRate) @safe nothrow {
+Wave generateBoingWave(in float startFreq, in float endFreq, in float duration, in int sampleRate) @safe pure nothrow {
     alias SS = short;
     const frameCount = cast(int)(sampleRate * duration);
     SS[] data = new SS[frameCount];
