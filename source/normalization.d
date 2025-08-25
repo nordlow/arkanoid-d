@@ -60,7 +60,7 @@ Sample softLimit(float input, float threshold = 0.95f) pure nothrow {
     if (absInput <= threshold) {
         return cast(Sample)(input * Sample.max);
     } else {
-        // Soft compression above threshold
+        // soft compression above threshold
         const float excess = absInput - threshold;
         const float compressed = threshold + excess / (1.0f + excess * 2.0f);
         const float sign = input >= 0.0f ? 1.0f : -1.0f;
