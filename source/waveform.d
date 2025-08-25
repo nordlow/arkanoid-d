@@ -66,21 +66,16 @@ struct WaveformGenerators {
     float noise(in float t, in float _f) => uniform(-1.0f, 1.0f, rng);
 }
 
-// Generates a static tone using the DSL
 Wave generateStaticWave(in float freq, in float dur, in int sampleRate) {
 	WaveformGenerators wg;
     return Waveform(
         dur: dur,
-        // Constant frequency
-        freq: (in float t) => freq,
-        // Constant amplitude
-        amplitude: (in float t) => 1.0f,
-        // Using the sine generator
+		freq: (in float t) => freq,
+		amplitude: (in float t) => 1.0f,
         generator: (in float t, float f) => wg.sine(t * dur * sampleRate, f)
     ).generate(sampleRate);
 }
 
-// Generates a bouncing tone using the DSL
 Wave generateBounceWave(in float startFreq, in float endFreq, in float dur, in int sampleRate) {
 	WaveformGenerators wg;
     return Waveform(
@@ -89,12 +84,10 @@ Wave generateBounceWave(in float startFreq, in float endFreq, in float dur, in i
         freq: (in float t) => startFreq * pow(endFreq / startFreq, t),
         // Fast decay amplitude
         amplitude: (in float t) => pow(1.0f - t, 2.0f),
-        // Using the sine generator
         generator: (in float t, float f) => wg.sine(t * dur * sampleRate, f)
     ).generate(sampleRate);
 }
 
-// Generates a boing tone using the DSL
 Wave generateBoingWave(in float startFreq, in float endFreq, in float dur, in int sampleRate) {
 	WaveformGenerators wg;
     return Waveform(
@@ -103,12 +96,10 @@ Wave generateBoingWave(in float startFreq, in float endFreq, in float dur, in in
         freq: (in float t) => startFreq * (1.0f - pow(t, 2.0f)) + endFreq * pow(t, 2.0f),
         // very fast percussive decay
         amplitude: (in float t) => pow(1.0f - t, 4.0f),
-        // using the sine generator
         generator: (in float t, float f) => wg.sine(t * dur * sampleRate, f)
     ).generate(sampleRate);
 }
 
-// Generates a glass break sound by mixing two DSL waveforms
 Wave generateGlassBreakWave(in float dur, in int sampleRate) {
 	WaveformGenerators wg;
 
