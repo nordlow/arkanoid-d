@@ -6,6 +6,7 @@ import std.random : uniform, Random, unpredictableSeed;
 import std.math;
 
 import raylib;
+import music;
 
 @safe:
 
@@ -76,8 +77,16 @@ void main() @trusted {
     auto wallSound = generateBoingWave(300.0f, 150.0f, 0.30f, sampleRate).LoadSoundFromWave();
     auto brickSound = rng.generateGlassBreakWave(0.60f, 0.2f, sampleRate).LoadSoundFromWave();
 	// auto shootSound = generateBounceWave(400.0f, 200.0f, 0.3f, sampleRate).LoadSoundFromWave();
+	auto shootSound = generatePianoTone(200.0f, 1.0f, 1.0f, sampleRate).LoadSoundFromWave();
 	// auto shootSound = rng.generateScreamWave(0.3f, sampleRate).LoadSoundFromWave();
-	auto shootSound = generatePianoTone(450, 1.0f, sampleRate).LoadSoundFromWave();
+
+	const pianoKeys = __traits(allMembers, Key);
+	Sound[] pianoSounds;
+	pianoSounds.reserve(pianoKeys.length);
+	foreach (const i, const key; pianoKeys) {
+		const f = cast(float)__traits(getMember, Key, key);
+		pianoSounds ~= generatePianoTone(f, 1.0f, 1.0f, sampleRate).LoadSoundFromWave();;
+	}
 
 	Ball ball = {
 		position: Vec2(screenWidth / 2, screenHeight - 150),
@@ -114,7 +123,7 @@ void main() @trusted {
 		}
 	}
 
-	const maxBullets = 10;
+	enum maxBullets = 10;
 	Bullet[maxBullets] bullets;
 	for (int i = 0; i < maxBullets; i++) {
 		bullets[i].active = false;
@@ -126,8 +135,15 @@ void main() @trusted {
 	bool gameWon = false;
 	bool gameOver = false;
 
+	uint frameCounter;
+	uint keyCounter;
 	while (!WindowShouldClose()) {
 		const deltaTime = GetFrameTime();
+		const absTime = GetTime();
+		if (absTime > keyCounter) {
+			PlaySound(pianoSounds[keyCounter]);
+			keyCounter += 1;
+		}
 
 		if (!gameOver && !gameWon) {
 			if (IsKeyDown(KeyboardKey.KEY_LEFT) && paddle.position.x > 0) {
@@ -186,7 +202,7 @@ void main() @trusted {
 				ball.velocity.x = 200 * (hitPos - 0.5f) * 2;
 			}
 
-			for (int i = 0; i < bricks.length; i++) {
+			foreach (const i; 0 ..bricks.length) {
 				if (!bricks[i].active)
 					continue;
 
@@ -202,7 +218,7 @@ void main() @trusted {
 					break;
 				}
 
-				for (int j = 0; j < maxBullets; j++) {
+				foreach (const j; 0 .. maxBullets) {
 					if (!bullets[j].active)
 						continue;
 
@@ -221,7 +237,7 @@ void main() @trusted {
 			}
 
 			bool allBricksDestroyed = true;
-			for (int i = 0; i < bricks.length; i++) {
+			foreach (const i; 0 ..bricks.length) {
 				if (bricks[i].active) {
 					allBricksDestroyed = false;
 					break;
@@ -291,6 +307,8 @@ void main() @trusted {
 			DrawText("LEFT/RIGHT arrows to move, SPACE to shoot".ptr, 10,
 			         screenHeight - 25, 16, Colors.WHITE);
 		}
+
+		frameCounter += 1;
 	}
 
 	writeln("Ending Arkanoid game.");
@@ -419,104 +437,13 @@ Wave generateScreamWave(scope ref Random rng, in float duration, in SampleRate s
     return typeof(return)(frameCount: frameCount, sampleRate: sampleRate, sampleSize: 8 * Sample.sizeof, channels: 1, data: &data[0]);
 }
 
-enum MusicalKey : float {
-    A0 = 27.50f,
-    ASharp0 = 29.14f,
-    B0 = 30.87f,
-    C1 = 32.70f,
-    CSharp1 = 34.65f,
-    D1 = 36.71f,
-    DSharp1 = 38.89f,
-    E1 = 41.20f,
-    F1 = 43.65f,
-    FSharp1 = 46.25f,
-    G1 = 49.00f,
-    GSharp1 = 51.91f,
-    A1 = 55.00f,
-    ASharp1 = 58.27f,
-    B1 = 61.74f,
-    C2 = 65.41f,
-    CSharp2 = 69.30f,
-    D2 = 73.42f,
-    DSharp2 = 77.78f,
-    E2 = 82.41f,
-    F2 = 87.31f,
-    FSharp2 = 92.50f,
-    G2 = 98.00f,
-    GSharp2 = 103.83f,
-    A2 = 110.00f,
-    ASharp2 = 116.54f,
-    B2 = 123.47f,
-    C3 = 130.81f,
-    CSharp3 = 138.59f,
-    D3 = 146.83f,
-    DSharp3 = 155.56f,
-    E3 = 164.81f,
-    F3 = 174.61f,
-    FSharp3 = 185.00f,
-    G3 = 196.00f,
-    GSharp3 = 207.65f,
-    A3 = 220.00f,
-    ASharp3 = 233.08f,
-    B3 = 246.94f,
-    C4 = 261.63f,
-    CSharp4 = 277.18f,
-    D4 = 293.66f,
-    DSharp4 = 311.13f,
-    E4 = 329.63f,
-    F4 = 349.23f,
-    FSharp4 = 369.99f,
-    G4 = 392.00f,
-    GSharp4 = 415.30f,
-    A4 = 440.00f,
-    ASharp4 = 466.16f,
-    B4 = 493.88f,
-    C5 = 523.25f,
-    CSharp5 = 554.37f,
-    D5 = 587.33f,
-    DSharp5 = 622.25f,
-    E5 = 659.25f,
-    F5 = 698.46f,
-    FSharp5 = 739.99f,
-    G5 = 783.99f,
-    GSharp5 = 830.61f,
-    A5 = 880.00f,
-    ASharp5 = 932.33f,
-    B5 = 987.77f,
-    C6 = 1046.50f,
-    CSharp6 = 1108.73f,
-    D6 = 1174.66f,
-    DSharp6 = 1244.51f,
-    E6 = 1318.51f,
-    F6 = 1396.91f,
-    FSharp6 = 1479.98f,
-    G6 = 1567.98f,
-    GSharp6 = 1661.22f,
-    A6 = 1760.00f,
-    ASharp6 = 1864.66f,
-    B6 = 1975.53f,
-    C7 = 2093.00f,
-    CSharp7 = 2217.46f,
-    D7 = 2349.32f,
-    DSharp7 = 2489.02f,
-    E7 = 2637.02f,
-    F7 = 2793.83f,
-    FSharp7 = 2959.96f,
-    G7 = 3135.96f,
-    GSharp7 = 3322.44f,
-    A7 = 3520.00f,
-    ASharp7 = 3729.31f,
-    B7 = 3951.07f,
-    C8 = 4186.01f
-}
-
-Wave generatePianoTone(in float frequency, in float duration, in SampleRate sampleRate) pure nothrow {
+Wave generatePianoTone(in float frequency, in float amplitude, in float duration, in SampleRate sampleRate) pure nothrow {
     const frameCount = cast(FrameCount)(sampleRate * duration);
     Sample[] data = new Sample[frameCount];
 
     // Define the amplitude envelope: Attack, Decay, Sustain, Release (ADSR)
     // A piano has a fast attack and a long, exponential decay.
-    float attackTime = 0.005f; // Very fast attack
+    float attackTime = 0.005f; // very fast attack
     float decayTime = 0.5f;   // The main decay of the initial strike
 
     // The decay curve for the overall tone
@@ -547,7 +474,7 @@ Wave generatePianoTone(in float frequency, in float duration, in SampleRate samp
         }
 
         // Apply the overall amplitude envelope and normalize
-        sample = (sample / harmonicAmplitudes.sum) * amplitudeEnvelope(t);
+        sample = amplitude * (sample / harmonicAmplitudes.sum) * amplitudeEnvelope(t);
 
         data[i] = cast(Sample)(sample * Sample.max);
     }
