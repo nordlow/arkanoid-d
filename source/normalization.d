@@ -9,29 +9,31 @@ import waves : Sample;
 @safe:
 
 // Method 1: Peak Normalization (most common)
-void peakNormalize(scope float[] data, in float targetLevel = 1.0f) pure nothrow @nogc {
+float[] peakNormalize(scope return float[] data, in float targetLevel = 1.0f) pure nothrow @nogc {
 	const peak = data.maxElement;
 	if (peak == 0)
-		return; // avoid division by zero
+		return data; // avoid division by zero
     const float scaleFactor = targetLevel / peak;
     foreach (ref sample; data)
         sample *= scaleFactor;
+	return data;
 }
 
 // Method 2: RMS Normalization (for perceived loudness)
-void rmsNormalize(scope float[] data, float targetRMS = 0.25f) pure nothrow {
+float[] rmsNormalize(scope return float[] data, in float targetRMS = 0.25f) pure nothrow {
     // Calculate RMS (Root Mean Square)
     float sumSquares = 0.0f;
     foreach (sample; data)
         sumSquares += sample * sample;
     const float rms = sqrt(sumSquares / data.length);
-    if (rms > 0.0f) {
-        const float scaleFactor = targetRMS / rms;
-        foreach (ref sample; data) {
-            sample *= scaleFactor;
-            sample = sample.clamp(-1.0f, 1.0f);
-        }
+	if (rms == 0)
+		return data; // avoid division by zero
+    const float scaleFactor = targetRMS / rms;
+    foreach (ref sample; data) {
+        sample *= scaleFactor;
+        sample = sample.clamp(-1.0f, 1.0f);
     }
+	return data;
 }
 
 // Method 3: Soft Limiting (prevents harsh clipping)
