@@ -436,10 +436,10 @@ Wave generatePianoTone(in float frequency, in float _amplitude, in float duratio
     Sample[] data = new Sample[frameCount];
 
     // ADSR envelope parameters for a piano-like sound
-    const float attackTime = 0.01; // Short attack (10ms)
-    const float decayTime = 0.1;  // Decay to sustain level
-    const float sustainLevel = 0.7; // Sustain amplitude
-    const float releaseTime = 0.3; // Release phase
+    const float attackTime = 0.01f; // Short attack (10ms)
+    const float decayTime = 0.1f;  // Decay to sustain level
+    const float sustainLevel = 0.7f; // Sustain amplitude
+    const float releaseTime = 0.3f; // Release phase
 
     // Harmonic amplitudes for a piano-like timbre (fundamental + overtones)
     immutable float[5] harmonicAmplitudes = [1.0, 0.5, 0.3, 0.2, 0.1]; // Fundamental + 4 harmonics
