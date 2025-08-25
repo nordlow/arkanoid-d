@@ -316,7 +316,7 @@ void main() @trusted {
 
 Wave generateStaticWave(in float frequency, in float duration, in SampleRate sampleRate) pure nothrow {
     const frameCount = cast(FrameCount)(sampleRate * duration);
-    Sample[] data = new Sample[frameCount];
+    auto data = new Sample[frameCount];
 	foreach (const i; 0 .. frameCount)
         data[i] = cast(Sample)(sin(2.0f * cast(float)std.math.PI * frequency * i / sampleRate) * Sample.max);
 
@@ -326,7 +326,7 @@ Wave generateStaticWave(in float frequency, in float duration, in SampleRate sam
 
 Wave generateBounceWave(in float startFreq, in float endFreq, in float duration, in SampleRate sampleRate) pure nothrow {
     const frameCount = cast(FrameCount)(sampleRate * duration);
-    Sample[] data = new Sample[frameCount];
+    auto data = new Sample[frameCount];
     foreach (const i; 0 .. frameCount) {
         // calculate the current frequency using an exponential sweep for a natural chirp effect
         const currentFreq = startFreq * pow(endFreq / startFreq, cast(float)i / frameCount);
@@ -341,7 +341,7 @@ Wave generateBounceWave(in float startFreq, in float endFreq, in float duration,
 
 Wave generateBoingWave(in float startFreq, in float endFreq, in float duration, in SampleRate sampleRate) pure nothrow {
     const frameCount = cast(FrameCount)(sampleRate * duration);
-    Sample[] data = new Sample[frameCount];
+    auto data = new Sample[frameCount];
 
     // Create a smooth frequency curve for the "boing"
     float frequencyCurve(float t) {
@@ -367,7 +367,7 @@ Wave generateBoingWave(in float startFreq, in float endFreq, in float duration, 
 
 Wave generateGlassBreakWave(scope ref Random rng, in float duration, in float amplitude, in SampleRate sampleRate) @safe {
     const frameCount = cast(FrameCount)(sampleRate * duration);
-    Sample[] data = new Sample[frameCount];
+    auto data = new Sample[frameCount];
 
     foreach (const i; 0 .. frameCount) {
         const t = cast(float)i / frameCount;
@@ -393,7 +393,7 @@ Wave generateGlassBreakWave(scope ref Random rng, in float duration, in float am
 
 Wave generateScreamWave(scope ref Random rng, in float duration, in SampleRate sampleRate) @safe {
     const frameCount = cast(FrameCount)(sampleRate * duration);
-    Sample[] data = new Sample[frameCount];
+    auto data = new Sample[frameCount];
 
     // Define a frequency range for the scream
     const float startFreq = 200.0f; // Lower frequency for the start
@@ -433,7 +433,7 @@ Wave generateScreamWave(scope ref Random rng, in float duration, in SampleRate s
 
 Wave generatePianoTone(in float frequency, in float _amplitude, in float duration, in SampleRate sampleRate) pure nothrow {
     const frameCount = cast(FrameCount)(sampleRate * duration);
-    Sample[] data = new Sample[frameCount];
+    auto data = new Sample[frameCount];
 
     // ADSR envelope parameters for a piano-like sound
     const float attackTime = 0.01f; // Short attack (10ms)
