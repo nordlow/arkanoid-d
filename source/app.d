@@ -1,4 +1,5 @@
 import std.stdio;
+import std.algorithm : minElement, maxElement;
 import std.random;
 import std.math;
 
@@ -7,6 +8,8 @@ import raylib;
 @safe:
 
 alias Vec2 = Vector2;
+
+alias SampleRate = uint;
 
 struct Ball {
 	Vec2 position;
@@ -65,9 +68,9 @@ void main() @trusted {
 
     auto rng = Random(unpredictableSeed());
 
-	auto paddleSound = generateBoingWave(300.0f, 150.0f, 0.30f, sampleRate).LoadSoundFromWave();
+	auto paddleSound = generateBoingWave(300.0f, 1000.0f, 0.30f, sampleRate).LoadSoundFromWave();
     auto wallSound = generateBoingWave(300.0f, 150.0f, 0.30f, sampleRate).LoadSoundFromWave();
-    auto brickSound = rng.generateGlassBreakWave(0.30f, sampleRate).LoadSoundFromWave();
+    auto brickSound = rng.generateGlassBreakWave(0.60f, 0.2f, sampleRate).LoadSoundFromWave();
 	auto shootSound = generateBounceWave(400.0f, 200.0f, 0.3f, sampleRate).LoadSoundFromWave();
 
 	Ball ball = {
@@ -289,16 +292,19 @@ void main() @trusted {
 
 alias SoundSample = short;
 
-Wave generateStaticWave(in float frequency, in float duration, in int sampleRate) pure nothrow {
+Wave generateStaticWave(in float frequency, in float duration, in SampleRate sampleRate) pure nothrow {
 	alias SS = SoundSample;
     const frameCount = cast(int)(sampleRate * duration);
     SS[] data = new SS[frameCount];
 	foreach (const i; 0 .. frameCount)
-        data[i] = cast(SS)(sin(2.0f * std.math.PI * frequency * i / sampleRate) * 16000);
+        data[i] = cast(SS)(sin(2.0f * std.math.PI * frequency * i / sampleRate) * SS.max);
+
+	debug writeln(__FUNCTION__, ": [", data.minElement, " ... " , data.maxElement, "]");
+
     return typeof(return)(frameCount: frameCount, sampleRate: sampleRate, sampleSize: 8 * SS.sizeof, channels: 1, data: &data[0]);
 }
 
-Wave generateBounceWave(in float startFreq, in float endFreq, in float duration, in int sampleRate) pure nothrow {
+Wave generateBounceWave(in float startFreq, in float endFreq, in float duration, in SampleRate sampleRate) pure nothrow {
     alias SS = short;
     const frameCount = cast(int)(sampleRate * duration);
     SS[] data = new SS[frameCount];
@@ -311,68 +317,68 @@ Wave generateBounceWave(in float startFreq, in float endFreq, in float duration,
         const amplitude = pow(1.0f - cast(float)i / frameCount, 2.0f); // Fast decay
 
         // Generate the sine wave sample
-        const sample = sin(2.0f * std.math.PI * currentFreq * i / sampleRate) * 16000 * amplitude;
+        const sample = sin(2.0f * std.math.PI * currentFreq * i / sampleRate) * SS.max * amplitude;
         data[i] = cast(SS)(sample);
     }
+
+	debug writeln(__FUNCTION__, ": [", data.minElement, " ... " , data.maxElement, "]");
 
     return typeof(return)(frameCount: frameCount, sampleRate: sampleRate, sampleSize: 8 * SS.sizeof, channels: 1, data: &data[0]);
 }
 
-Wave generateBoingWave(in float startFreq, in float endFreq, in float duration, in int sampleRate) pure nothrow {
+Wave generateBoingWave(in float startFreq, in float endFreq, in float duration, in SampleRate sampleRate) pure nothrow {
     alias SS = short;
     const frameCount = cast(int)(sampleRate * duration);
     SS[] data = new SS[frameCount];
 
     // Create a smooth frequency curve for the "boing"
     float frequencyCurve(float t) {
-        // A combination of a sharp initial drop and a slower rise
+        // a combination of a sharp initial drop and a slower rise
         return startFreq * (1.0f - pow(t, 2.0f)) + endFreq * pow(t, 2.0f);
     }
 
-    // Use a percussive amplitude envelope
     float amplitudeEnvelope(float t) {
-        return pow(1.0f - t, 4.0f); // A very fast, percussive decay
+        return pow(1.0f - t, 4.0f); // a very fast, percussive decay
     }
 
     foreach (const i; 0 .. frameCount) {
         const t = cast(float)i / frameCount;
         const currentFreq = frequencyCurve(t);
         const currentAmp = amplitudeEnvelope(t);
-
-        // Generate the sine wave sample with the percussive envelope
-        float sample = sin(2.0f * std.math.PI * currentFreq * i / sampleRate) * 16000 * currentAmp;
+        const sample = sin(2.0f * cast(float)std.math.PI * currentFreq * i / sampleRate) * SS.max * currentAmp;
         data[i] = cast(SS)(sample);
     }
+
+	debug writeln(__FUNCTION__, ": [", data.minElement, " ... " , data.maxElement, "]");
 
     return Wave(frameCount: frameCount, sampleRate: sampleRate, sampleSize: 8 * SS.sizeof, channels: 1, data: &data[0]);
 }
 
-Wave generateGlassBreakWave(scope ref Random rng, in float duration, in int sampleRate) @safe {
+Wave generateGlassBreakWave(scope ref Random rng, in float duration, in float amplitude, in SampleRate sampleRate) @safe {
     alias SS = short;
     const frameCount = cast(int)(sampleRate * duration);
     SS[] data = new SS[frameCount];
 
+
     foreach (const i; 0 .. frameCount) {
-        const float t = cast(float)i / frameCount;
+        const t = cast(float)i / frameCount;
 
         // Amplitude envelope for the initial "shatter"
-        const float shatterAmp = pow(1.0f - t, 8.0f); // Very fast, percussive decay for the noise
+        const shatterAmp = pow(1.0f - t, 8.0f); // Very fast, percussive decay for the noise
+		const noiseSample = uniform(-1.0f, 1.0f, rng) * SS.max * shatterAmp;
 
         // Amplitude envelope for the "tinkle" effect
-        const float tinkleAmp = 0.5f * (1.0f - t); // Slower, linear decay for the high-frequency tone
-
-        // Generate a random noise sample
-		const float noiseSample = uniform(-1.0f, 1.0f, rng) * 16000 * shatterAmp;
-
+        const tinkleAmp = 0.5f * (1.0f - t); // Slower, linear decay for the high-frequency tone
         // Generate a high-frequency sine wave for the "tinkle"
         // This makes it sound less like static and more like breaking glass
-        const float tinkleSample = sin(2.0f * std.math.PI * 10000.0f * i / sampleRate) * 16000 * tinkleAmp;
+        const tinkleSample = sin(2.0f * std.math.PI * 10000.0f * i / sampleRate) * SS.max * tinkleAmp;
 
-        // Combine the noise and the tinkle tone
-        const float combinedSample = noiseSample * 0.7f + tinkleSample * 0.3f; // Mix them
+        const combinedSample = amplitude*(noiseSample * 0.7f + tinkleSample * 0.3f);
 
         data[i] = cast(SS)(combinedSample);
     }
+
+	debug writeln(__FUNCTION__, ": [", data.minElement, " ... " , data.maxElement, "]");
 
     return typeof(return)(frameCount: frameCount, sampleRate: sampleRate, sampleSize: 8 * SS.sizeof, channels: 1, data: &data[0]);
 }
