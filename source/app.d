@@ -1,6 +1,7 @@
 import core.time : Duration;
 import std.stdio;
-import std.algorithm : minElement, maxElement;
+import std.algorithm : minElement, maxElement, sum;
+import std.numeric;
 import std.random : uniform, Random, unpredictableSeed;
 import std.math;
 
@@ -74,7 +75,9 @@ void main() @trusted {
 	auto paddleSound = generateBoingWave(300.0f, 1000.0f, 0.30f, sampleRate).LoadSoundFromWave();
     auto wallSound = generateBoingWave(300.0f, 150.0f, 0.30f, sampleRate).LoadSoundFromWave();
     auto brickSound = rng.generateGlassBreakWave(0.60f, 0.2f, sampleRate).LoadSoundFromWave();
-	auto shootSound = generateBounceWave(400.0f, 200.0f, 0.3f, sampleRate).LoadSoundFromWave();
+	// auto shootSound = generateBounceWave(400.0f, 200.0f, 0.3f, sampleRate).LoadSoundFromWave();
+	// auto shootSound = rng.generateScreamWave(0.3f, sampleRate).LoadSoundFromWave();
+	auto shootSound = generatePianoTone(450, 1.0f, sampleRate).LoadSoundFromWave();
 
 	Ball ball = {
 		position: Vec2(screenWidth / 2, screenHeight - 150),
@@ -305,9 +308,8 @@ Wave generateStaticWave(in float frequency, in float duration, in SampleRate sam
 }
 
 Wave generateBounceWave(in float startFreq, in float endFreq, in float duration, in SampleRate sampleRate) pure nothrow {
-    alias SS = short;
     const frameCount = cast(FrameCount)(sampleRate * duration);
-    SS[] data = new SS[frameCount];
+    Sample[] data = new Sample[frameCount];
 
     foreach (const i; 0 .. frameCount) {
         // Calculate the current frequency using an exponential sweep for a natural chirp effect
@@ -317,18 +319,17 @@ Wave generateBounceWave(in float startFreq, in float endFreq, in float duration,
         const amplitude = pow(1.0f - cast(float)i / frameCount, 2.0f); // Fast decay
 
         // Generate the sine wave sample
-        const sample = sin(2.0f * cast(float)std.math.PI * currentFreq * i / sampleRate) * SS.max * amplitude;
-        data[i] = cast(SS)(sample);
+        const sample = sin(2.0f * cast(float)std.math.PI * currentFreq * i / sampleRate) * Sample.max * amplitude;
+        data[i] = cast(Sample)(sample);
     }
 
 	debug data.showStats();
-    return typeof(return)(frameCount: frameCount, sampleRate: sampleRate, sampleSize: 8 * SS.sizeof, channels: 1, data: &data[0]);
+    return typeof(return)(frameCount: frameCount, sampleRate: sampleRate, sampleSize: 8 * Sample.sizeof, channels: 1, data: &data[0]);
 }
 
 Wave generateBoingWave(in float startFreq, in float endFreq, in float duration, in SampleRate sampleRate) pure nothrow {
-    alias SS = short;
     const frameCount = cast(FrameCount)(sampleRate * duration);
-    SS[] data = new SS[frameCount];
+    Sample[] data = new Sample[frameCount];
 
     // Create a smooth frequency curve for the "boing"
     float frequencyCurve(float t) {
@@ -344,39 +345,215 @@ Wave generateBoingWave(in float startFreq, in float endFreq, in float duration, 
         const t = cast(float)i / frameCount;
         const currentFreq = frequencyCurve(t);
         const currentAmp = amplitudeEnvelope(t);
-        const sample = sin(2.0f * cast(float)std.math.PI * currentFreq * i / sampleRate) * SS.max * currentAmp;
-        data[i] = cast(SS)(sample);
+        const sample = sin(2.0f * cast(float)std.math.PI * currentFreq * i / sampleRate) * Sample.max * currentAmp;
+        data[i] = cast(Sample)(sample);
     }
 
 	debug data.showStats();
-    return Wave(frameCount: frameCount, sampleRate: sampleRate, sampleSize: 8 * SS.sizeof, channels: 1, data: &data[0]);
+    return Wave(frameCount: frameCount, sampleRate: sampleRate, sampleSize: 8 * Sample.sizeof, channels: 1, data: &data[0]);
 }
 
 Wave generateGlassBreakWave(scope ref Random rng, in float duration, in float amplitude, in SampleRate sampleRate) @safe {
-    alias SS = short;
     const frameCount = cast(FrameCount)(sampleRate * duration);
-    SS[] data = new SS[frameCount];
+    Sample[] data = new Sample[frameCount];
 
     foreach (const i; 0 .. frameCount) {
         const t = cast(float)i / frameCount;
 
         // Amplitude envelope for the initial "shatter"
         const shatterAmp = pow(1.0f - t, 8.0f); // Very fast, percussive decay for the noise
-		const noiseSample = uniform(-1.0f, 1.0f, rng) * SS.max * shatterAmp;
+		const noiseSample = uniform(-1.0f, 1.0f, rng) * Sample.max * shatterAmp;
 
         // Amplitude envelope for the "tinkle" effect
         const tinkleAmp = 0.5f * (1.0f - t); // Slower, linear decay for the high-frequency tone
         // Generate a high-frequency sine wave for the "tinkle"
         // This makes it sound less like static and more like breaking glass
-        const tinkleSample = sin(2.0f * cast(float)std.math.PI * 10000.0f * i / sampleRate) * SS.max * tinkleAmp;
+        const tinkleSample = sin(2.0f * cast(float)std.math.PI * 10000.0f * i / sampleRate) * Sample.max * tinkleAmp;
 
         const combinedSample = amplitude*(noiseSample * 0.7f + tinkleSample * 0.3f);
 
-        data[i] = cast(SS)(combinedSample);
+        data[i] = cast(Sample)(combinedSample);
     }
 
 	debug data.showStats();
-    return typeof(return)(frameCount: frameCount, sampleRate: sampleRate, sampleSize: 8 * SS.sizeof, channels: 1, data: &data[0]);
+    return typeof(return)(frameCount: frameCount, sampleRate: sampleRate, sampleSize: 8 * Sample.sizeof, channels: 1, data: &data[0]);
+}
+
+Wave generateScreamWave(scope ref Random rng, in float duration, in SampleRate sampleRate) @safe {
+    const frameCount = cast(FrameCount)(sampleRate * duration);
+    Sample[] data = new Sample[frameCount];
+
+    // Define a frequency range for the scream
+    const float startFreq = 200.0f; // Lower frequency for the start
+    const float endFreq = 2000.0f; // High frequency for the peak of the scream
+
+    // Define the overall amplitude envelope
+    float amplitudeEnvelope(float t) {
+        // A sharp rise and a slower, noisy decay
+        // This simulates the vocal cords tightening and then relaxing
+        return pow(t, 0.5f) * pow(1.0f - t, 2.0f);
+    }
+
+    // Define a frequency sweep that rises quickly and then levels off
+    float frequencySweep(float t) {
+        return startFreq + (endFreq - startFreq) * pow(t, 1.0f/3.0f);
+    }
+
+    foreach (const i; 0 .. frameCount) {
+        const t = cast(float)i / frameCount;
+
+        // Combine a sine wave with the frequency sweep
+        const sineWave = sin(2.0f * cast(float)std.math.PI * frequencySweep(t) * i / sampleRate);
+
+        // Add random high-frequency noise to simulate vocal "grit"
+        const noise = uniform(-1.0f, 1.0f, rng) * 0.5f;
+
+        // Combine the sine wave and noise, then apply the overall amplitude envelope
+        const combinedSample = (sineWave * 0.7f + noise * 0.3f) * amplitudeEnvelope(t);
+
+        // Scale and cast to the sample type
+        data[i] = cast(Sample)(combinedSample * Sample.max);
+    }
+
+    debug data.showStats();
+    return typeof(return)(frameCount: frameCount, sampleRate: sampleRate, sampleSize: 8 * Sample.sizeof, channels: 1, data: &data[0]);
+}
+
+enum MusicalKey : float {
+    A0 = 27.50f,
+    ASharp0 = 29.14f,
+    B0 = 30.87f,
+    C1 = 32.70f,
+    CSharp1 = 34.65f,
+    D1 = 36.71f,
+    DSharp1 = 38.89f,
+    E1 = 41.20f,
+    F1 = 43.65f,
+    FSharp1 = 46.25f,
+    G1 = 49.00f,
+    GSharp1 = 51.91f,
+    A1 = 55.00f,
+    ASharp1 = 58.27f,
+    B1 = 61.74f,
+    C2 = 65.41f,
+    CSharp2 = 69.30f,
+    D2 = 73.42f,
+    DSharp2 = 77.78f,
+    E2 = 82.41f,
+    F2 = 87.31f,
+    FSharp2 = 92.50f,
+    G2 = 98.00f,
+    GSharp2 = 103.83f,
+    A2 = 110.00f,
+    ASharp2 = 116.54f,
+    B2 = 123.47f,
+    C3 = 130.81f,
+    CSharp3 = 138.59f,
+    D3 = 146.83f,
+    DSharp3 = 155.56f,
+    E3 = 164.81f,
+    F3 = 174.61f,
+    FSharp3 = 185.00f,
+    G3 = 196.00f,
+    GSharp3 = 207.65f,
+    A3 = 220.00f,
+    ASharp3 = 233.08f,
+    B3 = 246.94f,
+    C4 = 261.63f,
+    CSharp4 = 277.18f,
+    D4 = 293.66f,
+    DSharp4 = 311.13f,
+    E4 = 329.63f,
+    F4 = 349.23f,
+    FSharp4 = 369.99f,
+    G4 = 392.00f,
+    GSharp4 = 415.30f,
+    A4 = 440.00f,
+    ASharp4 = 466.16f,
+    B4 = 493.88f,
+    C5 = 523.25f,
+    CSharp5 = 554.37f,
+    D5 = 587.33f,
+    DSharp5 = 622.25f,
+    E5 = 659.25f,
+    F5 = 698.46f,
+    FSharp5 = 739.99f,
+    G5 = 783.99f,
+    GSharp5 = 830.61f,
+    A5 = 880.00f,
+    ASharp5 = 932.33f,
+    B5 = 987.77f,
+    C6 = 1046.50f,
+    CSharp6 = 1108.73f,
+    D6 = 1174.66f,
+    DSharp6 = 1244.51f,
+    E6 = 1318.51f,
+    F6 = 1396.91f,
+    FSharp6 = 1479.98f,
+    G6 = 1567.98f,
+    GSharp6 = 1661.22f,
+    A6 = 1760.00f,
+    ASharp6 = 1864.66f,
+    B6 = 1975.53f,
+    C7 = 2093.00f,
+    CSharp7 = 2217.46f,
+    D7 = 2349.32f,
+    DSharp7 = 2489.02f,
+    E7 = 2637.02f,
+    F7 = 2793.83f,
+    FSharp7 = 2959.96f,
+    G7 = 3135.96f,
+    GSharp7 = 3322.44f,
+    A7 = 3520.00f,
+    ASharp7 = 3729.31f,
+    B7 = 3951.07f,
+    C8 = 4186.01f
+}
+
+Wave generatePianoTone(in float frequency, in float duration, in SampleRate sampleRate) pure nothrow {
+    const frameCount = cast(FrameCount)(sampleRate * duration);
+    Sample[] data = new Sample[frameCount];
+
+    // Define the amplitude envelope: Attack, Decay, Sustain, Release (ADSR)
+    // A piano has a fast attack and a long, exponential decay.
+    float attackTime = 0.005f; // Very fast attack
+    float decayTime = 0.5f;   // The main decay of the initial strike
+
+    // The decay curve for the overall tone
+    float amplitudeEnvelope(float t) {
+        if (t < attackTime) {
+            // Fast attack
+            return t / attackTime;
+        } else {
+            // Exponential decay
+            return pow(1.0f - (t - attackTime) / (1.0f - attackTime), 2.0f);
+        }
+    }
+
+    // A piano tone is not a pure sine wave; it contains harmonics.
+    // The first few harmonics are usually the most prominent.
+    const float[] harmonics = [1.0f, 2.0f, 3.0f, 4.0f];
+    const float[] harmonicAmplitudes = [1.0f, 0.5f, 0.3f, 0.2f]; // Adjust to get the right timbre
+
+    foreach (const i; 0 .. frameCount) {
+        const t = cast(float)i / frameCount;
+        float sample = 0.0f;
+
+        // Sum the sine waves for each harmonic
+        foreach (j, h; harmonics) {
+            const currentFreq = frequency * h;
+            const currentAmp = harmonicAmplitudes[j];
+            sample += sin(2.0f * cast(float)std.math.PI * currentFreq * i / sampleRate) * currentAmp;
+        }
+
+        // Apply the overall amplitude envelope and normalize
+        sample = (sample / harmonicAmplitudes.sum) * amplitudeEnvelope(t);
+
+        data[i] = cast(Sample)(sample * Sample.max);
+    }
+
+    debug data.showStats();
+    return typeof(return)(frameCount: frameCount, sampleRate: sampleRate, sampleSize: 8 * Sample.sizeof, channels: 1, data: &data[0]);
 }
 
 private void showStats(in Sample[] samples, in char[] funName = __FUNCTION__) {
