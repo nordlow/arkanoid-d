@@ -3,7 +3,7 @@ module normalization;
 
 import std.math;
 import std.algorithm.comparison : min, max, clamp;
-import std.algorithm : maxElement;
+import std.algorithm.searching : maxElement;
 import waves : Sample;
 
 @safe:
