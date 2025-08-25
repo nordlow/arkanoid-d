@@ -1,7 +1,7 @@
 /++ Common normalizations for audio samples. +/
 module normalization;
 
-import std.math;
+import std.math : sqrt, abs;
 import std.algorithm.comparison : min, max, clamp;
 import std.algorithm.searching : maxElement;
 import waves : Sample;
