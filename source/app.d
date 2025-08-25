@@ -65,8 +65,8 @@ void main() {
 
 	auto paddleSound = generateBoingWave(300.0f, 150.0f, 0.30f, sampleRate).LoadSoundFromWave();
     auto wallSound = generateBoingWave(300.0f, 150.0f, 0.30f, sampleRate).LoadSoundFromWave();
-    auto brickSound = rng.generateGlassBreakSound(0.30f, sampleRate);
-	auto shootSound = generateBounceSound(400.0f, 200.0f, 0.3f, sampleRate);
+    auto brickSound = rng.generateGlassBreakWave(0.30f, sampleRate).LoadSoundFromWave();
+	auto shootSound = generateBounceWave(400.0f, 200.0f, 0.3f, sampleRate).LoadSoundFromWave();
 
 	Ball ball = {
 		position: Vec2(screenWidth / 2, screenHeight - 150),
@@ -287,17 +287,16 @@ void main() {
 
 alias SoundSample = short;
 
-Sound generateStaticSound(in float frequency, in float duration, in int sampleRate) @safe nothrow {
+Wave generateStaticWave(in float frequency, in float duration, in int sampleRate) @safe pure nothrow {
 	alias SS = SoundSample;
     const frameCount = cast(int)(sampleRate * duration);
     SS[] data = new SS[frameCount];
 	foreach (const i; 0 .. frameCount)
         data[i] = cast(SS)(sin(2.0f * std.math.PI * frequency * i / sampleRate) * 16000);
-    auto wave = Wave(frameCount: frameCount, sampleRate: sampleRate, sampleSize: 8 * SS.sizeof, channels: 1, data: &data[0]);
-	return () @trusted { return LoadSoundFromWave(wave); }();
+    return typeof(return)(frameCount: frameCount, sampleRate: sampleRate, sampleSize: 8 * SS.sizeof, channels: 1, data: &data[0]);
 }
 
-Sound generateBounceSound(in float startFreq, in float endFreq, in float duration, in int sampleRate) @safe nothrow {
+Wave generateBounceWave(in float startFreq, in float endFreq, in float duration, in int sampleRate) @safe pure nothrow {
     alias SS = short;
     const frameCount = cast(int)(sampleRate * duration);
     SS[] data = new SS[frameCount];
@@ -314,8 +313,7 @@ Sound generateBounceSound(in float startFreq, in float endFreq, in float duratio
         data[i] = cast(SS)(sample);
     }
 
-    auto wave = Wave(frameCount: frameCount, sampleRate: sampleRate, sampleSize: 8 * SS.sizeof, channels: 1, data: &data[0]);
-    return () @trusted { return LoadSoundFromWave(wave); }();
+    return typeof(return)(frameCount: frameCount, sampleRate: sampleRate, sampleSize: 8 * SS.sizeof, channels: 1, data: &data[0]);
 }
 
 Wave generateBoingWave(in float startFreq, in float endFreq, in float duration, in int sampleRate) @safe pure nothrow {
@@ -347,7 +345,7 @@ Wave generateBoingWave(in float startFreq, in float endFreq, in float duration, 
     return Wave(frameCount: frameCount, sampleRate: sampleRate, sampleSize: 8 * SS.sizeof, channels: 1, data: &data[0]);
 }
 
-Sound generateGlassBreakSound(scope ref Random rng, in float duration, in int sampleRate) @safe {
+Wave generateGlassBreakWave(scope ref Random rng, in float duration, in int sampleRate) @safe {
     alias SS = short;
     const frameCount = cast(int)(sampleRate * duration);
     SS[] data = new SS[frameCount];
@@ -375,6 +373,5 @@ Sound generateGlassBreakSound(scope ref Random rng, in float duration, in int sa
         data[i] = cast(SS)(combinedSample);
     }
 
-    auto wave = Wave(frameCount: frameCount, sampleRate: sampleRate, sampleSize: 8 * SS.sizeof, channels: 1, data: &data[0]);
-    return () @trusted { return LoadSoundFromWave(wave); }();
+    return typeof(return)(frameCount: frameCount, sampleRate: sampleRate, sampleSize: 8 * SS.sizeof, channels: 1, data: &data[0]);
 }
