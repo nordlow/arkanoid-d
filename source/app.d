@@ -450,7 +450,7 @@ Wave generatePianoTone(in float frequency, in float _amplitude, in float duratio
     const float amplitudeBoost = (referenceFrequency / frequency) * 0.5; // Inverse scaling, capped for balance
 
     foreach (const i; 0 .. frameCount) {
-        float t = cast(float)i / sampleRate; // Time in seconds
+        const float t = cast(float)i / sampleRate; // Time in seconds
         float amplitude = 0.0;
 
         // Apply ADSR envelope
@@ -470,9 +470,8 @@ Wave generatePianoTone(in float frequency, in float _amplitude, in float duratio
 
         // Generate waveform with harmonics
         float sampleValue = 0.0;
-        foreach (j; 0 .. harmonicAmplitudes.length) {
+        foreach (j; 0 .. harmonicAmplitudes.length)
             sampleValue += harmonicAmplitudes[j] * sin(2.0 * std.math.PI * harmonicFrequencies[j] * t);
-        }
 
         // Apply amplitude envelope and frequency-based boost
         data[i] = cast(Sample)(sampleValue * amplitude * amplitudeBoost * Sample.max / harmonicAmplitudes.length);
