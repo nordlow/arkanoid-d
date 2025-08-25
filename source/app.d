@@ -1,7 +1,7 @@
 import core.time : Duration;
-import std.stdio : stdout, stderr, writeln;
+import std.stdio;
 import std.algorithm : minElement, maxElement;
-import std.random;
+import std.random : uniform, Random, unpredictableSeed;
 import std.math;
 
 import raylib;
