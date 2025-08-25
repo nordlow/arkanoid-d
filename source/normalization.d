@@ -13,7 +13,7 @@ import std.math : abs;
 
 float[] peakNormalize(scope return float[] data, in float targetLevel = 1.0f) pure nothrow @nogc {
     float peak = 0.0f;
-    foreach (sample; data) {
+    foreach (const ref sample; data) {
         const float absSample = abs(sample);
         if (absSample > peak) {
             peak = absSample;
@@ -41,7 +41,7 @@ float[] peakNormalizeAlgorithmic(scope return float[] data, in float targetLevel
 float[] rmsNormalize(scope return float[] data, in float targetRMS = 0.25f) pure nothrow {
     // Calculate RMS (Root Mean Square)
     float sumSquares = 0.0f;
-    foreach (sample; data)
+    foreach (const ref sample; data)
         sumSquares += sample * sample;
     const float rms = sqrt(sumSquares / data.length);
 	if (rms == 0)
