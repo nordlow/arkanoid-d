@@ -2,14 +2,13 @@ module waveform;
 
 @safe:
 
-import std.stdio;
-import std.math;
-import std.random;
-import std.typecons : Nullable;
+import std.math : sin, pow, PI;
+import std.random : Random, uniform;
 
 import raylib : Wave;
 
 alias SoundSample = short;
+alias SS = SoundSample;
 
 // DSL Components
 // ---
@@ -28,7 +27,6 @@ struct Waveform {
 
     // Generates the final Wave struct from the declarative description.
     Wave generate(in int sampleRate) const {
-        alias SS = SoundSample;
         const frameCount = cast(int)(sampleRate * dur);
         SS[] data = new SS[frameCount];
 
@@ -46,7 +44,6 @@ struct Waveform {
 
     // Overload for when a Random generator is needed
     Wave generate(in int sampleRate, scope ref Random rng) {
-        alias SS = SoundSample;
         const frameCount = cast(int)(sampleRate * dur);
         SS[] data = new SS[frameCount];
 
