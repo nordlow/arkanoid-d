@@ -66,9 +66,6 @@ struct WaveformGenerators {
     float noise(in float t, in float _f) => uniform(-1.0f, 1.0f, rng);
 }
 
-// DSL-Based Sound Generation Functions
-// ---
-
 // Generates a static tone using the DSL
 Wave generateStaticWave(in float freq, in float dur, in int sampleRate) {
 	WaveformGenerators wg;
