@@ -108,8 +108,8 @@ void main() @trusted {
 	Brick[brickRows * brickCols] bricks;
 
 	foreach (const row; 0 .. brickRows) {
-		for (int col = 0; col < brickCols; col++) {
-			int index = row * brickCols + col;
+		foreach (const col; 0 .. brickCols) {
+			const index = row * brickCols + col;
 			bricks[index] = Brick(
 				Vec2(col * brickWidth, row * brickHeight + 50),
 				Vec2(brickWidth - 2, brickHeight - 2), Colors.RED, true);
