@@ -77,16 +77,15 @@ void main() @trusted {
     auto wallSound = generateBoingWave(300.0f, 150.0f, 0.30f, sampleRate).LoadSoundFromWave();
     auto brickSound = rng.generateGlassBreakWave(0.60f, 0.2f, sampleRate).LoadSoundFromWave();
 	auto shootSound = generateBounceWave(400.0f, 200.0f, 0.3f, sampleRate).LoadSoundFromWave();
-	// auto shootSound = generatePianoTone(200.0f, 1.0f, 1.0f, sampleRate).LoadSoundFromWave();
-	// auto shootSound = rng.generateScreamWave(0.3f, sampleRate).LoadSoundFromWave();
 
 	const pianoKeys = __traits(allMembers, Key);
 	Sound[] pianoSounds;
 	pianoSounds.reserve(pianoKeys.length);
-	foreach (const i, const key; pianoKeys) {
+	foreach (const i, const key; pianoKeys[0 .. 40]) {
 		const f = cast(float)__traits(getMember, Key, key);
-		// pianoSounds ~= generatePianoTone(f, 1.0f, 1.0f, sampleRate).LoadSoundFromWave();;
+		pianoSounds ~= generatePianoWave(f, 1.0f, 1.0f, sampleRate).LoadSoundFromWave();
 	}
+	import std;
 
 	Ball ball = {
 		position: Vec2(screenWidth / 2, screenHeight - 150),
@@ -141,7 +140,7 @@ void main() @trusted {
 		const deltaTime = GetFrameTime();
 		const absTime = GetTime();
 		if (absTime > keyCounter) {
-			// PlaySound(pianoSounds[keyCounter]);
+			PlaySound(pianoSounds[keyCounter]);
 			keyCounter += 1;
 		}
 
@@ -431,8 +430,7 @@ Wave generateScreamWave(scope ref Random rng, in float duration, in SampleRate s
     return typeof(return)(frameCount: frameCount, sampleRate: sampleRate, sampleSize: 8 * Sample.sizeof, channels: 1, data: &data[0]);
 }
 
-version(none)
-Wave generatePianoTone(in float frequency, in float _amplitude, in float duration, in SampleRate sampleRate) pure nothrow {
+Wave generatePianoWave(in float frequency, in float _amplitude, in float duration, in SampleRate sampleRate) pure nothrow {
     const frameCount = cast(FrameCount)(sampleRate * duration);
     auto data = new Sample[frameCount];
 
@@ -442,9 +440,11 @@ Wave generatePianoTone(in float frequency, in float _amplitude, in float duratio
     const float sustainLevel = 0.2f;  // Lower sustain (piano notes decay significantly)
     const float releaseTime = duration * 0.6f; // Longer, natural release
 
+	enum harmonicCount = 8;
+
     // More realistic harmonic content based on piano string physics
     // Piano harmonics are not perfect integer multiples due to string stiffness
-    immutable float[8] harmonicAmplitudes = [
+    immutable float[harmonicCount] harmonicAmplitudes = [
         1.0,    // Fundamental
         0.6,    // 2nd harmonic (strong in piano)
         0.25,   // 3rd harmonic
@@ -457,7 +457,7 @@ Wave generatePianoTone(in float frequency, in float _amplitude, in float duratio
 
     // Slightly inharmonic frequencies (piano string stiffness effect)
     const float inharmonicity = 0.0001f * (frequency / 440.0f); // Higher for higher frequencies
-    float[8] harmonicFrequencies;
+    float[harmonicCount] harmonicFrequencies;
     foreach (j; 0 .. harmonicFrequencies.length) {
         const float n = j + 1; // Harmonic number
         harmonicFrequencies[j] = frequency * n * (1.0f + inharmonicity * n * n);
