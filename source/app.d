@@ -102,7 +102,7 @@ void main() @trusted {
 	};
 
 	const brickRows = 6;
-	const brickCols = 10;
+	const brickCols = 20;
 	const brickWidth = screenWidth / brickCols;
 	const brickHeight = 30;
 	Brick[brickRows * brickCols] bricks;
@@ -141,7 +141,7 @@ void main() @trusted {
 		const deltaTime = GetFrameTime();
 		const absTime = GetTime();
 		if (absTime > keyCounter) {
-			PlaySound(pianoSounds[keyCounter]);
+			// PlaySound(pianoSounds[keyCounter]);
 			keyCounter += 1;
 		}
 
