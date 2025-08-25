@@ -315,14 +315,13 @@ void main() @trusted {
 }
 
 Wave generateStaticWave(in float frequency, in float duration, in SampleRate sampleRate) pure nothrow {
-	alias SS = Sample;
     const frameCount = cast(FrameCount)(sampleRate * duration);
-    SS[] data = new SS[frameCount];
+    Sample[] data = new Sample[frameCount];
 	foreach (const i; 0 .. frameCount)
-        data[i] = cast(SS)(sin(2.0f * cast(float)std.math.PI * frequency * i / sampleRate) * SS.max);
+        data[i] = cast(Sample)(sin(2.0f * cast(float)std.math.PI * frequency * i / sampleRate) * Sample.max);
 
 	debug data.showStats();
-    return typeof(return)(frameCount: frameCount, sampleRate: sampleRate, sampleSize: 8 * SS.sizeof, channels: 1, data: &data[0]);
+    return typeof(return)(frameCount: frameCount, sampleRate: sampleRate, sampleSize: 8 * Sample.sizeof, channels: 1, data: &data[0]);
 }
 
 Wave generateBounceWave(in float startFreq, in float endFreq, in float duration, in SampleRate sampleRate) pure nothrow {
@@ -432,46 +431,51 @@ Wave generateScreamWave(scope ref Random rng, in float duration, in SampleRate s
     return typeof(return)(frameCount: frameCount, sampleRate: sampleRate, sampleSize: 8 * Sample.sizeof, channels: 1, data: &data[0]);
 }
 
-Wave generatePianoTone(in float frequency, in float amplitude, in float duration, in SampleRate sampleRate) pure nothrow {
+Wave generatePianoTone(in float frequency, in float _amplitude, in float duration, in SampleRate sampleRate) pure nothrow {
     const frameCount = cast(FrameCount)(sampleRate * duration);
     Sample[] data = new Sample[frameCount];
 
-    // Define the amplitude envelope: Attack, Decay, Sustain, Release (ADSR)
-    // A piano has a fast attack and a long, exponential decay.
-    float attackTime = 0.005f; // very fast attack
-    float decayTime = 0.5f;   // The main decay of the initial strike
+    // ADSR envelope parameters for a piano-like sound
+    const float attackTime = 0.01; // Short attack (10ms)
+    const float decayTime = 0.1;  // Decay to sustain level
+    const float sustainLevel = 0.7; // Sustain amplitude
+    const float releaseTime = 0.3; // Release phase
 
-    // The decay curve for the overall tone
-    float amplitudeEnvelope(float t) {
-        if (t < attackTime) {
-            // Fast attack
-            return t / attackTime;
-        } else {
-            // Exponential decay
-            return pow(1.0f - (t - attackTime) / (1.0f - attackTime), 2.0f);
-        }
-    }
+    // Harmonic amplitudes for a piano-like timbre (fundamental + overtones)
+    immutable float[5] harmonicAmplitudes = [1.0, 0.5, 0.3, 0.2, 0.1]; // Fundamental + 4 harmonics
+    immutable float[5] harmonicFrequencies = [frequency, frequency * 2, frequency * 3, frequency * 4, frequency * 5];
 
-    // A piano tone is not a pure sine wave; it contains harmonics.
-    // The first few harmonics are usually the most prominent.
-    const float[] harmonics = [1.0f, 2.0f, 3.0f, 4.0f];
-    const float[] harmonicAmplitudes = [1.0f, 0.5f, 0.3f, 0.2f]; // Adjust to get the right timbre
+    // Frequency-based amplitude boost for lower tones
+    const float referenceFrequency = 440.0; // A4 as reference (middle of piano range)
+    const float amplitudeBoost = (referenceFrequency / frequency) * 0.5; // Inverse scaling, capped for balance
 
     foreach (const i; 0 .. frameCount) {
-        const t = cast(float)i / frameCount;
-        float sample = 0.0f;
+        float t = cast(float)i / sampleRate; // Time in seconds
+        float amplitude = 0.0;
 
-        // Sum the sine waves for each harmonic
-        foreach (j, h; harmonics) {
-            const currentFreq = frequency * h;
-            const currentAmp = harmonicAmplitudes[j];
-            sample += sin(2.0f * cast(float)std.math.PI * currentFreq * i / sampleRate) * currentAmp;
+        // Apply ADSR envelope
+        if (t < attackTime) {
+            // Attack phase: linear ramp up
+            amplitude = t / attackTime;
+        } else if (t < attackTime + decayTime) {
+            // Decay phase: linear decay to sustain level
+            amplitude = 1.0 - ((t - attackTime) / decayTime) * (1.0 - sustainLevel);
+        } else if (t < duration - releaseTime) {
+            // Sustain phase
+            amplitude = sustainLevel;
+        } else {
+            // Release phase: linear decay to 0
+            amplitude = sustainLevel * (1.0 - (t - (duration - releaseTime)) / releaseTime);
         }
 
-        // Apply the overall amplitude envelope and normalize
-        sample = amplitude * (sample / harmonicAmplitudes.sum) * amplitudeEnvelope(t);
+        // Generate waveform with harmonics
+        float sampleValue = 0.0;
+        foreach (j; 0 .. harmonicAmplitudes.length) {
+            sampleValue += harmonicAmplitudes[j] * sin(2.0 * std.math.PI * harmonicFrequencies[j] * t);
+        }
 
-        data[i] = cast(Sample)(sample * Sample.max);
+        // Apply amplitude envelope and frequency-based boost
+        data[i] = cast(Sample)(sampleValue * amplitude * amplitudeBoost * Sample.max / harmonicAmplitudes.length);
     }
 
     debug data.showStats();
