@@ -5,7 +5,7 @@ copyright "Copyright © 2020, Unknown"
 
 libs "raylib"
 
-dependency "raylib-d" path="../raylib-d"
+dependency "raylib-d" version="5.5.1" # path="../raylib-d"
 
 lflags "-L." platform="posix"
 lflags "-rpath" "@executable_path/" platform="osx"
