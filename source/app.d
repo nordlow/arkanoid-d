@@ -12,6 +12,7 @@ alias Vec2 = Vector2;
 
 alias SampleRate = uint;
 alias FrameCount = uint;
+alias Sample = short;
 
 struct Ball {
 	Vec2 position;
@@ -292,17 +293,14 @@ void main() @trusted {
 	writeln("Ending Arkanoid game.");
 }
 
-alias SoundSample = short;
-
 Wave generateStaticWave(in float frequency, in float duration, in SampleRate sampleRate) pure nothrow {
-	alias SS = SoundSample;
+	alias SS = Sample;
     const frameCount = cast(FrameCount)(sampleRate * duration);
     SS[] data = new SS[frameCount];
 	foreach (const i; 0 .. frameCount)
         data[i] = cast(SS)(sin(2.0f * std.math.PI * frequency * i / sampleRate) * SS.max);
 
-	debug writeln(__FUNCTION__, ": [", data.minElement, " ... " , data.maxElement, "]");
-
+	debug data.showStats();
     return typeof(return)(frameCount: frameCount, sampleRate: sampleRate, sampleSize: 8 * SS.sizeof, channels: 1, data: &data[0]);
 }
 
@@ -323,8 +321,7 @@ Wave generateBounceWave(in float startFreq, in float endFreq, in float duration,
         data[i] = cast(SS)(sample);
     }
 
-	debug writeln(__FUNCTION__, ": [", data.minElement, " ... " , data.maxElement, "]");
-
+	debug data.showStats();
     return typeof(return)(frameCount: frameCount, sampleRate: sampleRate, sampleSize: 8 * SS.sizeof, channels: 1, data: &data[0]);
 }
 
@@ -351,8 +348,7 @@ Wave generateBoingWave(in float startFreq, in float endFreq, in float duration, 
         data[i] = cast(SS)(sample);
     }
 
-	debug writeln(__FUNCTION__, ": [", data.minElement, " ... " , data.maxElement, "]");
-
+	debug data.showStats();
     return Wave(frameCount: frameCount, sampleRate: sampleRate, sampleSize: 8 * SS.sizeof, channels: 1, data: &data[0]);
 }
 
@@ -379,7 +375,10 @@ Wave generateGlassBreakWave(scope ref Random rng, in float duration, in float am
         data[i] = cast(SS)(combinedSample);
     }
 
-	debug writeln(__FUNCTION__, ": [", data.minElement, " ... " , data.maxElement, "]");
-
+	debug data.showStats();
     return typeof(return)(frameCount: frameCount, sampleRate: sampleRate, sampleSize: 8 * SS.sizeof, channels: 1, data: &data[0]);
+}
+
+private void showStats(in Sample[] samples, in char[] funName = __FUNCTION__) {
+	writeln(funName, ": [", samples.minElement, " ... " , samples.maxElement, "]");
 }
