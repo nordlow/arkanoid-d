@@ -4,6 +4,8 @@ import std.math;
 
 import raylib;
 
+@safe:
+
 alias Vec2 = Vector2;
 
 struct Ball {
@@ -34,7 +36,7 @@ struct Bullet {
 	bool active;
 }
 
-void main() {
+void main() @trusted {
 	validateRaylibBinding();
 
 	// Create Window
@@ -287,7 +289,7 @@ void main() {
 
 alias SoundSample = short;
 
-Wave generateStaticWave(in float frequency, in float duration, in int sampleRate) @safe pure nothrow {
+Wave generateStaticWave(in float frequency, in float duration, in int sampleRate) pure nothrow {
 	alias SS = SoundSample;
     const frameCount = cast(int)(sampleRate * duration);
     SS[] data = new SS[frameCount];
@@ -296,7 +298,7 @@ Wave generateStaticWave(in float frequency, in float duration, in int sampleRate
     return typeof(return)(frameCount: frameCount, sampleRate: sampleRate, sampleSize: 8 * SS.sizeof, channels: 1, data: &data[0]);
 }
 
-Wave generateBounceWave(in float startFreq, in float endFreq, in float duration, in int sampleRate) @safe pure nothrow {
+Wave generateBounceWave(in float startFreq, in float endFreq, in float duration, in int sampleRate) pure nothrow {
     alias SS = short;
     const frameCount = cast(int)(sampleRate * duration);
     SS[] data = new SS[frameCount];
@@ -316,7 +318,7 @@ Wave generateBounceWave(in float startFreq, in float endFreq, in float duration,
     return typeof(return)(frameCount: frameCount, sampleRate: sampleRate, sampleSize: 8 * SS.sizeof, channels: 1, data: &data[0]);
 }
 
-Wave generateBoingWave(in float startFreq, in float endFreq, in float duration, in int sampleRate) @safe pure nothrow {
+Wave generateBoingWave(in float startFreq, in float endFreq, in float duration, in int sampleRate) pure nothrow {
     alias SS = short;
     const frameCount = cast(int)(sampleRate * duration);
     SS[] data = new SS[frameCount];
