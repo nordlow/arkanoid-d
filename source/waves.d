@@ -93,18 +93,17 @@ Wave generateScreamWave(scope ref Random rng, in float duration, in SampleRate s
     const frameCount = cast(FrameCount)(sampleRate * duration);
     auto data = new Sample[frameCount];
 
-    // Define a frequency range for the scream
-    const float startFreq = 200.0f; // Lower frequency for the start
-    const float endFreq = 2000.0f; // High frequency for the peak of the scream
+    const float startFreq = 200.0f; // lower frequency for the start
+    const float endFreq = 2000.0f; // high frequency for the peak
 
-    // Define the overall amplitude envelope
+    // overall amplitude envelope
     float amplitudeEnvelope(float t) {
         // A sharp rise and a slower, noisy decay
         // This simulates the vocal cords tightening and then relaxing
         return pow(t, 0.5f) * pow(1.0f - t, 2.0f);
     }
 
-    // Define a frequency sweep that rises quickly and then levels off
+    // frequency sweep that rises quickly and then levels off
     float frequencySweep(float t) {
         return startFreq + (endFreq - startFreq) * pow(t, 1.0f/3.0f);
     }
@@ -112,16 +111,15 @@ Wave generateScreamWave(scope ref Random rng, in float duration, in SampleRate s
     foreach (const i; 0 .. frameCount) {
         const t = cast(float)i / frameCount;
 
-        // Combine a sine wave with the frequency sweep
+        // combine a sine wave with the frequency sweep
         const sineWave = sin(2.0f * cast(float)std.math.PI * frequencySweep(t) * i / sampleRate);
 
-        // Add random high-frequency noise to simulate vocal "grit"
+        // add random high-frequency noise to simulate vocal "grit"
         const noise = uniform(-1.0f, 1.0f, rng) * 0.5f;
 
-        // Combine the sine wave and noise, then apply the overall amplitude envelope
+        // combine the sine wave and noise, then apply the overall amplitude envelope
         const combinedSample = (sineWave * 0.7f + noise * 0.3f) * amplitudeEnvelope(t);
 
-        // Scale and cast to the sample type
         data[i] = cast(Sample)(combinedSample * Sample.max);
     }
 
