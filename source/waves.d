@@ -132,7 +132,7 @@ Wave generateScreamWave(scope ref Random rng, in float duration, in SampleRate s
 Wave generatePianoWave(in float frequency, in float _amplitude, in float duration, in SampleRate sampleRate) pure nothrow {
     const frameCount = cast(FrameCount)(sampleRate * duration);
     auto data = new Sample[frameCount];
-    auto floatData = new float[frameCount]; // Work in float first
+    auto floatData = new float[frameCount];
 
     // ADSR and harmonic parameters (same as before)
     const float attackTime = 0.005f;
@@ -153,7 +153,6 @@ Wave generatePianoWave(in float frequency, in float _amplitude, in float duratio
     const float trebleRolloff = frequency > 2000.0f ? 0.7f : 1.0f;
     const float amplitudeBoost = bassBoost * midBoost * trebleRolloff;
 
-    // Generate samples in floating point
     foreach (const i; 0 .. frameCount) {
         const float t = cast(float)i / sampleRate;
         float amplitude = 0.0;
@@ -174,7 +173,7 @@ Wave generatePianoWave(in float frequency, in float _amplitude, in float duratio
             amplitude = currentSustain * exp(-releaseProgress * 3.0f);
         }
 
-        // Generate waveform
+        // generate waveform
         float sampleValue = 0.0;
         foreach (const j; 0 .. harmonicAmplitudes.length) {
             const float phaseModulation = sin(2.0 * std.math.PI * frequency * 0.1f * t) * 0.001f;
@@ -183,15 +182,15 @@ Wave generatePianoWave(in float frequency, in float _amplitude, in float duratio
             sampleValue += harmonicAmplitudes[j] * harmonicDecay * sin(phase);
         }
 
-        // Add subtle noise
+        // add subtle noise
         const float noiseLevel = 0.002f * amplitude;
         const float noise = (cast(float)((i * 1103515245 + 12345) % 32768) / 16384.0f - 1.0f) * noiseLevel;
 
-        // Store in float array
+        // store in array
         floatData[i] = (sampleValue + noise) * amplitude * amplitudeBoost * _amplitude;
     }
 
-    floatData.peakNormalize(0.95f); // Leave some headroom
+    floatData.peakNormalize(0.95f); // leave some headroom
 
     foreach (const i; 0 .. frameCount) {
         // Optional: Apply soft limiting instead of hard clipping
