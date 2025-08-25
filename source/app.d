@@ -333,9 +333,9 @@ Sound generateBoingSound(in float startFreq, in float endFreq, in float duration
     }
 
     foreach (const i; 0 .. frameCount) {
-        float t = cast(float)i / frameCount;
-        float currentFreq = frequencyCurve(t);
-        float currentAmp = amplitudeEnvelope(t);
+        const t = cast(float)i / frameCount;
+        const currentFreq = frequencyCurve(t);
+        const currentAmp = amplitudeEnvelope(t);
 
         // Generate the sine wave sample with the percussive envelope
         float sample = sin(2.0f * std.math.PI * currentFreq * i / sampleRate) * 16000 * currentAmp;
