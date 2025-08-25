@@ -20,11 +20,11 @@ struct Waveform {
     float dur;
 
     // A delegate for the frequency envelope: returns frequency in Hz at time t [0..1]
-    float delegate(in float t) frequency;
+    float delegate(in float t) freq;
     // A delegate for the amplitude envelope: returns amplitude from 0.0 to 1.0 at time t [0..1]
     float delegate(in float t) amplitude;
     // The core generator: returns a sample from -1.0 to 1.0
-    float delegate(in float t, float freq) generator;
+    float delegate(in float t, float f) generator;
 
     // Generates the final Wave struct from the declarative description.
     Wave generate(in int sampleRate) const {
@@ -34,7 +34,7 @@ struct Waveform {
 
         foreach (const i; 0 .. frameCount) {
             const float t = cast(float)i / frameCount;
-            const float currentFreq = frequency(t);
+            const float currentFreq = freq(t);
             const float currentAmp = amplitude(t);
             const float sample = generator(t, currentFreq) * 16000 * currentAmp;
             data[i] = cast(SS)(sample);
@@ -52,7 +52,7 @@ struct Waveform {
 
         foreach (const i; 0 .. frameCount) {
             const float t = cast(float)i / frameCount;
-            const float currentFreq = frequency(t);
+            const float currentFreq = freq(t);
             const float currentAmp = amplitude(t);
             const float sample = generator(t, currentFreq) * 16000 * currentAmp;
             data[i] = cast(SS)(sample);
@@ -73,16 +73,16 @@ struct WaveformGenerators {
 // ---
 
 // Generates a static tone using the DSL
-Wave generateStaticWave(in float frequency, in float dur, in int sampleRate) {
+Wave generateStaticWave(in float freq, in float dur, in int sampleRate) {
 	WaveformGenerators wg;
     return Waveform(
         dur: dur,
         // Constant frequency
-        frequency: (in float t) => frequency,
+        freq: (in float t) => freq,
         // Constant amplitude
         amplitude: (in float t) => 1.0f,
         // Using the sine generator
-        generator: (in float t, float freq) => wg.sine(t * dur * sampleRate, freq)
+        generator: (in float t, float f) => wg.sine(t * dur * sampleRate, f)
     ).generate(sampleRate);
 }
 
@@ -92,11 +92,11 @@ Wave generateBounceWave(in float startFreq, in float endFreq, in float dur, in i
     return Waveform(
         dur: dur,
         // Exponential frequency sweep
-        frequency: (in float t) => startFreq * pow(endFreq / startFreq, t),
+        freq: (in float t) => startFreq * pow(endFreq / startFreq, t),
         // Fast decay amplitude
         amplitude: (in float t) => pow(1.0f - t, 2.0f),
         // Using the sine generator
-        generator: (in float t, float freq) => wg.sine(t * dur * sampleRate, freq)
+        generator: (in float t, float f) => wg.sine(t * dur * sampleRate, f)
     ).generate(sampleRate);
 }
 
@@ -105,12 +105,12 @@ Wave generateBoingWave(in float startFreq, in float endFreq, in float dur, in in
 	WaveformGenerators wg;
     return Waveform(
         dur: dur,
-        // Custom frequency curve
-        frequency: (in float t) => startFreq * (1.0f - pow(t, 2.0f)) + endFreq * pow(t, 2.0f),
-        // Very fast percussive decay
+        // custom frequency curve
+        freq: (in float t) => startFreq * (1.0f - pow(t, 2.0f)) + endFreq * pow(t, 2.0f),
+        // very fast percussive decay
         amplitude: (in float t) => pow(1.0f - t, 4.0f),
-        // Using the sine generator
-        generator: (in float t, float freq) => wg.sine(t * dur * sampleRate, freq)
+        // using the sine generator
+        generator: (in float t, float f) => wg.sine(t * dur * sampleRate, f)
     ).generate(sampleRate);
 }
 
@@ -118,20 +118,18 @@ Wave generateBoingWave(in float startFreq, in float endFreq, in float dur, in in
 Wave generateGlassBreakWave(in float dur, in int sampleRate) {
 	WaveformGenerators wg;
 
-    // Waveform for the "shatter" noise
     auto shatter = Waveform(
         dur: dur,
-        frequency: (in float t) => 0.0f, // Frequency is not relevant for noise
-        amplitude: (in float t) => pow(1.0f - t, 8.0f), // Very fast decay
-        generator: (in float t, float freq) => wg.noise(t, freq)
+        freq: (in float t) => t.init, // not used by noise
+        amplitude: (in float t) => pow(1.0f - t, 8.0f), // very fast decay
+        generator: (in float t, float f) => wg.noise(t, f)
     );
 
-    // Waveform for the high-frequency "tinkle" tone
     auto tinkle = Waveform(
         dur: dur,
-        frequency: (in float t) => 10000.0f,
-        amplitude: (in float t) => 0.5f * (1.0f - t), // Slower linear decay
-        generator: (in float t, float freq) => wg.sine(t, freq)
+        freq: (in float t) => 10000.0f,
+        amplitude: (in float t) => 0.5f * (1.0f - t), // slower linear decay
+        generator: (in float t, float f) => wg.sine(t, f)
     );
 
     // Generate both waves
