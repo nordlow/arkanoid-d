@@ -13,6 +13,7 @@ import waves;
 
 alias Vec2 = Vector2;
 
+/++ Bool. +/
 struct Ball {
 	Vec2 position;
 	Vec2 velocity;
@@ -26,6 +27,7 @@ struct Paddle {
 	Color color;
 }
 
+/++ Tegelsten. +/
 struct Brick {
 	Vec2 position;
 	Vec2 size;
@@ -33,11 +35,12 @@ struct Brick {
 	bool active;
 }
 
+/++ Skott. +/
 struct Bullet {
 	Vec2 position;
-	Vec2 velocity;
+	Vec2 velocity; // hastighet
 	float radius;
-	Color color;
+	Color color; // färg
 	bool active;
 }
 
@@ -70,6 +73,7 @@ void main() @trusted {
 
     auto rng = Random(unpredictableSeed());
 
+	// Sounds (Ljud):
 	auto paddleSound = generateBoingWave(300.0f, 1000.0f, 0.30f, sampleRate).LoadSoundFromWave();
     auto wallSound = generateBoingWave(300.0f, 150.0f, 0.30f, sampleRate).LoadSoundFromWave();
     auto brickSound = rng.generateGlassBreakWave(0.60f, 0.2f, sampleRate).LoadSoundFromWave();
@@ -83,11 +87,12 @@ void main() @trusted {
 		const f = cast(float)__traits(getMember, Key, key);
 		pianoSounds ~= generatePianoWave(f, 1.0f, 1.0f, sampleRate).LoadSoundFromWave();
 	}
-	import std;
+
+	const ballVelocity = Vec2(100, -800); // boll hastighet
 
 	Ball ball = {
 		position: Vec2(screenWidth / 2, screenHeight - 150),
-		velocity: Vec2(0, -800),
+		velocity: ballVelocity,
 		radius: 10,
 		color: Colors.WHITE
 	};
@@ -98,18 +103,21 @@ void main() @trusted {
 		color: Colors.BLUE
 	};
 
-	const brickRows = 6;
-	const brickCols = 20;
-	const brickWidth = screenWidth / brickCols;
-	const brickHeight = 30;
+	/// Brick Layout
+	const brickRows = 15; // rader
+	const brickCols = 20; // kolumner
+	const brickWidth = screenWidth / brickCols; // bredd
+	const brickHeight = 30; // höjd
 	Brick[brickRows * brickCols] bricks;
 
 	foreach (const row; 0 .. brickRows) {
 		foreach (const col; 0 .. brickCols) {
 			const index = row * brickCols + col;
-			bricks[index] = Brick(
-				Vec2(col * brickWidth, row * brickHeight + 50),
-				Vec2(brickWidth - 2, brickHeight - 2), Colors.RED, true);
+			bricks[index] = Brick(position: Vec2(col * brickWidth,
+												 row * brickHeight + 250),
+								  size: Vec2(brickWidth - 2,
+											 brickHeight - 2),
+								  Colors.RED, true);
 
 			if (row < 2)
 				bricks[index].color = Colors.RED;
@@ -120,11 +128,12 @@ void main() @trusted {
 		}
 	}
 
-	enum maxBullets = 10;
-	Bullet[maxBullets] bullets;
-	foreach (const i; 0 .. maxBullets) {
+	/// Create Bullets (Skapa Skott)
+	enum bulletCountMax = 30; // maximalt antal skott samtidigt
+	Bullet[bulletCountMax] bullets;
+	foreach (const i; 0 .. bulletCountMax) {
 		bullets[i].active = false;
-		bullets[i].radius = 3;
+		bullets[i].radius = 30; // radie, 2*radie == diameter
 		bullets[i].color = Colors.YELLOW;
 		bullets[i].velocity = Vec2(0, -333);
 	}
@@ -154,7 +163,7 @@ void main() @trusted {
 			}
 
 			if (IsKeyPressed(KeyboardKey.KEY_SPACE)) {
-				foreach (const i; 0 .. maxBullets) {
+				foreach (const i; 0 .. bulletCountMax) {
 					if (!bullets[i].active) {
 						bullets[i].position = Vec2(paddle.position.x + paddle.size.x / 2, paddle.position.y);
 						bullets[i].active = true;
@@ -167,7 +176,7 @@ void main() @trusted {
 			ball.position.x += ball.velocity.x * deltaTime;
 			ball.position.y += ball.velocity.y * deltaTime;
 
-			foreach (const i; 0 .. maxBullets) {
+			foreach (const i; 0 .. bulletCountMax) {
 				if (bullets[i].active) {
 					bullets[i].position.x += bullets[i].velocity.x * deltaTime;
 					bullets[i].position.y += bullets[i].velocity.y * deltaTime;
@@ -216,7 +225,7 @@ void main() @trusted {
 					break;
 				}
 
-				foreach (const j; 0 .. maxBullets) {
+				foreach (const j; 0 .. bulletCountMax) {
 					if (!bullets[j].active)
 						continue;
 
@@ -251,7 +260,7 @@ void main() @trusted {
 
 		if ((gameOver || gameWon) && IsKeyPressed(KeyboardKey.KEY_R)) {
 			ball.position = Vec2(screenWidth / 2, screenHeight - 150);
-			ball.velocity = Vec2(0, -800);
+			ball.velocity = ballVelocity;
 
 			paddle.position = Vec2(screenWidth / 2 - 60, screenHeight - 30);
 
@@ -259,7 +268,7 @@ void main() @trusted {
 				bricks[i].active = true;
 			}
 
-			foreach (const i; 0 .. maxBullets) {
+			foreach (const i; 0 .. bulletCountMax) {
 				bullets[i].active = false;
 			}
 
@@ -283,7 +292,7 @@ void main() @trusted {
 
 		DrawCircleV(ball.position, ball.radius, ball.color);
 
-		foreach (const i; 0 .. maxBullets) {
+		foreach (const i; 0 .. bulletCountMax) {
 			if (bullets[i].active) {
 				DrawCircleV(bullets[i].position, bullets[i].radius, bullets[i].color);
 			}

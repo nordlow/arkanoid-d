@@ -78,7 +78,8 @@ Wave generateGlassBreakWave(scope ref Random rng, in float duration, in float am
         const tinkleAmp = 0.5f * (1.0f - t); // Slower, linear decay for the high-frequency tone
         // Generate a high-frequency sine wave for the "tinkle"
         // This makes it sound less like static and more like breaking glass
-        const tinkleSample = sin(2.0f * cast(float)std.math.PI * 10000.0f * i / sampleRate) * Sample.max * tinkleAmp;
+		const frequency = 1000.0f; // initially 10_000.0f
+        const tinkleSample = sin(2.0f * cast(float)std.math.PI * frequency * i / sampleRate) * Sample.max * tinkleAmp;
 
         const combinedSample = amplitude*(noiseSample * 0.7f + tinkleSample * 0.3f);
 
