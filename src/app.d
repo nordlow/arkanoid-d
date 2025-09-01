@@ -75,6 +75,7 @@ void main() @trusted {
     auto brickSound = rng.generateGlassBreakWave(0.60f, 0.2f, sampleRate).LoadSoundFromWave();
 	auto shootSound = generateBounceWave(400.0f, 200.0f, 0.3f, sampleRate).LoadSoundFromWave();
 
+	const playPiano = false;
 	const pianoKeys = __traits(allMembers, Key);
 	Sound[] pianoSounds;
 	pianoSounds.reserve(pianoKeys.length);
@@ -86,7 +87,7 @@ void main() @trusted {
 
 	Ball ball = {
 		position: Vec2(screenWidth / 2, screenHeight - 150),
-		velocity: Vec2(800, -800),
+		velocity: Vec2(0, -800),
 		radius: 10,
 		color: Colors.WHITE
 	};
@@ -136,7 +137,8 @@ void main() @trusted {
 	while (!WindowShouldClose()) {
 		const deltaTime = GetFrameTime();
 		const absTime = GetTime();
-		if (absTime > keyCounter) {
+
+		if (playPiano && absTime > keyCounter) {
 			PlaySound(pianoSounds[keyCounter]);
 			keyCounter += 1;
 		}
@@ -249,7 +251,7 @@ void main() @trusted {
 
 		if ((gameOver || gameWon) && IsKeyPressed(KeyboardKey.KEY_R)) {
 			ball.position = Vec2(screenWidth / 2, screenHeight - 150);
-			ball.velocity = Vec2(200, -200);
+			ball.velocity = Vec2(0, -800);
 
 			paddle.position = Vec2(screenWidth / 2 - 60, screenHeight - 30);
 
