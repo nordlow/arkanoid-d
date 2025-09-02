@@ -4,6 +4,7 @@ import std.algorithm : minElement, maxElement, sum;
 import std.numeric;
 import std.random : uniform, Random, unpredictableSeed;
 import std.math;
+import std.string;
 import nxt.geometry;
 import raylib;
 import music;
@@ -66,6 +67,19 @@ void main() @trusted {
         stderr.writeln("ERROR: Audio device not ready!");
     else
         stdout.writeln("Audio device initialized successfully");
+
+	// Detect Gamepad
+	foreach (gamepad; -1000 .. 1000) {
+		if (IsGamepadAvailable(gamepad)) {
+			const name = GetGamepadName(gamepad);
+			writeln("Gamepad: nr ", gamepad, " being ", name.fromStringz, " detected");
+			foreach (const button; -100 .. 100) {
+				if (IsGamepadButtonDown(gamepad, button)) {
+					writeln("Button ", button, " is down");
+				}
+			}
+		}
+	}
 
     const sampleRate = 44100;
     auto rng = Random(unpredictableSeed());
