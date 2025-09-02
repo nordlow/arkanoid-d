@@ -4,7 +4,7 @@ import std.algorithm : minElement, maxElement, sum;
 import std.numeric;
 import std.random : uniform, Random, unpredictableSeed;
 import std.math;
-// import nxt.geometry;
+import nxt.geometry;
 import raylib;
 import music;
 import waves;
