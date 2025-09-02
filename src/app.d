@@ -13,13 +13,14 @@ import waves;
 
 alias Vec2 = Vector2;
 
-/++ Bool. +/
+/++ Boll. +/
 struct Ball {
 	Vec2 position;
 	Vec2 velocity;
 	float radius;
 	Color color;
 }
+
 
 struct Paddle {
 	Vec2 position;

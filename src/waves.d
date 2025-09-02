@@ -200,9 +200,8 @@ Wave generatePianoWave(in float frequency, in float _amplitude, in float duratio
     return typeof(return)(frameCount: frameCount, sampleRate: sampleRate, sampleSize: 8 * Sample.sizeof, channels: 1, data: &data[0]);
 }
 
-
 private void showStats(in Sample[] samples, in char[] funName = __FUNCTION__) {
-	import std.stdio : writeln;
+	import nxt.io : writeln;
 	import std.algorithm : minElement, maxElement;
 	writeln(funName, ": range:[", samples.minElement, " ... " , samples.maxElement, "]");
 }
