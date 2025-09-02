@@ -333,14 +333,13 @@ void main() @trusted {
     }
 }
 
-void bounceAll(ref Ball[] balls) {
+void bounceAll(ref Ball[] balls) { // studsa alla
     for (int i = 0; i < balls.length; ++i) { // TODO: Use `foreach`
         for (int j = i + 1; j < balls.length; ++j) { // TODO: Use `foreach`
-            if (!balls[i].active || !balls[j].active) {
+            if (!balls[i].active || !balls[j].active)
                 continue;
-            }
 
-            const auto delta = balls[j].position - balls[i].position;
+            const delta = balls[j].position - balls[i].position;
             const float distanceSquared = lengthSquared(delta);
             const float combinedRadii = balls[i].radius + balls[j].radius;
             const float combinedRadiiSquared = combinedRadii * combinedRadii;
@@ -348,12 +347,12 @@ void bounceAll(ref Ball[] balls) {
             if (distanceSquared < combinedRadiiSquared) {
                 const float distance = sqrt(distanceSquared);
                 const float overlap = combinedRadii - distance;
-                const auto normal = normalize(delta);
+                const normal = normalize(delta);
 
                 balls[i].position -= normal * (overlap / 2.0f);
                 balls[j].position += normal * (overlap / 2.0f);
 
-                const auto tangent = Vector2(-normal.y, normal.x);
+                const tangent = Vector2(-normal.y, normal.x);
 
                 const float v1n = dot(balls[i].velocity, normal);
                 const float v1t = dot(balls[i].velocity, tangent);
