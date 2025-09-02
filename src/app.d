@@ -334,8 +334,8 @@ void main() @trusted {
 }
 
 void bounceAll(ref Ball[] balls) {
-    for (int i = 0; i < balls.length; ++i) {
-        for (int j = i + 1; j < balls.length; ++j) {
+    for (int i = 0; i < balls.length; ++i) { // TODO: Use `foreach`
+        for (int j = i + 1; j < balls.length; ++j) { // TODO: Use `foreach`
             if (!balls[i].active || !balls[j].active) {
                 continue;
             }
