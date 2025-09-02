@@ -86,14 +86,14 @@ void main() @trusted {
     }
 
     const ballVelocity = Vec2(100, -800); // boll hastighet
-    enum ballCountMax = 3; // Maximum number of balls
+    enum ballCountMax = 10; // Maximum number of balls
 
     Ball[ballCountMax] balls;
     foreach (i; 0 .. ballCountMax) {
         balls[i] = Ball(
             position: Vec2(screenWidth / 2 + i * 20 - 20, screenHeight - 150),
             velocity: ballVelocity,
-            radius: 10,
+            radius: 15,
             color: Colors.WHITE,
             active: true
         );
@@ -132,7 +132,7 @@ void main() @trusted {
     Bullet[bulletCountMax] bullets;
     foreach (const i; 0 .. bulletCountMax) {
         bullets[i].active = false;
-        bullets[i].radius = 30; // radie, 2*radie == diameter
+        bullets[i].radius = 10; // radie, 2*radie == diameter
         bullets[i].color = Colors.YELLOW;
         bullets[i].velocity = Vec2(0, -333);
     }
