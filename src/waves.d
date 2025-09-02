@@ -201,7 +201,9 @@ Wave generatePianoWave(in float frequency, in float _amplitude, in float duratio
 }
 
 private void showStats(in Sample[] samples, in char[] funName = __FUNCTION__) {
-	import nxt.io : writeln;
-	import std.algorithm : minElement, maxElement;
-	writeln(funName, ": range:[", samples.minElement, " ... " , samples.maxElement, "]");
+	version(none) {
+		import nxt.io : writeln;
+		import std.algorithm : minElement, maxElement;
+		writeln(funName, ": range:[", samples.minElement, " ... " , samples.maxElement, "]");
+	}
 }

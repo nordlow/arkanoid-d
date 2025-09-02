@@ -1,7 +1,7 @@
 name "arkanoid"
 description "Arkandoid Clone in D"
 authors "Per Nordlöw"
-copyright "Copyright © 2020, Unknown"
+copyright "Copyright © 2025, Per Nordlöw"
 
 libs "raylib"
 
