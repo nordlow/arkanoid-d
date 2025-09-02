@@ -42,8 +42,7 @@ void readPendingEvents(ref Joystick js) @trusted {
     writeln("Reading pending events from joystick...");
 
     while (true) {
-        auto bytesRead = read(js.fd, &event, js_event.sizeof);
-
+        const bytesRead = read(js.fd, &event, js_event.sizeof);
         if (bytesRead > 0) {
             // Event was read successfully
             if (event.type & JS_EVENT_BUTTON) {
