@@ -52,9 +52,8 @@ struct Bullet {
 }
 
 void main() @trusted {
-	SetTraceLogLevel(TraceLogLevel.LOG_WARNING);
     validateRaylibBinding();
-    // Create Window
+	SetTraceLogLevel(TraceLogLevel.LOG_WARNING);
     InitWindow(800, 600, "Arkanoid Clone");
     const monitor = GetCurrentMonitor();
     SetWindowSize(GetMonitorWidth(monitor),
