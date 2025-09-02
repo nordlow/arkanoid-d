@@ -1,6 +1,7 @@
 module joystick;
 
 import nxt.io;
+import nxt.logger;
 
 import core.sys.posix.poll;
 import core.sys.posix.sys.types;
@@ -52,6 +53,7 @@ void readPendingEvents(ref Joystick js) @trusted in(js.fd >= 0) {
 
     // Check if there are any events to read with a 0ms timeout
     while (poll(&pfd, 1, 0) > 0) {
+
         if (pfd.revents & POLLIN) {
             // Data is available, so read it
             const bytesRead = read(js.fd, &event, js_event.sizeof);
