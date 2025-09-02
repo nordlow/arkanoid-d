@@ -70,8 +70,6 @@ void main() @trusted {
     }
     if (!IsAudioDeviceReady())
         stderr.writeln("ERROR: Audio device not ready!");
-    else
-        stdout.writeln("Audio device initialized successfully");
 
 	// Detect Gamepad
 	if (false) {
