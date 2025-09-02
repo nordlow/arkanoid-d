@@ -74,17 +74,20 @@ void main() @trusted {
         stdout.writeln("Audio device initialized successfully");
 
 	// Detect Gamepad
-	foreach (gamepad; -1000 .. 1000) {
-		if (IsGamepadAvailable(gamepad)) {
-			const name = GetGamepadName(gamepad);
-			writeln("Gamepad: nr ", gamepad, " being ", name.fromStringz, " detected");
-			foreach (const button; -100 .. 100) {
-				if (IsGamepadButtonDown(gamepad, button)) {
-					writeln("Button ", button, " is down");
+	if (false) {
+		foreach (gamepad; -1000 .. 1000) {
+			if (IsGamepadAvailable(gamepad)) {
+				const name = GetGamepadName(gamepad);
+				writeln("Gamepad: nr ", gamepad, " being ", name.fromStringz, " detected");
+				foreach (const button; -100 .. 100) {
+					if (IsGamepadButtonDown(gamepad, button)) {
+						writeln("Button ", button, " is down");
+					}
 				}
 			}
 		}
 	}
+
 	auto joystick = openDefaultJoystick();
 
     const sampleRate = 44100;
@@ -328,5 +331,4 @@ void main() @trusted {
         }
         frameCounter += 1;
     }
-    writeln("Ending Arkanoid game.");
 }
