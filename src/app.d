@@ -189,6 +189,7 @@ void main() @trusted {
                     }
                 }
             }
+			balls[].bounceAll();
             foreach (ref ball; balls) {
                 if (!ball.active) continue;
                 ball.position.x += ball.velocity.x * deltaTime;
@@ -330,4 +331,62 @@ void main() @trusted {
         }
         frameCounter += 1;
     }
+}
+
+void bounceAll(ref Ball[] balls) {
+    for (int i = 0; i < balls.length; ++i) {
+        for (int j = i + 1; j < balls.length; ++j) {
+            if (!balls[i].active || !balls[j].active) {
+                continue;
+            }
+
+            const auto delta = balls[j].position - balls[i].position;
+            const float distanceSquared = lengthSquared(delta);
+            const float combinedRadii = balls[i].radius + balls[j].radius;
+            const float combinedRadiiSquared = combinedRadii * combinedRadii;
+
+            if (distanceSquared < combinedRadiiSquared) {
+                const float distance = sqrt(distanceSquared);
+                const float overlap = combinedRadii - distance;
+                const auto normal = normalize(delta);
+
+                balls[i].position -= normal * (overlap / 2.0f);
+                balls[j].position += normal * (overlap / 2.0f);
+
+                const auto tangent = Vector2(-normal.y, normal.x);
+
+                const float v1n = dot(balls[i].velocity, normal);
+                const float v1t = dot(balls[i].velocity, tangent);
+                const float v2n = dot(balls[j].velocity, normal);
+                const float v2t = dot(balls[j].velocity, tangent);
+
+                const float v1n_prime = v2n;
+                const float v2n_prime = v1n;
+
+                balls[i].velocity = (normal * v1n_prime) + (tangent * v1t);
+                balls[j].velocity = (normal * v2n_prime) + (tangent * v2t);
+            }
+        }
+    }
+}
+
+// Free functions for vector math to be
+@safe @nogc nothrow pure:
+
+float lengthSquared(Vector2 v) {
+    return v.x*v.x + v.y*v.y;
+}
+
+float length(Vector2 v) {
+    return sqrt(lengthSquared(v));
+}
+
+Vector2 normalize(Vector2 v) {
+    const float l = length(v);
+    if (l == 0) return Vector2(0, 0);
+    return v / l;
+}
+
+float dot(Vector2 v1, Vector2 v2) {
+    return (v1.x * v2.x) + (v1.y * v2.y);
 }
