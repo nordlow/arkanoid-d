@@ -2,6 +2,7 @@ module joystick;
 
 import nxt.io;
 
+import core.sys.posix.poll;
 import core.sys.posix.sys.types;
 import core.sys.posix.sys.stat;
 import core.sys.posix.fcntl;
@@ -43,36 +44,34 @@ struct Joystick {
 /++ Read all pending {Joystick|Gamepad} events. +/
 void readPendingEvents(ref Joystick js) @trusted in(js.fd >= 0) {
     js_event event;
-    writeln("Reading pending events from joystick...");
 
-    while (true) {
-        const bytesRead = read(js.fd, &event, js_event.sizeof);
-        if (bytesRead > 0) {
-            // Event was read successfully
-            if (event.type & JS_EVENT_BUTTON) {
-                if (event.value == 1) {
-                    writeln("Button ", event.number, " pressed");
-                } else {
-                    writeln("Button ", event.number, " released");
+    // Create a pollfd structure for the joystick file descriptor
+    pollfd pfd;
+    pfd.fd = js.fd;
+    pfd.events = POLLIN; // Wait for incoming data
+
+    // Check if there are any events to read with a 0ms timeout
+    while (poll(&pfd, 1, 0) > 0) {
+        if (pfd.revents & POLLIN) {
+            // Data is available, so read it
+            const bytesRead = read(js.fd, &event, js_event.sizeof);
+
+            if (bytesRead > 0) {
+                // Event was read successfully
+                if (event.type & JS_EVENT_BUTTON) {
+                    if (event.value == 1) {
+                        writeln("Button ", event.number, " pressed");
+                    } else {
+                        writeln("Button ", event.number, " released");
+                    }
+                } else if (event.type & JS_EVENT_AXIS) {
+                    writeln("Axis ", event.number, " moved to ", event.value);
                 }
-            } else if (event.type & JS_EVENT_AXIS) {
-                writeln("Axis ", event.number, " moved to ", event.value);
-            }
-        } else if (bytesRead == -1) {
-            // Check for non-blocking errors.
-            // EAGAIN and EWOULDBLOCK mean no data is currently available.
-            if (errno == EAGAIN || errno == EWOULDBLOCK) {
-                writeln("No more events to read. Exiting.");
-                break; // Exit the loop
-            } else {
-                // Other errors, e.g., file descriptor is invalid, disk full, etc.
+            } else if (bytesRead == -1) {
+                // An actual error occurred during read
                 perror("Error reading from joystick");
-                break; // Exit on unexpected error
+                break;
             }
-        } else if (bytesRead == 0) {
-            // End of file (unlikely for a device file, but good practice to handle)
-            writeln("End of file reached. Exiting.");
-            break;
         }
     }
 }
