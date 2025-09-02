@@ -85,7 +85,7 @@ void main() @trusted {
 			}
 		}
 	}
-	auto joystick = Joystick("/dev/input/js0");
+	auto joystick = openDefaultJoystick();
 
     const sampleRate = 44100;
     auto rng = Random(unpredictableSeed());

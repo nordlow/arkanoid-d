@@ -12,6 +12,10 @@ import core.stdc.errno;
 
 @safe:
 
+Joystick openDefaultJoystick() @trusted {
+	return Joystick("/dev/input/js0");
+}
+
 struct Joystick {
 	int fd;
 	@disable this(this);
