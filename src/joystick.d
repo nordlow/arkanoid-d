@@ -7,6 +7,8 @@ import core.sys.posix.sys.stat;
 import core.sys.posix.fcntl;
 import core.sys.posix.unistd;
 import core.sys.posix.stdio;
+import core.sys.posix.signal;
+import core.stdc.errno;
 
 @safe:
 
@@ -36,18 +38,38 @@ struct Joystick {
 
 /++ Read all pending {Joystick|Gamepad} events. +/
 void readPendingEvents(ref Joystick js) @trusted {
-    // Loop until read() returns -1, indicating no more events are available
-    // for now (EAGAIN/EWOULDBLOCK).
     js_event event;
-    while (read(js.fd, &event, js_event.sizeof) > 0) {
-        if (event.type & JS_EVENT_BUTTON) {
-            if (event.value == 1) {
-                writeln("Button ", event.number, " pressed");
-            } else {
-                writeln("Button ", event.number, " released");
+    writeln("Reading pending events from joystick...");
+
+    while (true) {
+        auto bytesRead = read(js.fd, &event, js_event.sizeof);
+
+        if (bytesRead > 0) {
+            // Event was read successfully
+            if (event.type & JS_EVENT_BUTTON) {
+                if (event.value == 1) {
+                    writeln("Button ", event.number, " pressed");
+                } else {
+                    writeln("Button ", event.number, " released");
+                }
+            } else if (event.type & JS_EVENT_AXIS) {
+                writeln("Axis ", event.number, " moved to ", event.value);
             }
-        } else if (event.type & JS_EVENT_AXIS) {
-            writeln("Axis ", event.number, " moved to ", event.value);
+        } else if (bytesRead == -1) {
+            // Check for non-blocking errors.
+            // EAGAIN and EWOULDBLOCK mean no data is currently available.
+            if (errno == EAGAIN || errno == EWOULDBLOCK) {
+                writeln("No more events to read. Exiting.");
+                break; // Exit the loop
+            } else {
+                // Other errors, e.g., file descriptor is invalid, disk full, etc.
+                perror("Error reading from joystick");
+                break; // Exit on unexpected error
+            }
+        } else if (bytesRead == 0) {
+            // End of file (unlikely for a device file, but good practice to handle)
+            writeln("End of file reached. Exiting.");
+            break;
         }
     }
 }

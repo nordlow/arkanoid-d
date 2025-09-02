@@ -85,6 +85,7 @@ void main() @trusted {
 			}
 		}
 	}
+	auto joystick = Joystick("/dev/input/js0");
 
     const sampleRate = 44100;
     auto rng = Random(unpredictableSeed());
@@ -160,6 +161,8 @@ void main() @trusted {
     uint frameCounter;
     uint keyCounter;
     while (!WindowShouldClose()) {
+		joystick.readPendingEvents();
+
         const deltaTime = GetFrameTime();
         const absTime = GetTime();
         if (playPiano && absTime > keyCounter) {
