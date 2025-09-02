@@ -52,6 +52,7 @@ struct Bullet {
 }
 
 void main() @trusted {
+	SetTraceLogLevel(TraceLogLevel.LOG_WARNING);
     validateRaylibBinding();
     // Create Window
     InitWindow(800, 600, "Arkanoid Clone");
