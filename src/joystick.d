@@ -37,7 +37,7 @@ struct Joystick {
 }
 
 /++ Read all pending {Joystick|Gamepad} events. +/
-void readPendingEvents(ref Joystick js) @trusted {
+void readPendingEvents(ref Joystick js) @trusted in(js.fd >= 0) {
     js_event event;
     writeln("Reading pending events from joystick...");
 
