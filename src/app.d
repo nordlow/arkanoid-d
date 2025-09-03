@@ -38,14 +38,13 @@ void main() @trusted {
 
 	if (false) raylib_detectGamepad();
 
-	const sampleRate = 44100;
 	auto rng = Random(unpredictableSeed());
 
 	// Sounds (Ljud):
-	auto paddleSound = generateBoingWave(300.0f, 1000.0f, 0.30f, sampleRate).LoadSoundFromWave();
-	auto wallSound = generateBoingWave(300.0f, 150.0f, 0.30f, sampleRate).LoadSoundFromWave();
-	auto brickSound = rng.generateGlassBreakWave(0.60f, 0.2f, sampleRate).LoadSoundFromWave();
-	auto shootSound = generateBounceWave(400.0f, 200.0f, 0.3f, sampleRate).LoadSoundFromWave();
+	auto paddleSound = generateBoingWave(300.0f, 1000.0f, 0.30f, game.soundSampleRate).LoadSoundFromWave();
+	auto wallSound = generateBoingWave(300.0f, 150.0f, 0.30f, game.soundSampleRate).LoadSoundFromWave();
+	auto brickSound = rng.generateGlassBreakWave(0.60f, 0.2f, game.soundSampleRate).LoadSoundFromWave();
+	auto shootSound = generateBounceWave(400.0f, 200.0f, 0.3f, game.soundSampleRate).LoadSoundFromWave();
 	const playPiano = false;
 	const pianoKeys = __traits(allMembers, Key);
 
@@ -53,7 +52,7 @@ void main() @trusted {
 	pianoSounds.reserve(pianoKeys.length);
 	foreach (const i, const key; pianoKeys[0 .. 40]) {
 		const f = cast(float)__traits(getMember, Key, key);
-		pianoSounds ~= generatePianoWave(f, 1.0f, 1.0f, sampleRate).LoadSoundFromWave();
+		pianoSounds ~= generatePianoWave(f, 1.0f, 1.0f, game.soundSampleRate).LoadSoundFromWave();
 	}
 
 	const ballVelocity = Vec2(100, -800); // boll hastighet
@@ -295,6 +294,7 @@ struct Game {
 	Joystick joystick;
 	bool won;
 	bool over;
+	static immutable soundSampleRate = 44100;
 }
 
 struct Paddle {
