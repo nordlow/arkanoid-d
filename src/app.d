@@ -49,14 +49,10 @@ void main() @trusted {
 		pianoSounds ~= generatePianoWave(f, 1.0f, 1.0f, game.soundSampleRate).LoadSoundFromWave();
 	}
 
-	const ballVelocity = Vec2(100, -800); // boll hastighet
-	enum ballCountMax = 10; // Maximum number of balls
-
-	Ball[ballCountMax] balls;
-	foreach (const i; 0 .. ballCountMax) {
-		balls[i] = Ball(
+	foreach (const i; 0 .. game.ballCountMax) {
+		game.balls[i] = Ball(
 			position: Vec2(screenWidth / 2 + i * 20 - 20, screenHeight - 150),
-			velocity: ballVelocity,
+			velocity: game.ballVelocity,
 			radius: 15,
 			color: Colors.GRAY,
 			active: true
@@ -130,9 +126,9 @@ void main() @trusted {
 				}
 			}
 
-			balls[].bounceAll();
+			game.balls[].bounceAll();
 
-			foreach (ref ball; balls) {
+			foreach (ref ball; game.balls) {
 				if (!ball.active) continue;
 				ball.position.x += ball.velocity.x * deltaTime;
 				ball.position.y += ball.velocity.y * deltaTime;
@@ -218,7 +214,7 @@ void main() @trusted {
 			}
 			game.won = allBricksDestroyed;
 			bool allBallsLost = true;
-			foreach (const ball; balls) {
+			foreach (const ball; game.balls) {
 				if (ball.active) {
 					allBallsLost = false;
 					break;
@@ -227,9 +223,9 @@ void main() @trusted {
 			game.over = allBallsLost;
 		}
 		if ((game.over || game.won) && IsKeyPressed(KeyboardKey.KEY_R)) {
-			foreach (ref ball; balls) {
-				ball.position = Vec2(screenWidth / 2 + (ballCountMax - 1) * 20 - 20, screenHeight - 150);
-				ball.velocity = ballVelocity;
+			foreach (ref ball; game.balls) {
+				ball.position = Vec2(screenWidth / 2 + (game.ballCountMax - 1) * 20 - 20, screenHeight - 150);
+				ball.velocity = game.ballVelocity;
 				ball.active = true;
 			}
 			paddle.position = Vec2(screenWidth / 2 - 60, screenHeight - 30);
@@ -255,7 +251,7 @@ void main() @trusted {
 		clearCanvas();
 		bricks.drawBricks();
 		paddle.drawPaddle();
-		balls.drawBalls();
+		game.balls.drawBalls();
 		bullets.drawBullets();
 		EndDrawing();
 
@@ -300,6 +296,10 @@ struct Game {
 	Random rng;
 	Sound paddleSound, wallSound, brickSound, shootSound;
 	bool playPiano;
+
+	const ballVelocity = Vec2(100, -800); // boll hastighet
+	enum ballCountMax = 10; // Maximum number of balls
+	Ball[ballCountMax] balls;
 }
 
 struct Paddle {
