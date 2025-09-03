@@ -38,7 +38,7 @@ void main() @trusted {
 	if (!IsAudioDeviceReady())
 		stderr.writeln("ERROR: Audio device not ready!");
 
-	auto game = Game.launch();
+	auto game = Game.make();
 
 	if (false) raylib_detectGamepad();
 
@@ -253,7 +253,7 @@ void main() @trusted {
 struct Game {
 	@disable this(this);
 	static immutable pianoKeys = __traits(allMembers, Key);
-	static typeof(this) launch() @trusted {
+	static typeof(this) make() @trusted {
 		typeof(return) ret;
 		ret.joystick = openDefaultJoystick();
 		ret.rng = Random(unpredictableSeed());
