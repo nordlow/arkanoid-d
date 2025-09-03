@@ -8,9 +8,8 @@ void raylib_detectGamepad() @trusted {
 	foreach (const gamepad; -1000 .. 1000) {
 		if (IsGamepadAvailable(gamepad))
 			continue;
-		const name = GetGamepadName(gamepad);
 		import std.string : fromStringz;
-		info("Gamepad: nr ", gamepad, " being ", name.fromStringz, " detected");
+		info("Gamepad: nr ", gamepad, " being ", GetGamepadName(gamepad).fromStringz, " detected");
 		foreach (const button; -100 .. 100) {
 			if (!IsGamepadButtonDown(gamepad, button))
 				continue;
