@@ -7,7 +7,7 @@ import std.math;
 import std.string;
 import nxt.geometry;
 import nxt.color : ColorRGBA;
-import raylib : ColorR8G8B8A8 = Color; // TODO: merge into `ColorRGBA` and remove
+import raylib : ColorR8G8B8A8 = Color; // TODO: merge into ColorRGBA and remove
 import raylib;
 import music;
 import waves;
@@ -303,7 +303,6 @@ void drawPaddle(in Paddle paddle) @trusted {
 }
 
 struct BrickGrid {
-	Entity entity;
 	@disable this(this);
 	this(in uint rows, in uint cols) {
 		this.rows = rows;
@@ -320,7 +319,7 @@ void draw(in BrickGrid brickGrid) @trusted {
 }
 
 struct Brick/+Tegelsten+/ {
-	PositionedEntity posEnt; alias this = posEnt;
+	PositionedEntity posEnt; alias this = posEnt; // TODO: Replace with `Box shape;`
 	Entity entity;
 	Vec2 size;
 	ColorR8G8B8A8 color;
@@ -377,11 +376,29 @@ void drawBricks(in Brick[] bricks) @trusted {
 		brick.drawBrick();
 }
 
+// TODO: Move to `nxt.geometry`
+struct Circle {
+	Vec2 centerPosition;
+	float radius;
+}
+
+// TODO: Move to `nxt.geometry`
+struct Square {
+	Vec2 centerPosition;
+	float radius;
+}
+
+// TODO: Move to `nxt.geometry`
+struct Box {
+	Vec2 centerPosition;
+	Vec2 size;
+}
+
 /++ Skott. +/
 struct Bullet {
-	PositionedEntity posEnt; alias this = posEnt;
-	Vec2 vel/+hastighet+/;
+	PositionedEntity posEnt; alias this = posEnt; // TODO: Replace with `Circle shape;`
 	float rad;
+	Vec2 vel/+hastighet+/;
 	ColorR8G8B8A8 color;
 	bool active;
 }
@@ -444,9 +461,9 @@ void clearCanvas() @trusted {
 
 /++ Boll. +/
 struct Ball {
-	PositionedEntity posEnt; alias this = posEnt;
-	Vec2 vel;
+	PositionedEntity posEnt; alias this = posEnt; // TODO: Replace with `Circle shape;`
 	float rad;
+	Vec2 vel;
 	ColorR8G8B8A8 color;
 	bool active; // Added to track active balls
 }
