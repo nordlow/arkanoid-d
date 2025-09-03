@@ -20,9 +20,9 @@ struct Joystick {
 	int fd;
 nothrow:
 	@disable this(this);
-	this(const char* devicePath) @trusted {
+	this(in char[] devicePath) @trusted {
 		import std.string : fromStringz;
-		auto fd = open(devicePath, O_RDONLY | O_NONBLOCK);
+		auto fd = open(devicePath.ptr, O_RDONLY | O_NONBLOCK);
 		if (fd == -1)
 			perror(("Could not open joystick " ~ devicePath.fromStringz).ptr);
 		// Set the file descriptor to non-blocking mode.

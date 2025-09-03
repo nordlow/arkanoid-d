@@ -38,21 +38,13 @@ void main() @trusted {
 	if (!IsAudioDeviceReady())
 		stderr.writeln("ERROR: Audio device not ready!");
 
-	Game game;
+	auto game = Game(false);
 
 	if (false) raylib_detectGamepad();
 
-	// Sounds (Ljud):
-	auto paddleSound = generateBoingWave(300.0f, 1000.0f, 0.30f, game.soundSampleRate).LoadSoundFromWave();
-	auto wallSound = generateBoingWave(300.0f, 150.0f, 0.30f, game.soundSampleRate).LoadSoundFromWave();
-	auto brickSound = game.rng.generateGlassBreakWave(0.60f, 0.2f, game.soundSampleRate).LoadSoundFromWave();
-	auto shootSound = generateBounceWave(400.0f, 200.0f, 0.3f, game.soundSampleRate).LoadSoundFromWave();
-	const playPiano = false;
-	const pianoKeys = __traits(allMembers, Key);
-
 	Sound[] pianoSounds;
-	pianoSounds.reserve(pianoKeys.length);
-	foreach (const i, const key; pianoKeys[0 .. 40]) {
+	pianoSounds.reserve(game.pianoKeys.length);
+	foreach (const i, const key; game.pianoKeys[0 .. 40]) {
 		const f = cast(float)__traits(getMember, Key, key);
 		pianoSounds ~= generatePianoWave(f, 1.0f, 1.0f, game.soundSampleRate).LoadSoundFromWave();
 	}
@@ -114,7 +106,7 @@ void main() @trusted {
 		const deltaTime = GetFrameTime();
 		const absTime = GetTime();
 
-		if (playPiano && absTime > keyCounter) {
+		if (game.playPiano && absTime > keyCounter) {
 			pianoSounds[keyCounter].PlaySound();
 			keyCounter += 1;
 		}
@@ -132,7 +124,7 @@ void main() @trusted {
 					if (!bullet.active) {
 						bullet.position = Vec2(paddle.position.x + paddle.size.x / 2, paddle.position.y);
 						bullet.active = true;
-						shootSound.PlaySound();
+						game.shootSound.PlaySound();
 						break;
 					}
 				}
@@ -146,11 +138,11 @@ void main() @trusted {
 				ball.position.y += ball.velocity.y * deltaTime;
 				if (ball.position.x <= ball.radius || ball.position.x >= screenWidth - ball.radius) {
 					ball.velocity.x *= -1;
-					wallSound.PlaySound();
+					game.wallSound.PlaySound();
 				}
 				if (ball.position.y <= ball.radius) {
 					ball.velocity.y *= -1;
-					wallSound.PlaySound();
+					game.wallSound.PlaySound();
 				}
 				if (ball.position.y + ball.radius >= paddle.position.y
 					&& ball.position.y - ball.radius
@@ -158,7 +150,7 @@ void main() @trusted {
 					&& ball.position.x >= paddle.position.x
 					&& ball.position.x <= paddle.position.x + paddle.size.x) {
 					ball.velocity.y = -abs(ball.velocity.y);
-					paddleSound.PlaySound();
+					game.paddleSound.PlaySound();
 					const float hitPos = (ball.position.x - paddle.position.x) / paddle.size.x;
 					ball.velocity.x = 200 * (hitPos - 0.5f) * 2;
 				}
@@ -173,7 +165,7 @@ void main() @trusted {
 						<= brick.position.y + brick.size.y) {
 						brick.restartFlashing();
 						ball.velocity.y *= -1;
-						PlaySound(brickSound);
+						PlaySound(game.brickSound);
 						break;
 					}
 				}
@@ -199,7 +191,7 @@ void main() @trusted {
 							<= brick.position.y + brick.size.y) {
 							restartFlashing(brick); // Start flashing
 							bullet.active = false;
-							PlaySound(brickSound);
+							PlaySound(game.brickSound);
 							break;
 						}
 					}
@@ -290,15 +282,24 @@ void main() @trusted {
 
 struct Game {
 	@disable this(this);
-	this(in bool) nothrow {
+	static immutable pianoKeys = __traits(allMembers, Key);
+	this(in bool) @trusted {
 		joystick = openDefaultJoystick();
 		rng = Random(unpredictableSeed());
+		// Sounds (Ljud):
+		paddleSound = generateBoingWave(300.0f, 1000.0f, 0.30f, soundSampleRate).LoadSoundFromWave();
+		wallSound = generateBoingWave(300.0f, 150.0f, 0.30f, soundSampleRate).LoadSoundFromWave();
+		brickSound = rng.generateGlassBreakWave(0.60f, 0.2f, soundSampleRate).LoadSoundFromWave();
+		shootSound = generateBounceWave(400.0f, 200.0f, 0.3f, soundSampleRate).LoadSoundFromWave();
+		const playPiano = false;
 	}
 	Joystick joystick;
 	bool won;
 	bool over;
 	static immutable soundSampleRate = 44100;
 	Random rng;
+	Sound paddleSound, wallSound, brickSound, shootSound;
+	bool playPiano;
 }
 
 struct Paddle {
