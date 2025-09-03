@@ -308,6 +308,10 @@ struct Paddle {
 	ColorR8G8B8A8 color;
 }
 
+void drawPaddle(in Paddle paddle) @trusted {
+	DrawRectangleV(paddle.position, paddle.size, paddle.color);
+}
+
 struct Brick/+Tegelsten+/ {
 	Vec2 position;
 	Vec2 size;
@@ -315,6 +319,13 @@ struct Brick/+Tegelsten+/ {
 	bool active;
 	bool isFlashing = false;
 	float flashTimer = 0.0f; // Timer for flashing duration.
+}
+
+static immutable float FLASH_DURATION = 0.3f;
+
+void restartFlashing(ref Brick brick) {
+	brick.isFlashing = true; // start
+	brick.flashTimer = 0.0f; // restart
 }
 
 void drawBricks(in Brick[] bricks) @trusted {
@@ -331,13 +342,6 @@ void drawBricks(in Brick[] bricks) @trusted {
 			DrawRectangleV(brick.position, brick.size, drawColor);
 		}
 	}
-}
-
-static immutable float FLASH_DURATION = 0.3f;
-
-void restartFlashing(ref Brick brick) {
-	brick.isFlashing = true; // start
-	brick.flashTimer = 0.0f; // restart
 }
 
 /++ Skott. +/
@@ -385,10 +389,6 @@ Vec2 normalized(in Vec2 v) pure nothrow @nogc {
 
 void clearCanvas() @trusted {
 	ClearBackground(Colors.BLACK);
-}
-
-void drawPaddle(in Paddle paddle) @trusted {
-	DrawRectangleV(paddle.position, paddle.size, paddle.color);
 }
 
 void drawBullets(in Bullet[] bullets) @trusted {
