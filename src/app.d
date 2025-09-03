@@ -70,10 +70,9 @@ void main() @trusted {
 
 	auto bullets = makeBullets(30);
 
-	uint frameCounter;
 	uint keyCounter;
 
-	while (!WindowShouldClose()) {
+	for (uint frameCounter; !WindowShouldClose(); ++frameCounter) {
 		version(none)
 			game.joystick.readPendingEvents();
 
@@ -249,8 +248,6 @@ void main() @trusted {
 			DrawText("LEFT/RIGHT arrows to move, SPACE to shoot".ptr, 10,
 					 screenHeight - 25, 16, Colors.WHITE);
 		}
-
-		frameCounter += 1;
 	}
 }
 
