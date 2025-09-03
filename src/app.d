@@ -6,7 +6,7 @@ import std.random : uniform, Random, unpredictableSeed;
 import std.math;
 import std.string;
 import nxt.geometry;
-import nxt.color : ColorRGB8;
+import nxt.color : ColorRGBA8;
 import raylib;
 import raylib : ColorR8G8B8A8 = Color;
 import music;
