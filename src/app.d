@@ -315,7 +315,7 @@ void restartFlashing(ref Brick brick) {
 	brick.flashTimer = 0.0f; // restart
 }
 
-void layoutBricks(scope Brick[] bricks, int screenWidth, int screenHeight, int brickRows, int brickCols) pure nothrow @nogc {
+void layoutBricks(scope Brick[] bricks, in int screenWidth, in int screenHeight, in int brickRows, in int brickCols) pure nothrow @nogc {
 	const brickWidth = screenWidth / brickCols; // bredd
 	const brickHeight = 30; // höjd
 	foreach (const row; 0 .. brickRows) {
