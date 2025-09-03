@@ -23,13 +23,11 @@ struct JoystickEvent {
     short value;         // axis value (for axisMoved events)
     uint timestamp;      // event timestamp in milliseconds
 
-	bool opCast(T : bool)() const pure nothrow @safe @nogc { return type != JoystickEvent.Type.none; }
-
 @property const pure nothrow @nogc:
-    bool isButton() => (type == JoystickEvent.Type.buttonPressed ||
-               type == JoystickEvent.Type.buttonReleased);
-    bool isAxis() => type == JoystickEvent.Type.axisMoved;
-    bool isPressed() => type == JoystickEvent.Type.buttonPressed;
+	bool opCast(T: bool)() => type != Type.none;
+    bool isButton() => (type == Type.buttonPressed || type == Type.buttonReleased);
+    bool isAxis() => type == Type.axisMoved;
+    bool isPressed() => type == Type.buttonPressed;
 }
 
 struct Joystick {
