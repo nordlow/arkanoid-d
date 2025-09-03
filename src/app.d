@@ -337,9 +337,12 @@ void main() @trusted {
 			gameOver = false;
 			gameWon = false;
 		}
+
 		BeginDrawing();
 		scope(exit) EndDrawing();
+
 		ClearBackground(Colors.BLACK);
+
 		foreach (const i, ref brick; bricks) {
 			if (brick.active || brick.isFlashing) {
 				Color drawColor = brick.color;
@@ -354,8 +357,10 @@ void main() @trusted {
 			}
 		}
 		DrawRectangleV(paddle.position, paddle.size, paddle.color);
+
 		balls.drawBalls();
 		bullets.drawBullets();
+
 		if (gameWon) {
 			const text = "YOU WON! Press R to restart";
 			const fontSize = 32;
@@ -372,6 +377,7 @@ void main() @trusted {
 			DrawText("LEFT/RIGHT arrows to move, SPACE to shoot".ptr, 10,
 					 screenHeight - 25, 16, Colors.WHITE);
 		}
+
 		frameCounter += 1;
 	}
 }
