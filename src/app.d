@@ -284,7 +284,6 @@ void draw(in Game game) @trusted {
 struct Entity {
 }
 
-/++ Common term for a game object. +/
 struct PositionedEntity {
 	this(Vec2 position) pure nothrow @nogc {
 		this.position = position;
