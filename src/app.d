@@ -38,6 +38,15 @@ struct Bullet {
 	bool active;
 }
 
+void layoutBullets(Bullet[] bullets) {
+	foreach (ref bullet; bullets) {
+		bullet.active = false;
+		bullet.radius = 10; // radie, 2*radie == diameter
+		bullet.color = Colors.YELLOW;
+		bullet.velocity = Vec2(0, -333);
+	}
+}
+
 alias Vec2 = Vector2;
 
 float dot(in Vec2 v1, in Vec2 v2) pure nothrow @safe @nogc {
@@ -61,15 +70,6 @@ Vec2 normalized(in Vec2 v) pure nothrow @safe @nogc {
 	if (l == 0)
 		return Vec2(0, 0);
 	return v / l;
-}
-
-void layoutBullets(Bullet[] bullets) {
-	foreach (ref bullet; bullets) {
-		bullet.active = false;
-		bullet.radius = 10; // radie, 2*radie == diameter
-		bullet.color = Colors.YELLOW;
-		bullet.velocity = Vec2(0, -333);
-	}
 }
 
 void clearCanvas() @trusted {
