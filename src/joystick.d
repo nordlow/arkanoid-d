@@ -32,7 +32,7 @@ struct JoystickEvent {
 
 struct Joystick {
     int fd;
-    private bool[256] buttonStates; // Track button states, indexed by button number
+    private bool[256] buttonStates; // track button states, indexed by button number
 
 nothrow:
     @disable this(this);
@@ -77,23 +77,12 @@ nothrow:
      + Returns: An array of button numbers that are currently pressed
      +/
     ubyte[] getHeldButtons() const pure nothrow {
-        ubyte[] held;
+        typeof(return) held;
         held.reserve(32); // Reasonable initial capacity
-        foreach (ubyte i, bool pressed; buttonStates)
+        foreach (const ubyte i, const bool pressed; buttonStates)
             if (pressed)
                 held ~= i;
         return held;
-    }
-
-    /++
-     + Get the number of buttons currently being held.
-     + Returns: Count of pressed buttons
-     +/
-    size_t getHeldButtonCount() const pure nothrow @nogc {
-        size_t count = 0;
-        foreach (bool pressed; buttonStates)
-            if (pressed) count++;
-        return count;
     }
 
     /++
@@ -119,8 +108,10 @@ nothrow:
 
         // skip initialization events but still update button states from them
         if (rawEvent.type & JS_EVENT_INIT) {
-            if (rawEvent.type & JS_EVENT_BUTTON)
+            if (rawEvent.type & JS_EVENT_BUTTON) {
                 buttonStates[rawEvent.number] = (rawEvent.value == 1);
+				writeln("Set button ", rawEvent.number, ", buttonStates: ", buttonStates);
+			}
             return JoystickEvent(JoystickEvent.Type.none);
         }
 
@@ -134,6 +125,7 @@ nothrow:
                         JoystickEvent.Type.buttonReleased;
             // update button state tracking
             buttonStates[rawEvent.number] = (rawEvent.value == 1);
+			writeln("Set button ", rawEvent.number, ", buttonStates: ", buttonStates);
         } else if (rawEvent.type & JS_EVENT_AXIS) {
             event.type = JoystickEvent.Type.axisMoved;
             event.value = rawEvent.value;
