@@ -58,8 +58,6 @@ void main() @trusted {
 	auto brickGrid = BrickGrid(rows: 15, cols: 20);
 	brickGrid.bricks.layoutBricks(screenWidth, screenHeight, brickGrid.rows, brickGrid.cols);
 
-	game.bullets = makeBullets(30);
-
 	uint keyCounter;
 	for (uint frameCounter; !WindowShouldClose(); ++frameCounter) {
 		version(none)
@@ -247,6 +245,7 @@ struct Game {
 		joystick = openDefaultJoystick();
 		rng = Random(unpredictableSeed());
 		balls = makeBalls(ballCountMax, ballVelocity, screenWidth, screenHeight);
+		bullets = makeBullets(30);
 		generateSounds();
 	}
 
