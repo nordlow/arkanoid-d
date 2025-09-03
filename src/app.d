@@ -91,16 +91,16 @@ void main() @trusted {
 				if (!ball.active) continue;
 				ball.pos.x += ball.vel.x * deltaTime;
 				ball.pos.y += ball.vel.y * deltaTime;
-				if (ball.pos.x <= ball.radius || ball.pos.x >= screenWidth - ball.radius) {
+				if (ball.pos.x <= ball.rad || ball.pos.x >= screenWidth - ball.rad) {
 					ball.vel.x *= -1;
 					game.wallSound.PlaySound();
 				}
-				if (ball.pos.y <= ball.radius) {
+				if (ball.pos.y <= ball.rad) {
 					ball.vel.y *= -1;
 					game.wallSound.PlaySound();
 				}
-				if (ball.pos.y + ball.radius >= game.paddle.pos.y
-					&& ball.pos.y - ball.radius
+				if (ball.pos.y + ball.rad >= game.paddle.pos.y
+					&& ball.pos.y - ball.rad
 					<= game.paddle.pos.y + game.paddle.size.y
 					&& ball.pos.x >= game.paddle.pos.x
 					&& ball.pos.x <= game.paddle.pos.x + game.paddle.size.x) {
@@ -112,11 +112,11 @@ void main() @trusted {
 				foreach (ref brick; game.brickGrid.bricks) {
 					if (!brick.active || brick.isFlashing)
 						continue;
-					if (ball.pos.x + ball.radius >= brick.pos.x
-						&& ball.pos.x - ball.radius
+					if (ball.pos.x + ball.rad >= brick.pos.x
+						&& ball.pos.x - ball.rad
 						<= brick.pos.x + brick.size.x
-						&& ball.pos.y + ball.radius >= brick.pos.y
-						&& ball.pos.y - ball.radius
+						&& ball.pos.y + ball.rad >= brick.pos.y
+						&& ball.pos.y - ball.rad
 						<= brick.pos.y + brick.size.y) {
 						brick.restartFlashing();
 						ball.vel.y *= -1;
@@ -138,11 +138,11 @@ void main() @trusted {
 					foreach (ref brick; game.brickGrid.bricks) {
 						if (!brick.active || brick.isFlashing)
 							continue;
-						if (bullet.pos.x + bullet.radius >= brick.pos.x
-							&& bullet.pos.x - bullet.radius
+						if (bullet.pos.x + bullet.rad >= brick.pos.x
+							&& bullet.pos.x - bullet.rad
 							<= brick.pos.x + brick.size.x
-							&& bullet.pos.y + bullet.radius >= brick.pos.y
-							&& bullet.pos.y - bullet.radius
+							&& bullet.pos.y + bullet.rad >= brick.pos.y
+							&& bullet.pos.y - bullet.rad
 							<= brick.pos.y + brick.size.y) {
 							restartFlashing(brick); // Start flashing
 							bullet.active = false;
@@ -381,7 +381,7 @@ void drawBricks(in Brick[] bricks) @trusted {
 struct Bullet {
 	PositionedEntity posEnt; alias this = posEnt;
 	Vec2 vel/+hastighet+/;
-	float radius;
+	float rad;
 	ColorR8G8B8A8 color;
 	bool active;
 }
@@ -389,7 +389,7 @@ struct Bullet {
 Bullet makeBullet() {
 	typeof(return) ret;
 	ret.active = false;
-	ret.radius = 10; // radie, 2*radie == diameter
+	ret.rad = 10; // radie, 2*radie == diameter
 	ret.color = Colors.YELLOW;
 	ret.vel = Vec2(0, -333);
 	return ret;
@@ -405,7 +405,7 @@ Bullet[] makeBullets(uint count) {
 
 void drawBullet(in Bullet bullet) @trusted {
 	if (bullet.active)
-		DrawCircleV(bullet.pos, bullet.radius, bullet.color);
+		DrawCircleV(bullet.pos, bullet.rad, bullet.color);
 }
 
 void drawBullets(in Bullet[] bullets) @trusted {
@@ -446,7 +446,7 @@ void clearCanvas() @trusted {
 struct Ball {
 	PositionedEntity posEnt; alias this = posEnt;
 	Vec2 vel;
-	float radius;
+	float rad;
 	ColorR8G8B8A8 color;
 	bool active; // Added to track active balls
 }
@@ -457,7 +457,7 @@ Ball[] makeBalls(uint count, Vec2 ballVelocity, uint screenWidth, uint screenHei
 	foreach (const i, ref ball; ret)
 		ball = Ball(posEnt: PositionedEntity(Vec2(screenWidth / 2 + i * 20 - 20, screenHeight - 150)),
 					vel: ballVelocity,
-					radius: 15,
+					rad: 15,
 					color: Colors.GRAY,
 					active: true
 					);
@@ -468,7 +468,7 @@ void drawBalls(in Ball[] balls) @trusted {
 	foreach (const ref ball; balls) {
 		if (!ball.active)
 			continue;
-		DrawCircleV(ball.pos, ball.radius, ball.color);
+		DrawCircleV(ball.pos, ball.rad, ball.color);
 	}
 }
 
@@ -480,7 +480,7 @@ void bounceAll(ref Ball[] balls) pure nothrow @nogc { // studsa alla
 
 			const delta = ballB.pos - ballA.pos;
 			const distanceSquared = delta.lengthSquared;
-			const combinedRadii = ballA.radius + ballB.radius;
+			const combinedRadii = ballA.rad + ballB.rad;
 			const combinedRadiiSquared = combinedRadii * combinedRadii;
 
 			if (distanceSquared < combinedRadiiSquared) {
