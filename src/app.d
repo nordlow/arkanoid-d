@@ -62,21 +62,18 @@ void main() @trusted {
 		}
 
 		if (!game.over && !game.won) {
-			if (IsKeyDown(KeyboardKey.KEY_LEFT) && game.paddle.pos.x > 0) {
+			if (IsKeyDown(KeyboardKey.KEY_LEFT) && game.paddle.pos.x > 0)
 				game.paddle.pos.x -= 800 * deltaTime;
-			}
-			if (IsKeyDown(KeyboardKey.KEY_RIGHT)
-				&& game.paddle.pos.x < screenWidth - game.paddle.size.x) {
+			if (IsKeyDown(KeyboardKey.KEY_RIGHT) && game.paddle.pos.x < screenWidth - game.paddle.size.x)
 				game.paddle.pos.x += 800 * deltaTime;
-			}
 			if (IsKeyPressed(KeyboardKey.KEY_SPACE)) {
 				foreach (ref bullet; game.bullets) {
-					if (!bullet.active) {
-						bullet.pos = Vec2(game.paddle.pos.x + game.paddle.size.x / 2, game.paddle.pos.y);
-						bullet.active = true;
-						game.shootSound.PlaySound();
-						break;
-					}
+					if (bullet.active)
+						continue;
+					bullet.pos = Vec2(game.paddle.pos.x + game.paddle.size.x / 2, game.paddle.pos.y);
+					bullet.active = true;
+					game.shootSound.PlaySound();
+					break;
 				}
 			}
 
