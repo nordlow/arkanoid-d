@@ -70,9 +70,7 @@ nothrow:
      + Params: buttonNumber = The button number to check
      + Returns: true if the button is currently pressed, false otherwise
      +/
-    bool isButtonHeld(ubyte buttonNumber) const pure nothrow @nogc {
-        return buttonStates[buttonNumber];
-    }
+    bool isButtonHeld(ubyte buttonNumber) const pure nothrow @nogc => buttonStates[buttonNumber];
 
     /++
      + Get all currently held button numbers.
