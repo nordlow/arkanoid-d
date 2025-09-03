@@ -43,7 +43,7 @@ void main() @trusted {
 		pianoSounds ~= generatePianoWave(f, 1.0f, 1.0f, game.soundSampleRate).LoadSoundFromWave();
 	}
 
-	game.paddle = Paddle(pos: Vec2(screenWidth / 2 - 60, screenHeight - 30),
+	game.scene.paddle = Paddle(pos: Vec2(screenWidth / 2 - 60, screenHeight - 30),
 						 size: Vec2(250, 20),
 						 color: Colors.BLUE);
 
@@ -61,24 +61,24 @@ void main() @trusted {
 		}
 
 		if (!game.over && !game.won) {
-			if (IsKeyDown(KeyboardKey.KEY_LEFT) && game.paddle.pos.x > 0)
-				game.paddle.pos.x -= 800 * deltaTime;
-			if (IsKeyDown(KeyboardKey.KEY_RIGHT) && game.paddle.pos.x < screenWidth - game.paddle.size.x)
-				game.paddle.pos.x += 800 * deltaTime;
+			if (IsKeyDown(KeyboardKey.KEY_LEFT) && game.scene.paddle.pos.x > 0)
+				game.scene.paddle.pos.x -= 800 * deltaTime;
+			if (IsKeyDown(KeyboardKey.KEY_RIGHT) && game.scene.paddle.pos.x < screenWidth - game.scene.paddle.size.x)
+				game.scene.paddle.pos.x += 800 * deltaTime;
 			if (IsKeyPressed(KeyboardKey.KEY_SPACE)) {
-				foreach (ref bullet; game.bullets) {
+				foreach (ref bullet; game.scene.bullets) {
 					if (bullet.active)
 						continue;
-					bullet.pos = Vec2(game.paddle.pos.x + game.paddle.size.x / 2, game.paddle.pos.y);
+					bullet.pos = Vec2(game.scene.paddle.pos.x + game.scene.paddle.size.x / 2, game.scene.paddle.pos.y);
 					bullet.active = true;
 					game.shootSound.PlaySound();
 					break;
 				}
 			}
 
-			game.balls[].bounceAll();
+			game.scene.balls[].bounceAll();
 
-			foreach (ref ball; game.balls) {
+			foreach (ref ball; game.scene.balls) {
 				if (!ball.active) continue;
 				ball.pos += ball.vel * deltaTime;
 				if (ball.pos.x <= ball.rad || ball.pos.x >= screenWidth - ball.rad) {
@@ -89,17 +89,17 @@ void main() @trusted {
 					ball.vel.y *= -1;
 					game.wallSound.PlaySound();
 				}
-				if (ball.pos.y + ball.rad >= game.paddle.pos.y
+				if (ball.pos.y + ball.rad >= game.scene.paddle.pos.y
 					&& ball.pos.y - ball.rad
-					<= game.paddle.pos.y + game.paddle.size.y
-					&& ball.pos.x >= game.paddle.pos.x
-					&& ball.pos.x <= game.paddle.pos.x + game.paddle.size.x) {
+					<= game.scene.paddle.pos.y + game.scene.paddle.size.y
+					&& ball.pos.x >= game.scene.paddle.pos.x
+					&& ball.pos.x <= game.scene.paddle.pos.x + game.scene.paddle.size.x) {
 					ball.vel.y = -abs(ball.vel.y);
 					game.paddleSound.PlaySound();
-					const float hitPos = (ball.pos.x - game.paddle.pos.x) / game.paddle.size.x;
+					const float hitPos = (ball.pos.x - game.scene.paddle.pos.x) / game.scene.paddle.size.x;
 					ball.vel.x = 200 * (hitPos - 0.5f) * 2;
 				}
-				foreach (ref brick; game.brickGrid.bricks) {
+				foreach (ref brick; game.scene.brickGrid.bricks) {
 					if (!brick.active || brick.isFlashing)
 						continue;
 					if (ball.pos.x + ball.rad >= brick.pos.x
@@ -118,12 +118,12 @@ void main() @trusted {
 					ball.active = false;
 				}
 			}
-			foreach (ref bullet; game.bullets) {
+			foreach (ref bullet; game.scene.bullets) {
 				if (bullet.active) {
 					bullet.pos += bullet.vel * deltaTime;
 					if (bullet.pos.y < 0)
 						bullet.active = false;
-					foreach (ref brick; game.brickGrid.bricks) {
+					foreach (ref brick; game.scene.brickGrid.bricks) {
 						if (!brick.active || brick.isFlashing)
 							continue;
 						if (bullet.pos.x + bullet.rad >= brick.pos.x
@@ -142,7 +142,7 @@ void main() @trusted {
 			}
 
 			// Update logic for flashing bricks
-			foreach (ref brick; game.brickGrid.bricks) {
+			foreach (ref brick; game.scene.brickGrid.bricks) {
 				if (brick.isFlashing) {
 					brick.flashTimer += deltaTime;
 					if (brick.flashTimer >= FLASH_DURATION) {
@@ -153,7 +153,7 @@ void main() @trusted {
 			}
 
 			bool allBricksDestroyed = true;
-			foreach (const brick; game.brickGrid.bricks) {
+			foreach (const brick; game.scene.brickGrid.bricks) {
 				if (brick.active) {
 					allBricksDestroyed = false;
 					break;
@@ -161,7 +161,7 @@ void main() @trusted {
 			}
 			game.won = allBricksDestroyed;
 			bool allBallsLost = true;
-			foreach (const ball; game.balls) {
+			foreach (const ball; game.scene.balls) {
 				if (ball.active) {
 					allBallsLost = false;
 					break;
@@ -170,13 +170,13 @@ void main() @trusted {
 			game.over = allBallsLost;
 		}
 		if ((game.over || game.won) && IsKeyPressed(KeyboardKey.KEY_R)) {
-			foreach (ref ball; game.balls) {
-				ball.pos = Vec2(screenWidth / 2 + (game.balls.length - 1) * 20 - 20, screenHeight - 150);
+			foreach (ref ball; game.scene.balls) {
+				ball.pos = Vec2(screenWidth / 2 + (game.scene.balls.length - 1) * 20 - 20, screenHeight - 150);
 				ball.vel = game.ballVelocity;
 				ball.active = true;
 			}
-			game.paddle.pos = Vec2(screenWidth / 2 - 60, screenHeight - 30);
-			foreach (ref brick; game.brickGrid.bricks) {
+			game.scene.paddle.pos = Vec2(screenWidth / 2 - 60, screenHeight - 30);
+			foreach (ref brick; game.scene.brickGrid.bricks) {
 				brick.active = true;
 				brick.isFlashing = false; // Reset flashing state on restart
 				brick.flashTimer = 0.0f;
@@ -187,7 +187,7 @@ void main() @trusted {
 				else
 					brick.color = Colors.GREEN;
 			}
-			foreach (ref bullet; game.bullets) {
+			foreach (ref bullet; game.scene.bullets) {
 				bullet.active = false;
 			}
 			game.over = false;
@@ -224,10 +224,11 @@ struct Game {
 	this(in uint screenWidth, in uint screenHeight) @trusted {
 		joystick = openDefaultJoystick();
 		rng = Random(unpredictableSeed());
-		balls = makeBalls(ballCount, ballVelocity, screenWidth, screenHeight);
-		bullets = makeBullets(30);
-		brickGrid = BrickGrid(rows: 15, cols: 20);
-		brickGrid.bricks.layoutBricks(screenWidth, screenHeight, brickGrid.rows, brickGrid.cols);
+		scene = Scene(balls: makeBalls(ballCount, ballVelocity, screenWidth, screenHeight),
+					  bullets: makeBullets(30),
+					  brickGrid: BrickGrid(rows: 15, cols: 20));
+		scene.brickGrid.bricks.layoutBricks(screenWidth, screenHeight, scene.brickGrid.rows, scene.brickGrid.cols);
+
 		generateSounds();
 	}
 
@@ -242,15 +243,10 @@ struct Game {
 
 	Joystick joystick;
 
+	static immutable ballCount = 1;
 	const ballVelocity = Vec2(100, -200); // boll hastighet
 
-	Paddle paddle;
-
-	static immutable ballCount = 1;
-	Ball[] balls;
-
-	Bullet[] bullets;
-	BrickGrid brickGrid;
+	Scene scene;
 
 	static immutable soundSampleRate = 44100;
 	Random rng;
@@ -261,11 +257,19 @@ struct Game {
 	bool over;
 }
 
+struct Scene {
+	@disable this(this);
+	Paddle paddle;
+	Ball[] balls;
+	Bullet[] bullets;
+	BrickGrid brickGrid;
+}
+
 void draw(in Game game) @trusted {
-	game.brickGrid.draw();
-	game.paddle.drawPaddle();
-	game.balls.drawBalls();
-	game.bullets.drawBullets();
+	game.scene.brickGrid.draw();
+	game.scene.paddle.drawPaddle();
+	game.scene.balls.drawBalls();
+	game.scene.bullets.drawBullets();
 }
 
 struct Paddle {
