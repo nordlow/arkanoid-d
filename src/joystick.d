@@ -20,7 +20,7 @@ struct JoystickEvent {
 	}
     Type type;
     ubyte number;        // button/axis number
-    short value;         // axis value (for axisMoved events)
+    short value;         // axis value (for `Type.axisMoved` events)
     uint timestamp;      // event timestamp in milliseconds
 
 @property const pure nothrow @nogc:
