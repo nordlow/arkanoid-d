@@ -259,6 +259,7 @@ struct Game {
 
 	Joystick joystick;
 
+	Scene scene;
 	const ballVelocity = Vec2(100, -800); // boll hastighet
 	enum ballCountMax = 10; // Maximum number of balls
 	Ball[ballCountMax] balls;
@@ -272,6 +273,13 @@ struct Game {
 
 	bool won;
 	bool over;
+}
+
+struct Scene {
+	@disable this(this);
+}
+
+void draw(in Scene scene) @trusted {
 }
 
 struct Paddle {
