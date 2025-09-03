@@ -135,7 +135,7 @@ void main() @trusted {
 			position: Vec2(screenWidth / 2 + i * 20 - 20, screenHeight - 150),
 			velocity: ballVelocity,
 			radius: 15,
-			color: Colors.WHITE,
+			color: Colors.GRAY,
 			active: true
 		);
 	}
