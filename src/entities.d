@@ -81,7 +81,9 @@ struct Brick/+Tegelsten+/ {
 	}
 }
 
-/++ Draw generic entities `ents`. +/
+/++ Draw generic entities `ents`.
+	TODO: Investigate why this can't be named `draw`.
+	+/
 void drawN(T)(in T[] ents) @trusted {
 	foreach (const ref ent; ents)
 		ent.draw();
