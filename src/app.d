@@ -3,7 +3,6 @@ import core.time : Duration;
 import std.random : uniform, Random, unpredictableSeed;
 import std.math : abs, sqrt;
 
-import nxt.io : writeln;
 import nxt.geometry;
 import nxt.color : ColorRGBA;
 
@@ -39,7 +38,7 @@ void main() @trusted {
 		CloseWindow();
 	}
 	if (!IsAudioDeviceReady())
-		writeln("ERROR: Audio device not ready!");
+		throw new Exception("ERROR: Audio device not ready!");
 
 	auto game = Game(screenWidth, screenHeight);
 
