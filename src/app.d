@@ -76,19 +76,18 @@ void main() @trusted {
 
 			while (const ev = game.joystick.tryNextEvent()) {
 				import nxt.io : writeln;
-				writeln("Read ", ev);
-				if (ev.type == JoystickEvent.Type.axisMoved && ev.number == 0) {
-					if (ev.value < 0)
-						moveLeft();
-					else if (ev.value > 0)
-						moveRight();
+				writeln("Read ", ev, ", heldButtons:", game.joystick.getHeldButtons);
+				if (ev.type == JoystickEvent.Type.axisMoved) {
+					if (ev.number == 0) {
+						if (ev.value < 0) moveLeft();
+						else if (ev.value > 0) moveRight();
+					}
+					if (ev.number == 6) {
+						if (ev.value < 0) moveLeft();
+						else if (ev.value > 0) moveRight();
+					}
 				}
-				if (ev.type == JoystickEvent.Type.axisMoved && ev.number == 6) {
-					if (ev.value < 0)
-						moveLeft();
-					else if (ev.value > 0)
-						moveRight();
-				}
+
 			}
 
 			if (IsKeyDown(KeyboardKey.KEY_LEFT) && game.scene.paddle.pos.x > 0)

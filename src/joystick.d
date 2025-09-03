@@ -96,9 +96,8 @@ nothrow:
      +/
     size_t getHeldButtonCount() const pure nothrow @nogc {
         size_t count = 0;
-        foreach (bool pressed; buttonStates) {
+        foreach (bool pressed; buttonStates)
             if (pressed) count++;
-        }
         return count;
     }
 
