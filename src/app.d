@@ -62,7 +62,11 @@ void layoutBullets(Bullet[] bullets) {
 	}
 }
 
-void drawBalls(Ball[] balls) @trusted {
+void drawPaddle(scope ref Paddle paddle) @trusted {
+	DrawRectangleV(paddle.position, paddle.size, paddle.color);
+}
+
+void drawBalls(scope Ball[] balls) @trusted {
 	foreach (const ball; balls) {
 		if (!ball.active)
 			continue;
@@ -70,7 +74,7 @@ void drawBalls(Ball[] balls) @trusted {
 	}
 }
 
-void drawBullets(Bullet[] bullets) @trusted {
+void drawBullets(scope Bullet[] bullets) @trusted {
 	foreach (ref bullet; bullets) {
 		if (!bullet.active)
 			continue;
@@ -356,8 +360,8 @@ void main() @trusted {
 				DrawRectangleV(brick.position, brick.size, drawColor);
 			}
 		}
-		DrawRectangleV(paddle.position, paddle.size, paddle.color);
 
+		paddle.drawPaddle();
 		balls.drawBalls();
 		bullets.drawBullets();
 
