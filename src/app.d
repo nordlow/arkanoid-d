@@ -38,15 +38,6 @@ Vec2 normalized(in Vec2 v) pure nothrow @safe @nogc {
 	return v / l;
 }
 
-/++ Boll. +/
-struct Ball {
-	Vec2 position;
-	Vec2 velocity;
-	float radius;
-	Color color;
-	bool active; // Added to track active balls
-}
-
 struct Paddle {
 	Vec2 position;
 	Vec2 size;
@@ -68,7 +59,7 @@ struct Bullet {
 	Vec2 position;
 	Vec2 velocity; // hastighet
 	float radius;
-	Color color; // färg
+	Color color;
 	bool active;
 }
 
@@ -394,6 +385,15 @@ void main() @trusted {
 		}
 		frameCounter += 1;
 	}
+}
+
+/++ Boll. +/
+struct Ball {
+	Vec2 position;
+	Vec2 velocity;
+	float radius;
+	Color color;
+	bool active; // Added to track active balls
 }
 
 void bounceAll(ref Ball[] balls) { // studsa alla
