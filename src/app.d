@@ -49,8 +49,6 @@ void main() @trusted {
 		pianoSounds ~= generatePianoWave(f, 1.0f, 1.0f, game.soundSampleRate).LoadSoundFromWave();
 	}
 
-	game.balls = makeBalls(game.ballCountMax, game.ballVelocity, screenWidth, screenHeight);
-
 	Paddle paddle = {
 		position: Vec2(screenWidth / 2 - 60, screenHeight - 30),
 		size: Vec2(250, 20),
@@ -248,6 +246,7 @@ struct Game {
 	this(in uint screenWidth, in uint screenHeight) @trusted {
 		joystick = openDefaultJoystick();
 		rng = Random(unpredictableSeed());
+		balls = makeBalls(ballCountMax, ballVelocity, screenWidth, screenHeight);
 		generateSounds();
 	}
 
