@@ -1,8 +1,6 @@
 import core.time : Duration;
-import std.algorithm : minElement, maxElement, sum;
-import std.numeric;
 import std.random : uniform, Random, unpredictableSeed;
-import std.math;
+import std.math : abs, sqrt;
 import std.string;
 import nxt.io;
 import nxt.geometry;
