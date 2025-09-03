@@ -2,7 +2,10 @@
 
 Just type `dub` to run.
 
-## Att göra
+## TODO
+- Use static introspection to
+  - update `Game` `Scene` graph
+  - draw `Game` `Scene` graph
 + Blinka till på brickorna när det träffas av bollen
 + Gör färgskala i brickor
 + Sten brickor som inte går sönder
@@ -12,3 +15,9 @@ Just type `dub` to run.
 + Fler bollar
 + Fler färger
 + Brickor spricker i bitar
+
+<!-- Local Variables: -->
+<!-- gptel-model: grok-beta -->
+<!-- gptel--backend-name: "xAI" -->
+<!-- gptel--bounds: nil -->
+<!-- End: -->
