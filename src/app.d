@@ -13,105 +13,6 @@ import joystick;
 
 @safe:
 
-struct Game {
-	@disable this(this);
-	Joystick joystick;
-	bool won;
-	bool over;
-	this(in bool) nothrow {
-		joystick = openDefaultJoystick();
-	}
-}
-
-struct Paddle {
-	Vec2 position;
-	Vec2 size;
-	Color color;
-}
-
-/++ Skott. +/
-struct Bullet {
-	Vec2 position;
-	Vec2 velocity; // hastighet
-	float radius;
-	Color color;
-	bool active;
-}
-
-void layoutBullets(Bullet[] bullets) {
-	foreach (ref bullet; bullets) {
-		bullet.active = false;
-		bullet.radius = 10; // radie, 2*radie == diameter
-		bullet.color = Colors.YELLOW;
-		bullet.velocity = Vec2(0, -333);
-	}
-}
-
-alias Vec2 = Vector2;
-
-float dot(in Vec2 v1, in Vec2 v2) pure nothrow @safe @nogc {
-	version(D_Coverage) {} else pragma(inline, true);
-	return (v1.x * v2.x) + (v1.y * v2.y);
-}
-
-float lengthSquared(in Vec2 v) pure nothrow @safe @nogc {
-	version(D_Coverage) {} else pragma(inline, true);
-	return v.x*v.x + v.y*v.y;
-}
-
-float length(in Vec2 v) pure nothrow @safe @nogc {
-	version(D_Coverage) {} else pragma(inline, true);
-	return sqrt(lengthSquared(v));
-}
-
-Vec2 normalized(in Vec2 v) pure nothrow @safe @nogc {
-	version(D_Coverage) {} else pragma(inline, true);
-	const float l = length(v);
-	if (l == 0)
-		return Vec2(0, 0);
-	return v / l;
-}
-
-void clearCanvas() @trusted {
-	ClearBackground(Colors.BLACK);
-}
-
-void drawPaddle(in Paddle paddle) @trusted {
-	DrawRectangleV(paddle.position, paddle.size, paddle.color);
-}
-
-void drawBricks(in Brick[] bricks) @trusted {
-	foreach (const i, const ref brick; bricks) {
-		if (brick.active || brick.isFlashing) {
-			Color drawColor = brick.color;
-			if (brick.isFlashing) {
-				// Alternate between the original color and a bright white/yellow
-				// to create the flashing effect.
-				if (cast(int)(brick.flashTimer * 10) % 2 == 0) {
-					drawColor = Colors.WHITE;
-				}
-			}
-			DrawRectangleV(brick.position, brick.size, drawColor);
-		}
-	}
-}
-
-void drawBalls(in Ball[] balls) @trusted {
-	foreach (const ref ball; balls) {
-		if (!ball.active)
-			continue;
-		DrawCircleV(ball.position, ball.radius, ball.color);
-	}
-}
-
-void drawBullets(in Bullet[] bullets) @trusted {
-	foreach (const ref bullet; bullets) {
-		if (!bullet.active)
-			continue;
-		DrawCircleV(bullet.position, bullet.radius, bullet.color);
-	}
-}
-
 void main() @trusted {
 	SetTraceLogLevel(TraceLogLevel.LOG_WARNING);
 	validateRaylibBinding();
@@ -399,6 +300,22 @@ void main() @trusted {
 	}
 }
 
+struct Game {
+	@disable this(this);
+	Joystick joystick;
+	bool won;
+	bool over;
+	this(in bool) nothrow {
+		joystick = openDefaultJoystick();
+	}
+}
+
+struct Paddle {
+	Vec2 position;
+	Vec2 size;
+	Color color;
+}
+
 /++ Tegelsten. +/
 struct Brick {
 	Vec2 position;
@@ -416,6 +333,89 @@ const float FLASH_DURATION = 0.3f;
 void flash(ref Brick brick) {
 	brick.isFlashing = true;
 	brick.flashTimer = 0.0f;
+}
+
+/++ Skott. +/
+struct Bullet {
+	Vec2 position;
+	Vec2 velocity; // hastighet
+	float radius;
+	Color color;
+	bool active;
+}
+
+void layoutBullets(Bullet[] bullets) {
+	foreach (ref bullet; bullets) {
+		bullet.active = false;
+		bullet.radius = 10; // radie, 2*radie == diameter
+		bullet.color = Colors.YELLOW;
+		bullet.velocity = Vec2(0, -333);
+	}
+}
+
+alias Vec2 = Vector2;
+
+float dot(in Vec2 v1, in Vec2 v2) pure nothrow @safe @nogc {
+	version(D_Coverage) {} else pragma(inline, true);
+	return (v1.x * v2.x) + (v1.y * v2.y);
+}
+
+float lengthSquared(in Vec2 v) pure nothrow @safe @nogc {
+	version(D_Coverage) {} else pragma(inline, true);
+	return v.x*v.x + v.y*v.y;
+}
+
+float length(in Vec2 v) pure nothrow @safe @nogc {
+	version(D_Coverage) {} else pragma(inline, true);
+	return sqrt(lengthSquared(v));
+}
+
+Vec2 normalized(in Vec2 v) pure nothrow @safe @nogc {
+	version(D_Coverage) {} else pragma(inline, true);
+	const float l = length(v);
+	if (l == 0)
+		return Vec2(0, 0);
+	return v / l;
+}
+
+void clearCanvas() @trusted {
+	ClearBackground(Colors.BLACK);
+}
+
+void drawPaddle(in Paddle paddle) @trusted {
+	DrawRectangleV(paddle.position, paddle.size, paddle.color);
+}
+
+void drawBricks(in Brick[] bricks) @trusted {
+	foreach (const i, const ref brick; bricks) {
+		if (brick.active || brick.isFlashing) {
+			Color drawColor = brick.color;
+			if (brick.isFlashing) {
+				// Alternate between the original color and a bright white/yellow
+				// to create the flashing effect.
+				if (cast(int)(brick.flashTimer * 10) % 2 == 0) {
+					drawColor = Colors.WHITE;
+				}
+			}
+			DrawRectangleV(brick.position, brick.size, drawColor);
+		}
+	}
+}
+
+void drawBalls(in Ball[] balls) @trusted {
+	foreach (const ref ball; balls) {
+		if (!ball.active)
+			continue;
+		DrawCircleV(ball.position, ball.radius, ball.color);
+	}
+}
+
+void drawBullets(in Bullet[] bullets) @trusted {
+	foreach (const ref bullet; bullets) {
+		if (!bullet.active)
+			continue;
+		DrawCircleV(bullet.position, bullet.radius, bullet.color);
+	}
 }
 
 /++ Boll. +/
