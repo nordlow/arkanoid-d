@@ -14,7 +14,6 @@ import music;
 import waves;
 import joystick;
 
-
 @safe:
 
 void main() @trusted {
