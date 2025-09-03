@@ -245,7 +245,7 @@ void main() @trusted {
 struct Game {
 	@disable this(this);
 	static immutable pianoKeys = __traits(allMembers, Key);
-	this(uint screenWidth, uint screenHeight) @trusted {
+	this(in uint screenWidth, in uint screenHeight) @trusted {
 		joystick = openDefaultJoystick();
 		rng = Random(unpredictableSeed());
 		generateSounds();
