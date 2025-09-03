@@ -232,7 +232,7 @@ struct Game {
 		rng = Random(unpredictableSeed());
 		scene = Scene(balls: makeBalls(ballCount, ballVelocity, screenWidth, screenHeight),
 					  bullets: makeBullets(30),
-					  brickGrid: BrickGrid(rows: 15, cols: 20));
+					  brickGrid: BrickGrid(rows: 10, cols: 10));
 		scene.brickGrid.bricks.layoutBricks(screenWidth, screenHeight, scene.brickGrid.rows, scene.brickGrid.cols);
 
 		generateSounds();
@@ -332,7 +332,7 @@ struct Ball {
 	Vec2 vel;
 	Color color;
 	bool active; // Added to track active balls
-	void draw() const @trusted {
+	void draw() const nothrow @trusted {
 		if (active)
 			DrawCircleV(pos, rad, color);
 	}
@@ -352,10 +352,9 @@ Ball[] makeBalls(uint count, Vec2 ballVelocity, uint screenWidth, uint screenHei
 }
 
 /++ Bounce `balls`.
-
 	See_Also: Symbols in raylib containing `CheckCollision`
  +/
-void bounceAll(ref Ball[] balls) pure nothrow @nogc { // studsa alla
+void bounceAll(ref Ball[] balls) pure nothrow @nogc {
 	foreach (i, ref Ball ballA; balls) {
 		foreach (ref Ball ballB; balls[i + 1 .. $]) {
 			if (!ballA.active || !ballB.active)

@@ -9,7 +9,7 @@ struct Paddle {
 	Vec2 pos;
 	Vec2 size;
 	Color color;
-	void draw() const @trusted {
+	void draw() const nothrow @trusted {
 		DrawRectangleV(pos, size, color);
 	}
 }
@@ -20,7 +20,7 @@ struct Bullet {
 	Vec2 vel;
 	Color color;
 	bool active;
-	void draw() const @trusted {
+	void draw() const nothrow @trusted {
 		if (active)
 			DrawCircleV(pos, rad, color);
 	}
@@ -53,7 +53,7 @@ struct BrickGrid {
 	uint rows;
 	uint cols;
 	Brick[] bricks;
-	void draw() const {
+	void draw() const nothrow {
 		bricks.draw();
 	}
 }
@@ -70,7 +70,7 @@ struct Brick/+Tegelsten+/ {
 		isFlashing = true; // start
 		flashTimer = 0.0f; // restart
 	}
-	void draw() const @trusted {
+	void draw() const nothrow @trusted {
 		if (active || isFlashing) {
 			Color drawColor = color;
 			if (isFlashing) {
