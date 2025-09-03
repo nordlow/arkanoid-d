@@ -275,7 +275,7 @@ void draw(in Scene scene) @trusted {
 	scene.bullets.draw();
 }
 
-/++ Draw entities `ents`. +/
+/++ Draw generic entities `ents`. +/
 void draw(T)(in T[] ents) @trusted {
 	foreach (const ref ent; ents)
 		ent.draw();
