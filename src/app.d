@@ -286,7 +286,7 @@ struct Entity {
 
 /++ Common term for a game object. +/
 struct PositionedEntity {
-	this(Vec2 position) {
+	this(Vec2 position) pure nothrow @nogc {
 		this.position = position;
 	}
 	Entity entity;
@@ -321,8 +321,8 @@ void draw(in BrickGrid brickGrid) @trusted {
 }
 
 struct Brick/+Tegelsten+/ {
+	PositionedEntity positionedEntity; alias this = positionedEntity;
 	Entity entity;
-	Vec2 position;
 	Vec2 size;
 	ColorR8G8B8A8 color;
 	bool active;
@@ -343,8 +343,8 @@ void layoutBricks(scope Brick[] bricks, in int screenWidth, in int screenHeight,
 	foreach (const row; 0 .. brickRows) {
 		foreach (const col; 0 .. brickCols) {
 			const index = row * brickCols + col;
-			bricks[index] = Brick(position: Vec2(col * brickWidth,
-											   row * brickHeight + 250),
+			bricks[index] = Brick(positionedEntity: PositionedEntity(Vec2(col * brickWidth,
+											   row * brickHeight + 250)),
 								  size: Vec2(brickWidth - 2,
 											 brickHeight - 2),
 								  Colors.RED, true);
