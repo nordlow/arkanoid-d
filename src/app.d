@@ -65,10 +65,8 @@ void main() @trusted {
 		color: Colors.BLUE
 	};
 
-	const brickRows = 15; // rader
-	const brickCols = 20; // kolumner
-	Brick[brickRows * brickCols] bricks;
-	bricks.layoutBricks(screenWidth, screenHeight, brickRows, brickCols);
+	auto brickGrid = BrickGrid(rows: 15, cols: 20);
+	brickGrid.bricks.layoutBricks(screenWidth, screenHeight, brickGrid.rows, brickGrid.cols);
 
 	/// Create Bullets (Skapa Skott)
 	enum bulletCountMax = 30; // maximalt antal skott samtidigt
@@ -133,7 +131,7 @@ void main() @trusted {
 					const float hitPos = (ball.position.x - paddle.position.x) / paddle.size.x;
 					ball.velocity.x = 200 * (hitPos - 0.5f) * 2;
 				}
-				foreach (ref brick; bricks) {
+				foreach (ref brick; brickGrid.bricks) {
 					if (!brick.active || brick.isFlashing)
 						continue;
 					if (ball.position.x + ball.radius >= brick.position.x
@@ -159,7 +157,7 @@ void main() @trusted {
 					if (bullet.position.y < 0) {
 						bullet.active = false;
 					}
-					foreach (ref brick; bricks) {
+					foreach (ref brick; brickGrid.bricks) {
 						if (!brick.active || brick.isFlashing)
 							continue;
 						if (bullet.position.x + bullet.radius >= brick.position.x
@@ -178,7 +176,7 @@ void main() @trusted {
 			}
 
 			// Update logic for flashing bricks
-			foreach (ref brick; bricks) {
+			foreach (ref brick; brickGrid.bricks) {
 				if (brick.isFlashing) {
 					brick.flashTimer += deltaTime;
 					if (brick.flashTimer >= FLASH_DURATION) {
@@ -189,7 +187,7 @@ void main() @trusted {
 			}
 
 			bool allBricksDestroyed = true;
-			foreach (const brick; bricks) {
+			foreach (const brick; brickGrid.bricks) {
 				if (brick.active) {
 					allBricksDestroyed = false;
 					break;
@@ -212,7 +210,7 @@ void main() @trusted {
 				ball.active = true;
 			}
 			paddle.position = Vec2(screenWidth / 2 - 60, screenHeight - 30);
-			foreach (ref brick; bricks) {
+			foreach (ref brick; brickGrid.bricks) {
 				brick.active = true;
 				brick.isFlashing = false; // Reset flashing state on restart
 				brick.flashTimer = 0.0f;
@@ -232,7 +230,7 @@ void main() @trusted {
 
 		BeginDrawing();
 		clearCanvas();
-		bricks.drawBricks();
+		brickGrid.bricks.drawBricks();
 		paddle.drawPaddle();
 		game.balls.drawBalls();
 		bullets.drawBullets();
