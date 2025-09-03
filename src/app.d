@@ -233,7 +233,7 @@ void main() @trusted {
 						&& ball.position.y + ball.radius >= brick.position.y
 						&& ball.position.y - ball.radius
 						<= brick.position.y + brick.size.y) {
-						flash(brick); // Start the flashing effect
+						brick.flash();
 						ball.velocity.y *= -1;
 						PlaySound(brickSound);
 						break;
