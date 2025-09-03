@@ -139,7 +139,7 @@ void main() @trusted {
 							&& bullet.pos.y + bullet.rad >= brick.pos.y
 							&& bullet.pos.y - bullet.rad
 							<= brick.pos.y + brick.size.y) {
-							restartFlashing(brick); // Start flashing
+							brick.restartFlashing();
 							bullet.active = false;
 							PlaySound(game.brickSound);
 							break;
@@ -275,11 +275,6 @@ struct Scene {
 		balls.drawN();
 		bullets.drawN();
 	}
-}
-
-void restartFlashing(ref Brick brick) {
-	brick.isFlashing = true; // start
-	brick.flashTimer = 0.0f; // restart
 }
 
 void layoutBricks(scope Brick[] bricks, in int screenWidth, in int screenHeight, in int brickRows, in int brickCols) pure nothrow @nogc {

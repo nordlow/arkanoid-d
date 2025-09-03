@@ -66,6 +66,10 @@ struct Brick/+Tegelsten+/ {
 	bool active;
 	bool isFlashing = false;
 	float flashTimer = 0.0f; // Timer for flashing duration.
+	void restartFlashing() scope pure nothrow @nogc {
+		isFlashing = true; // start
+		flashTimer = 0.0f; // restart
+	}
 	void draw() const @trusted {
 		if (active || isFlashing) {
 			Color drawColor = color;
