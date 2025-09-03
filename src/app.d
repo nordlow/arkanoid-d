@@ -362,6 +362,14 @@ void layoutBullets(Bullet[] bullets) {
 	}
 }
 
+void drawBullets(in Bullet[] bullets) @trusted {
+	foreach (const ref bullet; bullets) {
+		if (!bullet.active)
+			continue;
+		DrawCircleV(bullet.position, bullet.radius, bullet.color);
+	}
+}
+
 alias Vec2 = Vector2;
 
 float dot(in Vec2 v1, in Vec2 v2) pure nothrow @nogc {
@@ -389,14 +397,6 @@ Vec2 normalized(in Vec2 v) pure nothrow @nogc {
 
 void clearCanvas() @trusted {
 	ClearBackground(Colors.BLACK);
-}
-
-void drawBullets(in Bullet[] bullets) @trusted {
-	foreach (const ref bullet; bullets) {
-		if (!bullet.active)
-			continue;
-		DrawCircleV(bullet.position, bullet.radius, bullet.color);
-	}
 }
 
 /++ Boll. +/
