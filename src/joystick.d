@@ -11,33 +11,25 @@ import core.stdc.errno;
 
 Joystick openDefaultJoystick() nothrow => typeof(return)("/dev/input/js0");
 
-enum JoystickEventType {
-    none,
-    buttonPressed,
-    buttonReleased,
-    axisMoved
-}
-
 struct JoystickEvent {
-    JoystickEventType type;
+	enum Type {
+		none,
+		buttonPressed,
+		buttonReleased,
+		axisMoved
+	}
+    Type type;
     ubyte number;        // button/axis number
     short value;         // axis value (for axisMoved events)
     uint timestamp;      // event timestamp in milliseconds
 
-	bool opCast(T : bool)() const pure nothrow @safe @nogc { return type != JoystickEventType.none; }
+	bool opCast(T : bool)() const pure nothrow @safe @nogc { return type != JoystickEvent.Type.none; }
 
-    @property bool isButton() const pure nothrow @nogc {
-        return type == JoystickEventType.buttonPressed ||
-               type == JoystickEventType.buttonReleased;
-    }
-
-    @property bool isAxis() const pure nothrow @nogc {
-        return type == JoystickEventType.axisMoved;
-    }
-
-    @property bool isPressed() const pure nothrow @nogc {
-        return type == JoystickEventType.buttonPressed;
-    }
+@property const pure nothrow @nogc:
+    bool isButton() => (type == JoystickEvent.Type.buttonPressed ||
+               type == JoystickEvent.Type.buttonReleased);
+    bool isAxis() => type == JoystickEvent.Type.axisMoved;
+    bool isPressed() => type == JoystickEvent.Type.buttonPressed;
 }
 
 struct Joystick {
@@ -89,7 +81,7 @@ nothrow:
 
         // Check if there's data available with 0ms timeout
         if (poll(&pfd, 1, 0) <= 0 || !(pfd.revents & POLLIN)) {
-            return JoystickEvent(JoystickEventType.none);
+            return JoystickEvent(JoystickEvent.Type.none);
         }
 
         const bytesRead = read(fd, &rawEvent, js_event.sizeof);
@@ -97,12 +89,12 @@ nothrow:
             if (bytesRead == -1) {
                 perror("Error reading from joystick");
             }
-            return JoystickEvent(JoystickEventType.none);
+            return JoystickEvent(JoystickEvent.Type.none);
         }
 
         // Skip initialization events
         if (rawEvent.type & JS_EVENT_INIT) {
-            return JoystickEvent(JoystickEventType.none);
+            return JoystickEvent(JoystickEvent.Type.none);
         }
 
         JoystickEvent event;
@@ -111,13 +103,13 @@ nothrow:
 
         if (rawEvent.type & JS_EVENT_BUTTON) {
             event.type = (rawEvent.value == 1) ?
-                        JoystickEventType.buttonPressed :
-                        JoystickEventType.buttonReleased;
+                        JoystickEvent.Type.buttonPressed :
+                        JoystickEvent.Type.buttonReleased;
         } else if (rawEvent.type & JS_EVENT_AXIS) {
-            event.type = JoystickEventType.axisMoved;
+            event.type = JoystickEvent.Type.axisMoved;
             event.value = rawEvent.value;
         } else {
-            event.type = JoystickEventType.none;
+            event.type = JoystickEvent.Type.none;
         }
 
         return event;
@@ -131,18 +123,18 @@ nothrow:
     void processPendingEvents() @trusted
     in(isValid, "Joystick must be valid before processing events") {
         JoystickEvent event;
-        while ((event = tryNextEvent()).type != JoystickEventType.none) {
+        while ((event = tryNextEvent()).type != JoystickEvent.Type.none) {
             final switch (event.type) {
-                case JoystickEventType.buttonPressed:
+                case JoystickEvent.Type.buttonPressed:
                     warning("Button ", event.number, " pressed");
                     break;
-                case JoystickEventType.buttonReleased:
+                case JoystickEvent.Type.buttonReleased:
                     warning("Button ", event.number, " released");
                     break;
-                case JoystickEventType.axisMoved:
+                case JoystickEvent.Type.axisMoved:
                     warning("Axis ", event.number, " moved to ", event.value);
                     break;
-                case JoystickEventType.none:
+                case JoystickEvent.Type.none:
                     break; // This case is handled by the while condition
             }
         }

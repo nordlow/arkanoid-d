@@ -77,7 +77,7 @@ void main() @trusted {
 			while (const ev = game.joystick.tryNextEvent()) {
 				import nxt.io : writeln;
 				writeln("Read ", ev);
-				if (ev.type == JoystickEventType.axisMoved && ev.number == 0) {
+				if (ev.type == JoystickEvent.Type.axisMoved && ev.number == 0) {
 					if (ev.value < 0)
 						moveLeft();
 					else if (ev.value > 0)
