@@ -62,20 +62,36 @@ void layoutBullets(Bullet[] bullets) {
 	}
 }
 
-void drawPaddle(scope ref Paddle paddle) @trusted {
+void drawPaddle(in Paddle paddle) @trusted {
 	DrawRectangleV(paddle.position, paddle.size, paddle.color);
 }
 
-void drawBalls(scope Ball[] balls) @trusted {
-	foreach (const ball; balls) {
+void drawBricks(in Brick[] bricks) @trusted {
+	foreach (const i, const ref brick; bricks) {
+		if (brick.active || brick.isFlashing) {
+			Color drawColor = brick.color;
+			if (brick.isFlashing) {
+				// Alternate between the original color and a bright white/yellow
+				// to create the flashing effect.
+				if (cast(int)(brick.flashTimer * 10) % 2 == 0) {
+					drawColor = Colors.WHITE;
+				}
+			}
+			DrawRectangleV(brick.position, brick.size, drawColor);
+		}
+	}
+}
+
+void drawBalls(in Ball[] balls) @trusted {
+	foreach (const ref ball; balls) {
 		if (!ball.active)
 			continue;
 		DrawCircleV(ball.position, ball.radius, ball.color);
 	}
 }
 
-void drawBullets(scope Bullet[] bullets) @trusted {
-	foreach (ref bullet; bullets) {
+void drawBullets(in Bullet[] bullets) @trusted {
+	foreach (const ref bullet; bullets) {
 		if (!bullet.active)
 			continue;
 		DrawCircleV(bullet.position, bullet.radius, bullet.color);
@@ -347,20 +363,7 @@ void main() @trusted {
 
 		ClearBackground(Colors.BLACK);
 
-		foreach (const i, ref brick; bricks) {
-			if (brick.active || brick.isFlashing) {
-				Color drawColor = brick.color;
-				if (brick.isFlashing) {
-					// Alternate between the original color and a bright white/yellow
-					// to create the flashing effect.
-					if (cast(int)(brick.flashTimer * 10) % 2 == 0) {
-						drawColor = Colors.WHITE;
-					}
-				}
-				DrawRectangleV(brick.position, brick.size, drawColor);
-			}
-		}
-
+		bricks.drawBricks();
 		paddle.drawPaddle();
 		balls.drawBalls();
 		bullets.drawBullets();
