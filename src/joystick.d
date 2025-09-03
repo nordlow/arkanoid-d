@@ -22,7 +22,7 @@ nothrow:
 	@disable this(this);
 	this(in char[] devicePath) @trusted {
 		import std.string : fromStringz;
-		auto fd = open(devicePath.ptr, O_RDONLY | O_NONBLOCK);
+		this.fd = open(devicePath.ptr, O_RDONLY | O_NONBLOCK);
 		if (fd == -1)
 			perror(("Could not open joystick " ~ devicePath.fromStringz).ptr);
 		// Set the file descriptor to non-blocking mode.
@@ -52,21 +52,15 @@ void readPendingEvents(ref Joystick js) @trusted in(js.fd >= 0) {
 
     // Check if there are any events to read with a 0ms timeout
     while (poll(&pfd, 1, 0) > 0) {
-
         if (pfd.revents & POLLIN) {
             // Data is available, so read it
             const bytesRead = read(js.fd, &event, js_event.sizeof);
-
-            if (bytesRead > 0) {
-                // Event was read successfully
+            if (bytesRead > 0) { // event was read successfully
                 if (event.type & JS_EVENT_BUTTON) {
-                    if (event.value == 1) {
-                        writeln("Button ", event.number, " pressed");
-                    } else {
-                        writeln("Button ", event.number, " released");
-                    }
+					const pressed = event.value == 1;
+                    warning("Button ", event.number, " ", (pressed ? "pressed" : "released"));
                 } else if (event.type & JS_EVENT_AXIS) {
-                    writeln("Axis ", event.number, " moved to ", event.value);
+                    warning("Axis ", event.number, " moved to ", event.value);
                 }
             } else if (bytesRead == -1) {
                 // An actual error occurred during read

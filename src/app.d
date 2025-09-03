@@ -54,8 +54,7 @@ void main() @trusted {
 
 	uint keyCounter;
 	for (uint frameCounter; !WindowShouldClose(); ++frameCounter) {
-		version(none)
-			game.joystick.readPendingEvents();
+		game.joystick.readPendingEvents(); // TODO: Currently has no effect
 
 		const deltaTime = GetFrameTime();
 		const absTime = GetTime();
