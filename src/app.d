@@ -339,11 +339,7 @@ void main() @trusted {
 				DrawCircleV(ball.position, ball.radius, ball.color);
 			}
 		}
-		foreach (const i; 0 .. bulletCountMax) {
-			if (bullets[i].active) {
-				DrawCircleV(bullets[i].position, bullets[i].radius, bullets[i].color);
-			}
-		}
+		bullets.drawBullets();
 		if (gameWon) {
 			const text = "YOU WON! Press R to restart";
 			const fontSize = 32;
@@ -370,6 +366,13 @@ void layoutBullets(Bullet[] bullets) {
 		bullet.radius = 10; // radie, 2*radie == diameter
 		bullet.color = Colors.YELLOW;
 		bullet.velocity = Vec2(0, -333);
+	}
+}
+
+void drawBullets(Bullet[] bullets) @trusted {
+	foreach (ref bullet; bullets) {
+		if (bullet.active)
+			DrawCircleV(bullet.position, bullet.radius, bullet.color);
 	}
 }
 
