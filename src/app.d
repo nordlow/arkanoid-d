@@ -257,13 +257,14 @@ struct Game {
 		typeof(return) ret;
 		ret.joystick = openDefaultJoystick();
 		ret.rng = Random(unpredictableSeed());
-		// Sounds (Ljud):
-		ret.paddleSound = generateBoingWave(300.0f, 1000.0f, 0.30f, soundSampleRate).LoadSoundFromWave();
-		ret.wallSound = generateBoingWave(300.0f, 150.0f, 0.30f, soundSampleRate).LoadSoundFromWave();
-		ret.brickSound = ret.rng.generateGlassBreakWave(0.60f, 0.2f, soundSampleRate).LoadSoundFromWave();
-		ret.shootSound = generateBounceWave(400.0f, 200.0f, 0.3f, soundSampleRate).LoadSoundFromWave();
-		ret.playMusic = false;
+		ret.generateSounds();
 		return ret;
+	}
+	void generateSounds() @trusted {
+		paddleSound = generateBoingWave(300.0f, 1000.0f, 0.30f, soundSampleRate).LoadSoundFromWave();
+		wallSound = generateBoingWave(300.0f, 150.0f, 0.30f, soundSampleRate).LoadSoundFromWave();
+		brickSound = rng.generateGlassBreakWave(0.60f, 0.2f, soundSampleRate).LoadSoundFromWave();
+		shootSound = generateBounceWave(400.0f, 200.0f, 0.3f, soundSampleRate).LoadSoundFromWave();
 	}
 	Joystick joystick;
 
