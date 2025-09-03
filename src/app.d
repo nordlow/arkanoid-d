@@ -18,13 +18,16 @@ import joystick;
 void main() @trusted {
 	SetTraceLogLevel(TraceLogLevel.LOG_WARNING);
 	validateRaylibBinding();
+
 	InitWindow(800, 600, "Arkanoid Clone");
 	const monitor = GetCurrentMonitor();
 	SetWindowSize(GetMonitorWidth(monitor),
 				  GetMonitorHeight(monitor));
+
 	ToggleFullscreen();
 	const screenWidth = GetScreenWidth();
 	const screenHeight = GetScreenHeight();
+
 	SetTargetFPS(60);
 
 	InitAudioDevice();
