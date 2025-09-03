@@ -54,7 +54,10 @@ void main() @trusted {
 
 	uint keyCounter;
 	for (uint frameCounter; !WindowShouldClose(); ++frameCounter) {
-		game.joystick.readPendingEvents(); // TODO: Currently has no effect
+		while (const ev = game.joystick.tryNextEvent()) {
+			import nxt.io : writeln;
+			writeln("Read ", ev);
+		}
 
 		const deltaTime = GetFrameTime();
 		const absTime = GetTime();
