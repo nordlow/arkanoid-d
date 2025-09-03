@@ -27,6 +27,7 @@ struct JoystickEvent {
     bool isButton() => (type == Type.buttonPressed || type == Type.buttonReleased);
     bool isAxis() => type == Type.axisMoved;
     bool isPressed() => type == Type.buttonPressed;
+    bool isRelease() => type == Type.buttonReleased;
 }
 
 struct Joystick {
