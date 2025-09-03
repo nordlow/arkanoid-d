@@ -14,12 +14,13 @@ import core.stdc.errno;
 
 @safe:
 
-Joystick openDefaultJoystick() {
+Joystick openDefaultJoystick() nothrow {
 	return typeof(return)("/dev/input/js0");
 }
 
 struct Joystick {
 	int fd;
+nothrow:
 	@disable this(this);
 	this(const char* devicePath) @trusted {
 		import std.string : fromStringz;

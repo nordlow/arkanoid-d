@@ -15,6 +15,10 @@ import joystick;
 
 struct Game {
 	@disable this(this);
+	Joystick joystick;
+	this(in bool) nothrow {
+		joystick = openDefaultJoystick();
+	}
 }
 
 alias Vec2 = Vector2;
@@ -144,8 +148,6 @@ void main() @trusted {
 		}
 	}
 
-	auto joystick = openDefaultJoystick();
-
 	const sampleRate = 44100;
 	auto rng = Random(unpredictableSeed());
 
@@ -218,7 +220,7 @@ void main() @trusted {
 	uint keyCounter;
 
 	while (!WindowShouldClose()) {
-		joystick.readPendingEvents();
+		game.joystick.readPendingEvents();
 
 		const deltaTime = GetFrameTime();
 		const absTime = GetTime();
