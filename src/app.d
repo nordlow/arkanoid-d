@@ -49,15 +49,7 @@ void main() @trusted {
 		pianoSounds ~= generatePianoWave(f, 1.0f, 1.0f, game.soundSampleRate).LoadSoundFromWave();
 	}
 
-	foreach (const i; 0 .. game.ballCountMax) {
-		game.balls[i] = Ball(
-			position: Vec2(screenWidth / 2 + i * 20 - 20, screenHeight - 150),
-			velocity: game.ballVelocity,
-			radius: 15,
-			color: Colors.GRAY,
-			active: true
-		);
-	}
+	game.balls = makeBalls(game.ballCountMax, game.ballVelocity, screenWidth, screenHeight);
 
 	Paddle paddle = {
 		position: Vec2(screenWidth / 2 - 60, screenHeight - 30),
@@ -433,6 +425,19 @@ struct Ball {
 	float radius;
 	ColorR8G8B8A8 color;
 	bool active; // Added to track active balls
+}
+
+Ball[] makeBalls(uint count, Vec2 ballVelocity, uint screenWidth, uint screenHeight) {
+	typeof(return) ret;
+	ret.length = count;
+	foreach (const i, ref ball; ret)
+		ball = Ball(position: Vec2(screenWidth / 2 + i * 20 - 20, screenHeight - 150),
+					velocity: ballVelocity,
+					radius: 15,
+					color: Colors.GRAY,
+					active: true
+					);
+	return ret;
 }
 
 void drawBalls(in Ball[] balls) @trusted {
