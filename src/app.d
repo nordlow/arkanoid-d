@@ -84,8 +84,7 @@ void main() @trusted {
 
 			foreach (ref ball; game.balls) {
 				if (!ball.active) continue;
-				ball.pos.x += ball.vel.x * deltaTime;
-				ball.pos.y += ball.vel.y * deltaTime;
+				ball.pos += ball.vel * deltaTime;
 				if (ball.pos.x <= ball.rad || ball.pos.x >= screenWidth - ball.rad) {
 					ball.vel.x *= -1;
 					game.wallSound.PlaySound();
@@ -125,11 +124,9 @@ void main() @trusted {
 			}
 			foreach (ref bullet; game.bullets) {
 				if (bullet.active) {
-					bullet.pos.x += bullet.vel.x * deltaTime;
-					bullet.pos.y += bullet.vel.y * deltaTime;
-					if (bullet.pos.y < 0) {
+					bullet.pos += bullet.vel * deltaTime;
+					if (bullet.pos.y < 0)
 						bullet.active = false;
-					}
 					foreach (ref brick; game.brickGrid.bricks) {
 						if (!brick.active || brick.isFlashing)
 							continue;
