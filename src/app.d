@@ -36,20 +36,7 @@ void main() @trusted {
 
 	Game game;
 
-	// Detect Gamepad
-	if (false) {
-		foreach (const gamepad; -1000 .. 1000) {
-			if (IsGamepadAvailable(gamepad)) {
-				const name = GetGamepadName(gamepad);
-				writeln("Gamepad: nr ", gamepad, " being ", name.fromStringz, " detected");
-				foreach (const button; -100 .. 100) {
-					if (IsGamepadButtonDown(gamepad, button)) {
-						writeln("Button ", button, " is down");
-					}
-				}
-			}
-		}
-	}
+	if (false) raylib_detectGamepad();
 
 	const sampleRate = 44100;
 	auto rng = Random(unpredictableSeed());
@@ -307,6 +294,20 @@ struct Game {
 	bool over;
 	this(in bool) nothrow {
 		joystick = openDefaultJoystick();
+	}
+}
+
+void raylib_detectGamepad() @trusted {
+	foreach (const gamepad; -1000 .. 1000) {
+		if (IsGamepadAvailable(gamepad)) {
+			const name = GetGamepadName(gamepad);
+			writeln("Gamepad: nr ", gamepad, " being ", name.fromStringz, " detected");
+			foreach (const button; -100 .. 100) {
+				if (IsGamepadButtonDown(gamepad, button)) {
+					writeln("Button ", button, " is down");
+				}
+			}
+		}
 	}
 }
 
