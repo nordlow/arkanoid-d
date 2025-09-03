@@ -372,15 +372,20 @@ struct Bullet {
 	bool active;
 }
 
+Bullet makeBullet() {
+	typeof(return) ret;
+	ret.active = false;
+	ret.radius = 10; // radie, 2*radie == diameter
+	ret.color = Colors.YELLOW;
+	ret.velocity = Vec2(0, -333);
+	return ret;
+}
+
 Bullet[] makeBullets(uint count) {
 	typeof(return) ret;
 	ret.length = count;
-	foreach (ref bullet; ret) {
-		bullet.active = false;
-		bullet.radius = 10; // radie, 2*radie == diameter
-		bullet.color = Colors.YELLOW;
-		bullet.velocity = Vec2(0, -333);
-	}
+	foreach (ref bullet; ret)
+		bullet = makeBullet();
 	return ret;
 }
 
