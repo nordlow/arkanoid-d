@@ -303,8 +303,7 @@ struct Paddle {
 	Color color;
 }
 
-/++ Tegelsten. +/
-struct Brick {
+struct Brick/+Tegelsten+/ {
 	Vec2 position;
 	Vec2 size;
 	Color color;
@@ -324,7 +323,7 @@ void flash(ref Brick brick) {
 /++ Skott. +/
 struct Bullet {
 	Vec2 position;
-	Vec2 velocity; // hastighet
+	Vec2 velocity/+hastighet+/;
 	float radius;
 	Color color;
 	bool active;
