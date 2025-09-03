@@ -270,9 +270,6 @@ struct Scene {
 	Bullet[] bullets;
 	BrickGrid brickGrid;
 	void draw() @trusted {
-		/+ TODO: Specify a generic draw function that recurses fields and checks for
-		   geometric shapes. If a structure has a draw function it overrides
-		   recursion. +/
 		brickGrid.draw();
 		paddle.draw();
 		balls.drawN();
