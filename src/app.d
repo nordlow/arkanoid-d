@@ -62,6 +62,14 @@ void layoutBullets(Bullet[] bullets) {
 	}
 }
 
+void drawBalls(Ball[] balls) @trusted {
+	foreach (const ball; balls) {
+		if (!ball.active)
+			continue;
+		DrawCircleV(ball.position, ball.radius, ball.color);
+	}
+}
+
 void drawBullets(Bullet[] bullets) @trusted {
 	foreach (ref bullet; bullets) {
 		if (!bullet.active)
@@ -93,7 +101,7 @@ void main() @trusted {
 
 	// Detect Gamepad
 	if (false) {
-		foreach (gamepad; -1000 .. 1000) {
+		foreach (const gamepad; -1000 .. 1000) {
 			if (IsGamepadAvailable(gamepad)) {
 				const name = GetGamepadName(gamepad);
 				writeln("Gamepad: nr ", gamepad, " being ", name.fromStringz, " detected");
@@ -130,7 +138,7 @@ void main() @trusted {
 	enum ballCountMax = 10; // Maximum number of balls
 
 	Ball[ballCountMax] balls;
-	foreach (i; 0 .. ballCountMax) {
+	foreach (const i; 0 .. ballCountMax) {
 		balls[i] = Ball(
 			position: Vec2(screenWidth / 2 + i * 20 - 20, screenHeight - 150),
 			velocity: ballVelocity,
@@ -346,11 +354,7 @@ void main() @trusted {
 			}
 		}
 		DrawRectangleV(paddle.position, paddle.size, paddle.color);
-		foreach (const ball; balls) {
-			if (ball.active) {
-				DrawCircleV(ball.position, ball.radius, ball.color);
-			}
-		}
+		balls.drawBalls();
 		bullets.drawBullets();
 		if (gameWon) {
 			const text = "YOU WON! Press R to restart";
