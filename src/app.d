@@ -300,10 +300,9 @@ struct BrickGrid {
 	uint rows;
 	uint cols;
 	Brick[] bricks;
-}
-
-void draw(in BrickGrid brickGrid) @trusted {
-	brickGrid.bricks.drawBricks();
+	void draw() const @trusted {
+		bricks.draw();
+	}
 }
 
 struct Brick/+Tegelsten+/ {
@@ -313,6 +312,19 @@ struct Brick/+Tegelsten+/ {
 	bool active;
 	bool isFlashing = false;
 	float flashTimer = 0.0f; // Timer for flashing duration.
+	void draw() const @trusted {
+		if (active || isFlashing) {
+			Color drawColor = color;
+			if (isFlashing) {
+				// Alternate between the original color and a bright white/yellow
+				// to create the flashing effect.
+				if (cast(int)(flashTimer * 10) % 2 == 0) {
+					drawColor = Colors.WHITE;
+				}
+			}
+			DrawRectangleV(pos, size, drawColor);
+		}
+	}
 }
 
 static immutable float FLASH_DURATION = 0.3f;
@@ -341,25 +353,6 @@ void layoutBricks(scope Brick[] bricks, in int screenWidth, in int screenHeight,
 		}
 	}
 
-}
-
-void drawBrick(in Brick brick) @trusted {
-	if (brick.active || brick.isFlashing) {
-		Color drawColor = brick.color;
-		if (brick.isFlashing) {
-			// Alternate between the original color and a bright white/yellow
-			// to create the flashing effect.
-			if (cast(int)(brick.flashTimer * 10) % 2 == 0) {
-				drawColor = Colors.WHITE;
-			}
-		}
-		DrawRectangleV(brick.pos, brick.size, drawColor);
-	}
-}
-
-void drawBricks(in Brick[] bricks) @trusted {
-	foreach (const ref brick; bricks)
-		brick.drawBrick();
 }
 
 // TODO: Move to `nxt.geometry`
