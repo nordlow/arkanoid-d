@@ -272,7 +272,7 @@ void draw(in Scene scene) @trusted {
 	scene.brickGrid.draw();
 	scene.paddle.drawPaddle();
 	scene.balls.draw();
-	scene.bullets.drawBullets();
+	scene.bullets.draw();
 }
 
 /++ Draw entities `ents`. +/
@@ -385,9 +385,13 @@ struct Box {
 struct Bullet {
 	Vec2 pos;
 	float rad;
-	Vec2 vel/+hastighet+/;
+	Vec2 vel;
 	Color color;
 	bool active;
+	void draw() const @trusted {
+		if (active)
+			DrawCircleV(pos, rad, color);
+	}
 }
 
 Bullet makeBullet() {
@@ -405,16 +409,6 @@ Bullet[] makeBullets(uint count) {
 	foreach (ref bullet; ret)
 		bullet = makeBullet();
 	return ret;
-}
-
-void drawBullet(in Bullet bullet) @trusted {
-	if (bullet.active)
-		DrawCircleV(bullet.pos, bullet.rad, bullet.color);
-}
-
-void drawBullets(in Bullet[] bullets) @trusted {
-	foreach (const ref bullet; bullets)
-		bullet.drawBullet();
 }
 
 alias Vec2 = Vector2;
@@ -454,9 +448,8 @@ struct Ball {
 	Color color;
 	bool active; // Added to track active balls
 	void draw() const @trusted {
-		if (!active)
-			return;
-		DrawCircleV(pos, rad, color);
+		if (active)
+			DrawCircleV(pos, rad, color);
 	}
 }
 
