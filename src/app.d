@@ -1,8 +1,7 @@
 import core.time : Duration;
 import std.random : uniform, Random, unpredictableSeed;
 import std.math : abs, sqrt;
-import std.string : fromStringz;
-import nxt.io;
+import nxt.io : writeln;
 import nxt.geometry;
 import nxt.color : ColorRGBA;
 import raylib : ColorR8G8B8A8 = Color; // TODO: merge into ColorRGBA and remove
@@ -527,6 +526,7 @@ void raylib_detectGamepad() @trusted {
 	foreach (const gamepad; -1000 .. 1000) {
 		if (IsGamepadAvailable(gamepad)) {
 			const name = GetGamepadName(gamepad);
+			import std.string : fromStringz;
 			writeln("Gamepad: nr ", gamepad, " being ", name.fromStringz, " detected");
 			foreach (const button; -100 .. 100) {
 				if (IsGamepadButtonDown(gamepad, button)) {
