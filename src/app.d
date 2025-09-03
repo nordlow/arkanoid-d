@@ -54,11 +54,6 @@ void main() @trusted {
 
 	uint keyCounter;
 	for (uint frameCounter; !WindowShouldClose(); ++frameCounter) {
-		while (const ev = game.joystick.tryNextEvent()) {
-			import nxt.io : writeln;
-			writeln("Read ", ev);
-		}
-
 		const deltaTime = GetFrameTime();
 		const absTime = GetTime();
 
@@ -68,10 +63,32 @@ void main() @trusted {
 		}
 
 		if (!game.over && !game.won) {
+			void moveLeft () {
+				if (game.scene.paddle.pos.x > 0)
+					game.scene.paddle.pos.x -= 800 * deltaTime;
+			}
+			void moveRight () {
+				if (game.scene.paddle.pos.x < screenWidth - game.scene.paddle.size.x)
+					game.scene.paddle.pos.x += 800 * deltaTime;
+			}
+
+			while (const ev = game.joystick.tryNextEvent()) {
+				import nxt.io : writeln;
+				writeln("Read ", ev);
+				if (ev.type == JoystickEventType.axisMoved && ev.number == 0) {
+					if (ev.value < 0)
+						moveLeft();
+					else if (ev.value > 0)
+						moveRight();
+				}
+			}
+
 			if (IsKeyDown(KeyboardKey.KEY_LEFT) && game.scene.paddle.pos.x > 0)
-				game.scene.paddle.pos.x -= 800 * deltaTime;
+				moveLeft();
+
 			if (IsKeyDown(KeyboardKey.KEY_RIGHT) && game.scene.paddle.pos.x < screenWidth - game.scene.paddle.size.x)
-				game.scene.paddle.pos.x += 800 * deltaTime;
+				moveRight();
+
 			if (IsKeyPressed(KeyboardKey.KEY_SPACE)) {
 				foreach (ref bullet; game.scene.bullets) {
 					if (bullet.active)
