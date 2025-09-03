@@ -38,7 +38,7 @@ void main() @trusted {
 	if (!IsAudioDeviceReady())
 		stderr.writeln("ERROR: Audio device not ready!");
 
-	auto game = Game(false);
+	auto game = Game.launch();
 
 	if (false) raylib_detectGamepad();
 
@@ -97,12 +97,13 @@ void main() @trusted {
 	uint keyCounter;
 
 	while (!WindowShouldClose()) {
-		game.joystick.readPendingEvents();
+		version(none)
+			game.joystick.readPendingEvents();
 
 		const deltaTime = GetFrameTime();
 		const absTime = GetTime();
 
-		if (game.playPiano && absTime > keyCounter) {
+		if (game.playMusic && absTime > keyCounter) {
 			pianoSounds[keyCounter].PlaySound();
 			keyCounter += 1;
 		}
@@ -279,15 +280,17 @@ void main() @trusted {
 struct Game {
 	@disable this(this);
 	static immutable pianoKeys = __traits(allMembers, Key);
-	this(in bool) @trusted {
-		joystick = openDefaultJoystick();
-		rng = Random(unpredictableSeed());
+	static typeof(this) launch() @trusted {
+		typeof(return) ret;
+		ret.joystick = openDefaultJoystick();
+		ret.rng = Random(unpredictableSeed());
 		// Sounds (Ljud):
-		paddleSound = generateBoingWave(300.0f, 1000.0f, 0.30f, soundSampleRate).LoadSoundFromWave();
-		wallSound = generateBoingWave(300.0f, 150.0f, 0.30f, soundSampleRate).LoadSoundFromWave();
-		brickSound = rng.generateGlassBreakWave(0.60f, 0.2f, soundSampleRate).LoadSoundFromWave();
-		shootSound = generateBounceWave(400.0f, 200.0f, 0.3f, soundSampleRate).LoadSoundFromWave();
-		const playPiano = false;
+		ret.paddleSound = generateBoingWave(300.0f, 1000.0f, 0.30f, soundSampleRate).LoadSoundFromWave();
+		ret.wallSound = generateBoingWave(300.0f, 150.0f, 0.30f, soundSampleRate).LoadSoundFromWave();
+		ret.brickSound = ret.rng.generateGlassBreakWave(0.60f, 0.2f, soundSampleRate).LoadSoundFromWave();
+		ret.shootSound = generateBounceWave(400.0f, 200.0f, 0.3f, soundSampleRate).LoadSoundFromWave();
+		ret.playMusic = false;
+		return ret;
 	}
 	Joystick joystick;
 	bool won;
@@ -295,7 +298,7 @@ struct Game {
 	static immutable soundSampleRate = 44100;
 	Random rng;
 	Sound paddleSound, wallSound, brickSound, shootSound;
-	bool playPiano;
+	bool playMusic;
 
 	const ballVelocity = Vec2(100, -800); // boll hastighet
 	enum ballCountMax = 10; // Maximum number of balls
