@@ -124,7 +124,7 @@ void main() @trusted {
 						break;
 					}
 				}
-				if (ball.pos.y > screenHeight) {
+				if (ball.pos.y > screenHeight) { // TODO: Change this condition.
 					ball.active = false;
 				}
 			}
