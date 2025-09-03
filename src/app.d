@@ -270,7 +270,7 @@ void draw(in Scene scene) @trusted {
        geometric shapes. If a structure has a draw function it overrides
        recursion. +/
 	scene.brickGrid.draw();
-	scene.paddle.drawPaddle();
+	scene.paddle.draw();
 	scene.balls.draw();
 	scene.bullets.draw();
 }
@@ -285,10 +285,9 @@ struct Paddle {
 	Vec2 pos;
 	Vec2 size;
 	Color color;
-}
-
-void drawPaddle(in Paddle paddle) @trusted {
-	DrawRectangleV(paddle.pos, paddle.size, paddle.color);
+	void draw() const @trusted {
+		DrawRectangleV(pos, size, color);
+	}
 }
 
 struct BrickGrid {
