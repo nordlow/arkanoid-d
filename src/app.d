@@ -358,7 +358,7 @@ float length(in Vec2 v) pure nothrow @safe @nogc {
 
 Vec2 normalized(in Vec2 v) pure nothrow @safe @nogc {
 	version(D_Coverage) {} else pragma(inline, true);
-	const float l = v.length;
+	const l = v.length;
 	if (l == 0)
 		return Vec2(0, 0);
 	return v / l;
