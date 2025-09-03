@@ -380,8 +380,7 @@ void drawBricks(in Brick[] bricks) @trusted {
 
 /++ Skott. +/
 struct Bullet {
-	Entity entity;
-	Vec2 position;
+	PositionedEntity posEnt; alias this = posEnt;
 	Vec2 velocity/+hastighet+/;
 	float radius;
 	ColorR8G8B8A8 color;
@@ -446,8 +445,7 @@ void clearCanvas() @trusted {
 
 /++ Boll. +/
 struct Ball {
-	Entity entity;
-	Vec2 position;
+	PositionedEntity posEnt; alias this = posEnt;
 	Vec2 velocity;
 	float radius;
 	ColorR8G8B8A8 color;
@@ -458,7 +456,7 @@ Ball[] makeBalls(uint count, Vec2 ballVelocity, uint screenWidth, uint screenHei
 	typeof(return) ret;
 	ret.length = count;
 	foreach (const i, ref ball; ret)
-		ball = Ball(position: Vec2(screenWidth / 2 + i * 20 - 20, screenHeight - 150),
+		ball = Ball(posEnt: PositionedEntity(Vec2(screenWidth / 2 + i * 20 - 20, screenHeight - 150)),
 					velocity: ballVelocity,
 					radius: 15,
 					color: Colors.GRAY,
