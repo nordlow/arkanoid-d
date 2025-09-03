@@ -309,8 +309,8 @@ struct Brick {
 	Vec2 size;
 	Color color;
 	bool active;
-	bool isFlashing = false; // New flag for flashing
-	float flashTimer = 0.0f; // New timer for flashing duration
+	bool isFlashing = false;
+	float flashTimer = 0.0f; // Timer for flashing duration.
 }
 
 // Global constant for the flashing duration
