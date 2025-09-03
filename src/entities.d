@@ -82,7 +82,7 @@ struct Brick/+Tegelsten+/ {
 }
 
 /++ Draw generic entities `ents`.
-	TODO: Investigate why this can't be named `draw`.
+	TODO: Investigate why this can be UFCS-resolved from `app.d` when named `draw`.
 	+/
 void drawN(T)(in T[] ents) @trusted {
 	foreach (const ref ent; ents)
