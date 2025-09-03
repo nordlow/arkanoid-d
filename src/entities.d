@@ -54,7 +54,7 @@ struct BrickGrid {
 	uint cols;
 	Brick[] bricks;
 	void draw() const @trusted {
-		bricks.drawN();
+		bricks.draw();
 	}
 }
 
@@ -88,7 +88,7 @@ struct Brick/+Tegelsten+/ {
 /++ Draw generic entities `ents`.
 	TODO: Fails to UFCS-called from `app.d` when named `draw`.
 	+/
-void drawN(T)(in T[] ents) @trusted {
+void draw(T)(in T[] ents) @trusted {
 	foreach (const ref ent; ents)
 		ent.draw();
 }

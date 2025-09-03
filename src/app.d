@@ -272,8 +272,8 @@ struct Scene {
 	void draw() {
 		brickGrid.draw();
 		paddle.draw();
-		balls.drawN();
-		bullets.drawN();
+		balls.draw();
+		bullets.draw();
 	}
 }
 
