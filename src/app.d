@@ -164,12 +164,7 @@ void main() @trusted {
 	/// Create Bullets (Skapa Skott)
 	enum bulletCountMax = 30; // maximalt antal skott samtidigt
 	Bullet[bulletCountMax] bullets;
-	foreach (const i; 0 .. bulletCountMax) {
-		bullets[i].active = false;
-		bullets[i].radius = 10; // radie, 2*radie == diameter
-		bullets[i].color = Colors.YELLOW;
-		bullets[i].velocity = Vec2(0, -333);
-	}
+	bullets.layoutBullets();
 
 	bool gameWon = false;
 	bool gameOver = false;
@@ -366,6 +361,15 @@ void main() @trusted {
 					 screenHeight - 25, 16, Colors.WHITE);
 		}
 		frameCounter += 1;
+	}
+}
+
+void layoutBullets(Bullet[] bullets) {
+	foreach (ref bullet; bullets) {
+		bullet.active = false;
+		bullet.radius = 10; // radie, 2*radie == diameter
+		bullet.color = Colors.YELLOW;
+		bullet.velocity = Vec2(0, -333);
 	}
 }
 
