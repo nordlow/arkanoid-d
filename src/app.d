@@ -341,22 +341,22 @@ void layoutBullets(Bullet[] bullets) {
 
 alias Vec2 = Vector2;
 
-float dot(in Vec2 v1, in Vec2 v2) pure nothrow @safe @nogc {
+float dot(in Vec2 v1, in Vec2 v2) pure nothrow @nogc {
 	version(D_Coverage) {} else pragma(inline, true);
 	return v1.x*v2.x + v1.y*v2.y;
 }
 
-float lengthSquared(in Vec2 v) pure nothrow @safe @nogc {
+float lengthSquared(in Vec2 v) pure nothrow @nogc {
 	version(D_Coverage) {} else pragma(inline, true);
 	return v.x*v.x + v.y*v.y;
 }
 
-float length(in Vec2 v) pure nothrow @safe @nogc {
+float length(in Vec2 v) pure nothrow @nogc {
 	version(D_Coverage) {} else pragma(inline, true);
 	return v.lengthSquared.sqrt;
 }
 
-Vec2 normalized(in Vec2 v) pure nothrow @safe @nogc {
+Vec2 normalized(in Vec2 v) pure nothrow @nogc {
 	version(D_Coverage) {} else pragma(inline, true);
 	const l = v.length;
 	if (l == 0)
