@@ -315,8 +315,8 @@ struct Brick/+Tegelsten+/ {
 static immutable float FLASH_DURATION = 0.3f;
 
 void restartFlashing(ref Brick brick) {
-	brick.isFlashing = true;
-	brick.flashTimer = 0.0f;
+	brick.isFlashing = true; // start
+	brick.flashTimer = 0.0f; // restart
 }
 
 /++ Skott. +/
