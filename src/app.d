@@ -384,12 +384,14 @@ void layoutBullets(Bullet[] bullets) {
 	}
 }
 
-void drawBullets(in Bullet[] bullets) @trusted {
-	foreach (const ref bullet; bullets) {
-		if (!bullet.active)
-			continue;
+void drawBullet(in Bullet bullet) @trusted {
+	if (bullet.active)
 		DrawCircleV(bullet.position, bullet.radius, bullet.color);
-	}
+}
+
+void drawBullets(in Bullet[] bullets) @trusted {
+	foreach (const ref bullet; bullets)
+		bullet.drawBullet();
 }
 
 alias Vec2 = Vector2;
