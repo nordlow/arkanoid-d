@@ -85,9 +85,7 @@ struct Brick/+Tegelsten+/ {
 	}
 }
 
-/++ Draw generic entities `ents`.
-	TODO: Fails to UFCS-called from `app.d` when named `draw`.
-	+/
+/++ Draw generic entities `ents`. +/
 void draw(T)(in T[] ents) @trusted {
 	foreach (const ref ent; ents)
 		ent.draw();
