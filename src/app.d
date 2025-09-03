@@ -4,7 +4,6 @@ import std.math : abs, sqrt;
 import nxt.io : writeln;
 import nxt.geometry;
 import nxt.color : ColorRGBA;
-import raylib : ColorR8G8B8A8 = Color; // TODO: merge into ColorRGBA and remove
 import raylib;
 import music;
 import waves;
@@ -272,7 +271,7 @@ void draw(in Game game) @trusted {
 struct Paddle {
 	Vec2 pos;
 	Vec2 size;
-	ColorR8G8B8A8 color;
+	Color color;
 }
 
 void drawPaddle(in Paddle paddle) @trusted {
@@ -298,7 +297,7 @@ void draw(in BrickGrid brickGrid) @trusted {
 struct Brick/+Tegelsten+/ {
 	Vec2 pos;
 	Vec2 size;
-	ColorR8G8B8A8 color;
+	Color color;
 	bool active;
 	bool isFlashing = false;
 	float flashTimer = 0.0f; // Timer for flashing duration.
@@ -334,7 +333,7 @@ void layoutBricks(scope Brick[] bricks, in int screenWidth, in int screenHeight,
 
 void drawBrick(in Brick brick) @trusted {
 	if (brick.active || brick.isFlashing) {
-		ColorR8G8B8A8 drawColor = brick.color;
+		Color drawColor = brick.color;
 		if (brick.isFlashing) {
 			// Alternate between the original color and a bright white/yellow
 			// to create the flashing effect.
@@ -374,7 +373,7 @@ struct Bullet {
 	Vec2 pos;
 	float rad;
 	Vec2 vel/+hastighet+/;
-	ColorR8G8B8A8 color;
+	Color color;
 	bool active;
 }
 
@@ -439,7 +438,7 @@ struct Ball {
 	Vec2 pos;
 	float rad;
 	Vec2 vel;
-	ColorR8G8B8A8 color;
+	Color color;
 	bool active; // Added to track active balls
 }
 
