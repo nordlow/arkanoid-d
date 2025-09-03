@@ -269,15 +269,10 @@ void draw(in Game game) @trusted {
 	game.bullets.drawBullets();
 }
 
-/++ Common term for a game object. +/
-struct Entity {
-}
-
 struct PositionedEntity {
 	this(Vec2 pos) pure nothrow @nogc {
 		this.pos = pos;
 	}
-	Entity ent;
 	Vec2 pos;
 }
 
@@ -309,7 +304,6 @@ void draw(in BrickGrid brickGrid) @trusted {
 
 struct Brick/+Tegelsten+/ {
 	PositionedEntity posEnt; alias this = posEnt; // TODO: Replace with `Box shape;`
-	Entity entity;
 	Vec2 size;
 	ColorR8G8B8A8 color;
 	bool active;
