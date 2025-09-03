@@ -64,10 +64,12 @@ void main() @trusted {
 
 		if (!game.over && !game.won) {
 			void moveLeft () {
+				// TODO: Truncated
 				if (game.scene.paddle.pos.x > 0)
 					game.scene.paddle.pos.x -= 800 * deltaTime;
 			}
 			void moveRight () {
+				// TODO: Truncated
 				if (game.scene.paddle.pos.x < screenWidth - game.scene.paddle.size.x)
 					game.scene.paddle.pos.x += 800 * deltaTime;
 			}
