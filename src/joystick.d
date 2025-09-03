@@ -44,16 +44,12 @@ nothrow:
 /++ Read all pending {Joystick|Gamepad} events. +/
 void readPendingEvents(ref Joystick js) @trusted in(js.fd >= 0) {
     js_event event;
-
-    // Create a pollfd structure for the joystick file descriptor
     pollfd pfd;
     pfd.fd = js.fd;
-    pfd.events = POLLIN; // Wait for incoming data
-
-    // Check if there are any events to read with a 0ms timeout
+    pfd.events = POLLIN; // wait for incoming data
+    // check if there are any events to read with a 0ms timeout
     while (poll(&pfd, 1, 0) > 0) {
-        if (pfd.revents & POLLIN) {
-            // Data is available, so read it
+        if (pfd.revents & POLLIN) { // data is available, so read it
             const bytesRead = read(js.fd, &event, js_event.sizeof);
             if (bytesRead > 0) { // event was read successfully
                 if (event.type & JS_EVENT_BUTTON) {
@@ -62,8 +58,7 @@ void readPendingEvents(ref Joystick js) @trusted in(js.fd >= 0) {
                 } else if (event.type & JS_EVENT_AXIS) {
                     warning("Axis ", event.number, " moved to ", event.value);
                 }
-            } else if (bytesRead == -1) {
-                // An actual error occurred during read
+            } else if (bytesRead == -1) { // an actual error occurred during read
                 perror("Error reading from joystick");
                 break;
             }
