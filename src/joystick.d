@@ -41,9 +41,7 @@ nothrow:
 /++ Read all pending {Joystick|Gamepad} events. +/
 void readPendingEvents(ref Joystick js) @trusted in(js.fd >= 0) {
     js_event event;
-    pollfd pfd;
-    pfd.fd = js.fd;
-    pfd.events = POLLIN; // wait for incoming data
+    auto pfd = pollfd(js.fd, POLLIN); // wait for incoming data
     // check if there are any events to read with a 0ms timeout
     while (poll(&pfd, 1, 0) > 0) {
         if (pfd.revents & POLLIN) { // data is available, so read it
