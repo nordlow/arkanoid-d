@@ -371,8 +371,9 @@ void layoutBullets(Bullet[] bullets) {
 
 void drawBullets(Bullet[] bullets) @trusted {
 	foreach (ref bullet; bullets) {
-		if (bullet.active)
-			DrawCircleV(bullet.position, bullet.radius, bullet.color);
+		if (!bullet.active)
+			continue;
+		DrawCircleV(bullet.position, bullet.radius, bullet.color);
 	}
 }
 
