@@ -31,7 +31,6 @@ struct JoystickEvent {
 
 struct Joystick {
     int fd;
-
 nothrow:
     @disable this(this);
 
@@ -57,14 +56,11 @@ nothrow:
     }
 
     ~this() @trusted {
-        if (fd >= 0) {
+        if (fd >= 0)
             close(fd);
-        }
     }
 
-    @property bool isValid() const pure nothrow @nogc {
-        return fd >= 0;
-    }
+    @property bool isValid() const pure nothrow @nogc => fd >= 0;
 
     /++
      + Try to read the next joystick event.
