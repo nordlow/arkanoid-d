@@ -289,7 +289,7 @@ struct PositionedEntity {
 	this(Vec2 position) pure nothrow @nogc {
 		this.position = position;
 	}
-	Entity entity;
+	Entity ent;
 	Vec2 position;
 }
 
