@@ -6,7 +6,9 @@ import std.random : uniform, Random, unpredictableSeed;
 import std.math;
 import std.string;
 import nxt.geometry;
+import nxt.color : ColorRGB8;
 import raylib;
+import raylib : ColorR8G8B8A8 = Color;
 import music;
 import waves;
 import joystick;
@@ -300,13 +302,13 @@ struct Game {
 struct Paddle {
 	Vec2 position;
 	Vec2 size;
-	Color color;
+	ColorR8G8B8A8 color;
 }
 
 struct Brick/+Tegelsten+/ {
 	Vec2 position;
 	Vec2 size;
-	Color color;
+	ColorR8G8B8A8 color;
 	bool active;
 	bool isFlashing = false;
 	float flashTimer = 0.0f; // Timer for flashing duration.
@@ -324,7 +326,7 @@ struct Bullet {
 	Vec2 position;
 	Vec2 velocity/+hastighet+/;
 	float radius;
-	Color color;
+	ColorR8G8B8A8 color;
 	bool active;
 }
 
@@ -373,7 +375,7 @@ void drawPaddle(in Paddle paddle) @trusted {
 void drawBricks(in Brick[] bricks) @trusted {
 	foreach (const i, const ref brick; bricks) {
 		if (brick.active || brick.isFlashing) {
-			Color drawColor = brick.color;
+			ColorR8G8B8A8 drawColor = brick.color;
 			if (brick.isFlashing) {
 				// Alternate between the original color and a bright white/yellow
 				// to create the flashing effect.
@@ -407,7 +409,7 @@ struct Ball {
 	Vec2 position;
 	Vec2 velocity;
 	float radius;
-	Color color;
+	ColorR8G8B8A8 color;
 	bool active; // Added to track active balls
 }
 
