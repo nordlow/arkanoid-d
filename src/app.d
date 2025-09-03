@@ -68,10 +68,7 @@ void main() @trusted {
 	auto brickGrid = BrickGrid(rows: 15, cols: 20);
 	brickGrid.bricks.layoutBricks(screenWidth, screenHeight, brickGrid.rows, brickGrid.cols);
 
-	/// Create Bullets (Skapa Skott)
-	enum bulletCountMax = 30; // maximalt antal skott samtidigt
-	Bullet[bulletCountMax] bullets;
-	bullets.layoutBullets();
+	auto bullets = makeBullets(30);
 
 	uint frameCounter;
 	uint keyCounter;
@@ -375,13 +372,16 @@ struct Bullet {
 	bool active;
 }
 
-void layoutBullets(Bullet[] bullets) {
-	foreach (ref bullet; bullets) {
+Bullet[] makeBullets(uint count) {
+	typeof(return) ret;
+	ret.length = count;
+	foreach (ref bullet; ret) {
 		bullet.active = false;
 		bullet.radius = 10; // radie, 2*radie == diameter
 		bullet.color = Colors.YELLOW;
 		bullet.velocity = Vec2(0, -333);
 	}
+	return ret;
 }
 
 void drawBullet(in Bullet bullet) @trusted {
