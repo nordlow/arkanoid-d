@@ -227,7 +227,9 @@ void main() @trusted {
 					}
 				}
 			}
+
 			balls[].bounceAll();
+
 			foreach (ref ball; balls) {
 				if (!ball.active) continue;
 				ball.position.x += ball.velocity.x * deltaTime;
