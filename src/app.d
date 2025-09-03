@@ -44,7 +44,7 @@ void main() @trusted {
 		pianoSounds ~= generatePianoWave(f, 1.0f, 1.0f, game.soundSampleRate).LoadSoundFromWave();
 	}
 
-	game.paddle = Paddle(posEnt: PositionedEntity(pos: Vec2(screenWidth / 2 - 60, screenHeight - 30)),
+	game.paddle = Paddle(pos: Vec2(screenWidth / 2 - 60, screenHeight - 30),
 						 size: Vec2(250, 20),
 						 color: Colors.BLUE);
 
@@ -269,15 +269,8 @@ void draw(in Game game) @trusted {
 	game.bullets.drawBullets();
 }
 
-struct PositionedEntity {
-	this(Vec2 pos) pure nothrow @nogc {
-		this.pos = pos;
-	}
-	Vec2 pos;
-}
-
 struct Paddle {
-	PositionedEntity posEnt; alias this = posEnt;
+	Vec2 pos;
 	Vec2 size;
 	ColorR8G8B8A8 color;
 }
@@ -303,7 +296,7 @@ void draw(in BrickGrid brickGrid) @trusted {
 }
 
 struct Brick/+Tegelsten+/ {
-	PositionedEntity posEnt; alias this = posEnt; // TODO: Replace with `Box shape;`
+	Vec2 pos;
 	Vec2 size;
 	ColorR8G8B8A8 color;
 	bool active;
@@ -324,8 +317,7 @@ void layoutBricks(scope Brick[] bricks, in int screenWidth, in int screenHeight,
 	foreach (const row; 0 .. brickRows) {
 		foreach (const col; 0 .. brickCols) {
 			const index = row * brickCols + col;
-			bricks[index] = Brick(posEnt: PositionedEntity(Vec2(col * brickWidth,
-											   row * brickHeight + 250)),
+			bricks[index] = Brick(pos: Vec2(col * brickWidth, row * brickHeight + 250),
 								  size: Vec2(brickWidth - 2,
 											 brickHeight - 2),
 								  Colors.RED, true);
@@ -379,7 +371,7 @@ struct Box {
 
 /++ Skott. +/
 struct Bullet {
-	PositionedEntity posEnt; alias this = posEnt; // TODO: Replace with `Circle shape;`
+	Vec2 pos;
 	float rad;
 	Vec2 vel/+hastighet+/;
 	ColorR8G8B8A8 color;
@@ -444,7 +436,7 @@ void clearCanvas() @trusted {
 
 /++ Boll. +/
 struct Ball {
-	PositionedEntity posEnt; alias this = posEnt; // TODO: Replace with `Circle shape;`
+	Vec2 pos;
 	float rad;
 	Vec2 vel;
 	ColorR8G8B8A8 color;
@@ -455,7 +447,7 @@ Ball[] makeBalls(uint count, Vec2 ballVelocity, uint screenWidth, uint screenHei
 	typeof(return) ret;
 	ret.length = count;
 	foreach (const i, ref ball; ret)
-		ball = Ball(posEnt: PositionedEntity(Vec2(screenWidth / 2 + i * 20 - 20, screenHeight - 150)),
+		ball = Ball(pos: Vec2(screenWidth / 2 + i * 20 - 20, screenHeight - 150),
 					vel: ballVelocity,
 					rad: 15,
 					color: Colors.GRAY,
