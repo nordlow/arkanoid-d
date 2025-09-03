@@ -23,6 +23,21 @@ struct Game {
 	}
 }
 
+struct Paddle {
+	Vec2 position;
+	Vec2 size;
+	Color color;
+}
+
+/++ Skott. +/
+struct Bullet {
+	Vec2 position;
+	Vec2 velocity; // hastighet
+	float radius;
+	Color color;
+	bool active;
+}
+
 alias Vec2 = Vector2;
 
 float dot(in Vec2 v1, in Vec2 v2) pure nothrow @safe @nogc {
@@ -46,21 +61,6 @@ Vec2 normalized(in Vec2 v) pure nothrow @safe @nogc {
 	if (l == 0)
 		return Vec2(0, 0);
 	return v / l;
-}
-
-struct Paddle {
-	Vec2 position;
-	Vec2 size;
-	Color color;
-}
-
-/++ Skott. +/
-struct Bullet {
-	Vec2 position;
-	Vec2 velocity; // hastighet
-	float radius;
-	Color color;
-	bool active;
 }
 
 void layoutBullets(Bullet[] bullets) {
