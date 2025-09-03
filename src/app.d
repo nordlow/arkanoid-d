@@ -49,7 +49,7 @@ void main() @trusted {
 		pianoSounds ~= generatePianoWave(f, 1.0f, 1.0f, game.soundSampleRate).LoadSoundFromWave();
 	}
 
-	game.paddle = Paddle(entity: Entity(position: Vec2(screenWidth / 2 - 60, screenHeight - 30)),
+	game.paddle = Paddle(positionedEntity: PositionedEntity(position: Vec2(screenWidth / 2 - 60, screenHeight - 30)),
 						 size: Vec2(250, 20),
 						 color: Colors.BLUE);
 
@@ -282,12 +282,19 @@ void draw(in Game game) @trusted {
 
 /++ Common term for a game object. +/
 struct Entity {
+}
+
+/++ Common term for a game object. +/
+struct PositionedEntity {
+	this(Vec2 position) {
+		this.position = position;
+	}
+	Entity entity;
 	Vec2 position;
 }
 
 struct Paddle {
-	Entity entity;
-	alias this = entity;
+	PositionedEntity positionedEntity; alias this = positionedEntity;
 	Vec2 size;
 	ColorR8G8B8A8 color;
 }
