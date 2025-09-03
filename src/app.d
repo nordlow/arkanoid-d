@@ -426,13 +426,13 @@ void bounceAll(ref Ball[] balls) pure nothrow @nogc { // studsa alla
 				continue;
 
 			const delta = ballB.position - ballA.position;
-			const float distanceSquared = delta.lengthSquared;
-			const float combinedRadii = ballA.radius + ballB.radius;
-			const float combinedRadiiSquared = combinedRadii * combinedRadii;
+			const distanceSquared = delta.lengthSquared;
+			const combinedRadii = ballA.radius + ballB.radius;
+			const combinedRadiiSquared = combinedRadii * combinedRadii;
 
 			if (distanceSquared < combinedRadiiSquared) {
-				const float distance = distanceSquared.sqrt;
-				const float overlap = combinedRadii - distance;
+				const distance = distanceSquared.sqrt;
+				const overlap = combinedRadii - distance;
 				const normal = delta.normalized;
 
 				ballA.position -= normal * (overlap / 2.0f);
@@ -440,13 +440,13 @@ void bounceAll(ref Ball[] balls) pure nothrow @nogc { // studsa alla
 
 				const tangent = Vec2(-normal.y, normal.x);
 
-				const float v1n = dot(ballA.velocity, normal);
-				const float v1t = dot(ballA.velocity, tangent);
-				const float v2n = dot(ballB.velocity, normal);
-				const float v2t = dot(ballB.velocity, tangent);
+				const v1n = dot(ballA.velocity, normal);
+				const v1t = dot(ballA.velocity, tangent);
+				const v2n = dot(ballB.velocity, normal);
+				const v2t = dot(ballB.velocity, tangent);
 
-				const float v1n_prime = v2n;
-				const float v2n_prime = v1n;
+				const v1n_prime = v2n;
+				const v2n_prime = v1n;
 
 				ballA.velocity = (normal * v1n_prime) + (tangent * v1t);
 				ballB.velocity = (normal * v2n_prime) + (tangent * v2t);
