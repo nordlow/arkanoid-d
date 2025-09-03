@@ -107,8 +107,7 @@ nothrow:
      +          otherwise returns the event details.
      + Note: This method automatically updates the internal button state tracking.
      +/
-    JoystickEvent tryNextEvent() @trusted
-    in(isValid, "Joystick must be valid before reading events") {
+    JoystickEvent tryNextEvent() @trusted in(isValid) {
         js_event rawEvent;
         auto pfd = pollfd(fd, POLLIN);
 
