@@ -49,11 +49,11 @@ void main() @trusted {
 		pianoSounds ~= generatePianoWave(f, 1.0f, 1.0f, game.soundSampleRate).LoadSoundFromWave();
 	}
 
-	Paddle paddle = {
-		position: Vec2(screenWidth / 2 - 60, screenHeight - 30),
-		size: Vec2(250, 20),
-		color: Colors.BLUE
-	};
+	game.paddle = Paddle(
+						   position: Vec2(screenWidth / 2 - 60, screenHeight - 30),
+						   size: Vec2(250, 20),
+						   color: Colors.BLUE
+						   );
 
 	uint keyCounter;
 	for (uint frameCounter; !WindowShouldClose(); ++frameCounter) {
@@ -69,17 +69,17 @@ void main() @trusted {
 		}
 
 		if (!game.over && !game.won) {
-			if (IsKeyDown(KeyboardKey.KEY_LEFT) && paddle.position.x > 0) {
-				paddle.position.x -= 800 * deltaTime;
+			if (IsKeyDown(KeyboardKey.KEY_LEFT) && game.paddle.position.x > 0) {
+				game.paddle.position.x -= 800 * deltaTime;
 			}
 			if (IsKeyDown(KeyboardKey.KEY_RIGHT)
-				&& paddle.position.x < screenWidth - paddle.size.x) {
-				paddle.position.x += 800 * deltaTime;
+				&& game.paddle.position.x < screenWidth - game.paddle.size.x) {
+				game.paddle.position.x += 800 * deltaTime;
 			}
 			if (IsKeyPressed(KeyboardKey.KEY_SPACE)) {
 				foreach (ref bullet; game.bullets) {
 					if (!bullet.active) {
-						bullet.position = Vec2(paddle.position.x + paddle.size.x / 2, paddle.position.y);
+						bullet.position = Vec2(game.paddle.position.x + game.paddle.size.x / 2, game.paddle.position.y);
 						bullet.active = true;
 						game.shootSound.PlaySound();
 						break;
@@ -101,14 +101,14 @@ void main() @trusted {
 					ball.velocity.y *= -1;
 					game.wallSound.PlaySound();
 				}
-				if (ball.position.y + ball.radius >= paddle.position.y
+				if (ball.position.y + ball.radius >= game.paddle.position.y
 					&& ball.position.y - ball.radius
-					<= paddle.position.y + paddle.size.y
-					&& ball.position.x >= paddle.position.x
-					&& ball.position.x <= paddle.position.x + paddle.size.x) {
+					<= game.paddle.position.y + game.paddle.size.y
+					&& ball.position.x >= game.paddle.position.x
+					&& ball.position.x <= game.paddle.position.x + game.paddle.size.x) {
 					ball.velocity.y = -abs(ball.velocity.y);
 					game.paddleSound.PlaySound();
-					const float hitPos = (ball.position.x - paddle.position.x) / paddle.size.x;
+					const float hitPos = (ball.position.x - game.paddle.position.x) / game.paddle.size.x;
 					ball.velocity.x = 200 * (hitPos - 0.5f) * 2;
 				}
 				foreach (ref brick; game.brickGrid.bricks) {
@@ -189,7 +189,7 @@ void main() @trusted {
 				ball.velocity = game.ballVelocity;
 				ball.active = true;
 			}
-			paddle.position = Vec2(screenWidth / 2 - 60, screenHeight - 30);
+			game.paddle.position = Vec2(screenWidth / 2 - 60, screenHeight - 30);
 			foreach (ref brick; game.brickGrid.bricks) {
 				brick.active = true;
 				brick.isFlashing = false; // Reset flashing state on restart
@@ -210,10 +210,7 @@ void main() @trusted {
 
 		BeginDrawing();
 		clearCanvas();
-		game.brickGrid.draw();
-		paddle.drawPaddle();
-		game.balls.drawBalls();
-		game.bullets.drawBullets();
+		game.draw();
 		EndDrawing();
 
 		if (game.won) {
@@ -259,9 +256,9 @@ struct Game {
 
 	Joystick joystick;
 
-	Scene scene;
-
 	const ballVelocity = Vec2(100, -800); // boll hastighet
+
+	Paddle paddle;
 
 	static immutable ballCount = 3;
 	Ball[] balls;
@@ -278,11 +275,11 @@ struct Game {
 	bool over;
 }
 
-struct Scene {
-	@disable this(this);
-}
-
-void draw(in Scene scene) @trusted {
+void draw(in Game game) @trusted {
+	game.brickGrid.draw();
+	game.paddle.drawPaddle();
+	game.balls.drawBalls();
+	game.bullets.drawBullets();
 }
 
 struct Paddle {
