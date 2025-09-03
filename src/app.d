@@ -37,8 +37,6 @@ void main() @trusted {
 
 	auto game = Game(screenWidth, screenHeight);
 
-	if (false) raylib_detectGamepad();
-
 	Sound[] pianoSounds;
 	pianoSounds.reserve(game.pianoKeys.length);
 	foreach (const i, const key; game.pianoKeys[0 .. 40]) {
@@ -517,21 +515,6 @@ void bounceAll(ref Ball[] balls) pure nothrow @nogc { // studsa alla
 
 				ballA.vel = (normal * v1n_prime) + (tangent * v1t);
 				ballB.vel = (normal * v2n_prime) + (tangent * v2t);
-			}
-		}
-	}
-}
-
-void raylib_detectGamepad() @trusted {
-	foreach (const gamepad; -1000 .. 1000) {
-		if (IsGamepadAvailable(gamepad)) {
-			const name = GetGamepadName(gamepad);
-			import std.string : fromStringz;
-			writeln("Gamepad: nr ", gamepad, " being ", name.fromStringz, " detected");
-			foreach (const button; -100 .. 100) {
-				if (IsGamepadButtonDown(gamepad, button)) {
-					writeln("Button ", button, " is down");
-				}
 			}
 		}
 	}
