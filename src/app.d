@@ -19,6 +19,29 @@ import joystick;
 
 alias Vec2 = Vector2;
 
+float dot(in Vec2 v1, in Vec2 v2) pure nothrow @safe @nogc {
+	version(D_Coverage) {} else pragma(inline, true);
+	return (v1.x * v2.x) + (v1.y * v2.y);
+}
+
+float lengthSquared(in Vec2 v) pure nothrow @safe @nogc {
+	version(D_Coverage) {} else pragma(inline, true);
+	return v.x*v.x + v.y*v.y;
+}
+
+float length(in Vec2 v) pure nothrow @safe @nogc {
+	version(D_Coverage) {} else pragma(inline, true);
+	return sqrt(lengthSquared(v));
+}
+
+Vec2 normalized(in Vec2 v) pure nothrow @safe @nogc {
+	version(D_Coverage) {} else pragma(inline, true);
+	const float l = length(v);
+	if (l == 0)
+		return Vec2(0, 0);
+	return v / l;
+}
+
 /++ Boll. +/
 struct Ball {
 	Vec2 position;
@@ -51,6 +74,23 @@ struct Bullet {
 	float radius;
 	Color color; // färg
 	bool active;
+}
+
+void layoutBullets(Bullet[] bullets) {
+	foreach (ref bullet; bullets) {
+		bullet.active = false;
+		bullet.radius = 10; // radie, 2*radie == diameter
+		bullet.color = Colors.YELLOW;
+		bullet.velocity = Vec2(0, -333);
+	}
+}
+
+void drawBullets(Bullet[] bullets) @trusted {
+	foreach (ref bullet; bullets) {
+		if (!bullet.active)
+			continue;
+		DrawCircleV(bullet.position, bullet.radius, bullet.color);
+	}
 }
 
 // Global constant for the flashing duration
@@ -360,45 +400,6 @@ void main() @trusted {
 	}
 }
 
-void layoutBullets(Bullet[] bullets) {
-	foreach (ref bullet; bullets) {
-		bullet.active = false;
-		bullet.radius = 10; // radie, 2*radie == diameter
-		bullet.color = Colors.YELLOW;
-		bullet.velocity = Vec2(0, -333);
-	}
-}
-
-void drawBullets(Bullet[] bullets) @trusted {
-	foreach (ref bullet; bullets) {
-		if (!bullet.active)
-			continue;
-		DrawCircleV(bullet.position, bullet.radius, bullet.color);
-	}
-}
-
-float dot(in Vec2 v1, in Vec2 v2) pure nothrow @safe @nogc {
-	version(D_Coverage) {} else pragma(inline, true);
-	return (v1.x * v2.x) + (v1.y * v2.y);
-}
-
-float lengthSquared(in Vec2 v) pure nothrow @safe @nogc {
-	version(D_Coverage) {} else pragma(inline, true);
-	return v.x*v.x + v.y*v.y;
-}
-
-float length(in Vec2 v) pure nothrow @safe @nogc {
-	version(D_Coverage) {} else pragma(inline, true);
-	return sqrt(lengthSquared(v));
-}
-
-Vec2 normalize(in Vec2 v) pure nothrow @safe @nogc {
-	version(D_Coverage) {} else pragma(inline, true);
-	const float l = length(v);
-	if (l == 0) return Vec2(0, 0);
-	return v / l;
-}
-
 void bounceAll(ref Ball[] balls) { // studsa alla
 	foreach (i, ref Ball ballA; balls) {
 		foreach (ref Ball ballB; balls[i + 1 .. $]) {
@@ -413,7 +414,7 @@ void bounceAll(ref Ball[] balls) { // studsa alla
 			if (distanceSquared < combinedRadiiSquared) {
 				const float distance = sqrt(distanceSquared);
 				const float overlap = combinedRadii - distance;
-				const normal = normalize(delta);
+				const normal = delta.normalized;
 
 				ballA.position -= normal * (overlap / 2.0f);
 				ballB.position += normal * (overlap / 2.0f);
