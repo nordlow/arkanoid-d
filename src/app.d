@@ -293,16 +293,18 @@ struct Game {
 		return ret;
 	}
 	Joystick joystick;
-	bool won;
-	bool over;
+
+	const ballVelocity = Vec2(100, -800); // boll hastighet
+	enum ballCountMax = 10; // Maximum number of balls
+	Ball[ballCountMax] balls;
+
 	static immutable soundSampleRate = 44100;
 	Random rng;
 	Sound paddleSound, wallSound, brickSound, shootSound;
 	bool playMusic;
 
-	const ballVelocity = Vec2(100, -800); // boll hastighet
-	enum ballCountMax = 10; // Maximum number of balls
-	Ball[ballCountMax] balls;
+	bool won;
+	bool over;
 }
 
 struct Paddle {
