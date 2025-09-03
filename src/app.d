@@ -65,28 +65,10 @@ void main() @trusted {
 		color: Colors.BLUE
 	};
 
-	/// Brick Layout
 	const brickRows = 15; // rader
 	const brickCols = 20; // kolumner
-	const brickWidth = screenWidth / brickCols; // bredd
-	const brickHeight = 30; // höjd
 	Brick[brickRows * brickCols] bricks;
-	foreach (const row; 0 .. brickRows) {
-		foreach (const col; 0 .. brickCols) {
-			const index = row * brickCols + col;
-			bricks[index] = Brick(position: Vec2(col * brickWidth,
-											   row * brickHeight + 250),
-								  size: Vec2(brickWidth - 2,
-											 brickHeight - 2),
-								  Colors.RED, true);
-			if (row < 2)
-				bricks[index].color = Colors.RED;
-			else if (row < 4)
-				bricks[index].color = Colors.YELLOW;
-			else
-				bricks[index].color = Colors.GREEN;
-		}
-	}
+	bricks.layoutBricks(screenWidth, screenHeight, brickRows, brickCols);
 
 	/// Create Bullets (Skapa Skott)
 	enum bulletCountMax = 30; // maximalt antal skott samtidigt
@@ -331,6 +313,28 @@ static immutable float FLASH_DURATION = 0.3f;
 void restartFlashing(ref Brick brick) {
 	brick.isFlashing = true; // start
 	brick.flashTimer = 0.0f; // restart
+}
+
+void layoutBricks(scope Brick[] bricks, int screenWidth, int screenHeight, int brickRows, int brickCols) pure nothrow @nogc {
+	const brickWidth = screenWidth / brickCols; // bredd
+	const brickHeight = 30; // höjd
+	foreach (const row; 0 .. brickRows) {
+		foreach (const col; 0 .. brickCols) {
+			const index = row * brickCols + col;
+			bricks[index] = Brick(position: Vec2(col * brickWidth,
+											   row * brickHeight + 250),
+								  size: Vec2(brickWidth - 2,
+											 brickHeight - 2),
+								  Colors.RED, true);
+			if (row < 2)
+				bricks[index].color = Colors.RED;
+			else if (row < 4)
+				bricks[index].color = Colors.YELLOW;
+			else
+				bricks[index].color = Colors.GREEN;
+		}
+	}
+
 }
 
 void drawBricks(in Brick[] bricks) @trusted {
