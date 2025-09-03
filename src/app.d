@@ -1,10 +1,10 @@
 import core.time : Duration;
-import std.stdio;
 import std.algorithm : minElement, maxElement, sum;
 import std.numeric;
 import std.random : uniform, Random, unpredictableSeed;
 import std.math;
 import std.string;
+import nxt.io;
 import nxt.geometry;
 import nxt.color : ColorRGBA;
 import raylib : ColorR8G8B8A8 = Color; // TODO: merge into ColorRGBA and remove
@@ -36,7 +36,7 @@ void main() @trusted {
 		CloseWindow();
 	}
 	if (!IsAudioDeviceReady())
-		stderr.writeln("ERROR: Audio device not ready!");
+		writeln("ERROR: Audio device not ready!");
 
 	auto game = Game(screenWidth, screenHeight);
 
@@ -254,11 +254,11 @@ struct Game {
 
 	Joystick joystick;
 
-	const ballVelocity = Vec2(100, -800); // boll hastighet
+	const ballVelocity = Vec2(100, -200); // boll hastighet
 
 	Paddle paddle;
 
-	static immutable ballCount = 3;
+	static immutable ballCount = 1;
 	Ball[] balls;
 
 	Bullet[] bullets;
