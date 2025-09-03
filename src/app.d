@@ -299,6 +299,18 @@ void drawPaddle(in Paddle paddle) @trusted {
 	DrawRectangleV(paddle.position, paddle.size, paddle.color);
 }
 
+struct BrickGrid {
+	@disable this(this);
+	this(in uint rows, in uint cols) {
+		this.rows = rows;
+		this.cols = cols;
+		bricks = new Brick[rows * cols];
+	}
+	uint rows;
+	uint cols;
+	Brick[] bricks;
+}
+
 struct Brick/+Tegelsten+/ {
 	Vec2 position;
 	Vec2 size;
