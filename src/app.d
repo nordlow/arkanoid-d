@@ -391,14 +391,6 @@ void drawBricks(in Brick[] bricks) @trusted {
 	}
 }
 
-void drawBalls(in Ball[] balls) @trusted {
-	foreach (const ref ball; balls) {
-		if (!ball.active)
-			continue;
-		DrawCircleV(ball.position, ball.radius, ball.color);
-	}
-}
-
 void drawBullets(in Bullet[] bullets) @trusted {
 	foreach (const ref bullet; bullets) {
 		if (!bullet.active)
@@ -414,6 +406,14 @@ struct Ball {
 	float radius;
 	ColorR8G8B8A8 color;
 	bool active; // Added to track active balls
+}
+
+void drawBalls(in Ball[] balls) @trusted {
+	foreach (const ref ball; balls) {
+		if (!ball.active)
+			continue;
+		DrawCircleV(ball.position, ball.radius, ball.color);
+	}
 }
 
 void bounceAll(ref Ball[] balls) pure nothrow @nogc { // studsa alla
