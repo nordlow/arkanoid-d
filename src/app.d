@@ -7,8 +7,8 @@ import std.math;
 import std.string;
 import nxt.geometry;
 import nxt.color : ColorRGBA;
+import raylib : ColorR8G8B8A8 = Color; // TODO: merge into `ColorRGBA` and remove
 import raylib;
-import raylib : ColorR8G8B8A8 = Color;
 import music;
 import waves;
 import joystick;
