@@ -249,7 +249,7 @@ struct Game {
 
 	Joystick joystick;
 
-	static immutable ballCount = 1;
+	static immutable ballCount = 10;
 	const ballVelocity = Vec2(100, -200); // boll hastighet
 
 	Scene scene;
