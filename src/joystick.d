@@ -42,7 +42,7 @@ nothrow:
         this.fd = open(devicePath.toStringz, O_RDONLY | O_NONBLOCK);
         if (fd == -1) {
             perror(("Could not open joystick " ~ devicePath).ptr);
-            return; // Leave fd as -1 to indicate failure
+            return; // leave fd as -1 to indicate failure
         }
 
         // Set the file descriptor to non-blocking mode.
@@ -59,9 +59,8 @@ nothrow:
     }
 
     ~this() @trusted {
-        if (fd >= 0) {
+        if (fd >= 0)
             close(fd);
-        }
     }
 
     @property bool isValid() const pure nothrow @nogc {
