@@ -313,10 +313,9 @@ struct Brick {
 	float flashTimer = 0.0f; // Timer for flashing duration.
 }
 
-// Global constant for the flashing duration
-const float FLASH_DURATION = 0.3f;
+static immutable float FLASH_DURATION = 0.3f;
 
-// New function to start the flashing effect on a brick
+// Start the flashing effect on a brick.
 void flash(ref Brick brick) {
 	brick.isFlashing = true;
 	brick.flashTimer = 0.0f;
