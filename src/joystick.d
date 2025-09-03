@@ -139,7 +139,6 @@ extern (C) {
         ubyte type;    // event type
         ubyte number;  // axis/button number
     }
-
     enum {
         JS_EVENT_BUTTON = 0x01,
         JS_EVENT_AXIS = 0x02,
