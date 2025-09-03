@@ -42,8 +42,6 @@ void main() @trusted {
 
 	if (false) raylib_detectGamepad();
 
-
-
 	// Sounds (Ljud):
 	auto paddleSound = generateBoingWave(300.0f, 1000.0f, 0.30f, game.soundSampleRate).LoadSoundFromWave();
 	auto wallSound = generateBoingWave(300.0f, 150.0f, 0.30f, game.soundSampleRate).LoadSoundFromWave();
