@@ -210,7 +210,7 @@ void main() @trusted {
 
 		BeginDrawing();
 		clearCanvas();
-		game.brickGrid.bricks.drawBricks();
+		game.brickGrid.drawBrickGrid();
 		paddle.drawPaddle();
 		game.balls.drawBalls();
 		game.bullets.drawBullets();
@@ -294,6 +294,10 @@ struct BrickGrid {
 	uint rows;
 	uint cols;
 	Brick[] bricks;
+}
+
+void drawBrickGrid(in BrickGrid brickGrid) @trusted {
+	brickGrid.bricks.drawBricks();
 }
 
 struct Brick/+Tegelsten+/ {
