@@ -10,6 +10,7 @@ import nxt.color : ColorRGBA;
 import raylib;
 alias Vec2 = Vector2;
 
+import entities;
 import music;
 import waves;
 import joystick;
