@@ -244,18 +244,22 @@ void main() @trusted {
 
 struct Game {
 	@disable this(this);
-	static immutable pianoKeys = __traits(allMembers, Key);
+
 	this(in uint screenWidth, in uint screenHeight) @trusted {
 		joystick = openDefaultJoystick();
 		rng = Random(unpredictableSeed());
 		generateSounds();
 	}
+
 	void generateSounds() @trusted {
 		paddleSound = generateBoingWave(300.0f, 1000.0f, 0.30f, soundSampleRate).LoadSoundFromWave();
 		wallSound = generateBoingWave(300.0f, 150.0f, 0.30f, soundSampleRate).LoadSoundFromWave();
 		brickSound = rng.generateGlassBreakWave(0.60f, 0.2f, soundSampleRate).LoadSoundFromWave();
 		shootSound = generateBounceWave(400.0f, 200.0f, 0.3f, soundSampleRate).LoadSoundFromWave();
 	}
+
+	private static immutable pianoKeys = __traits(allMembers, Key);
+
 	Joystick joystick;
 
 	const ballVelocity = Vec2(100, -800); // boll hastighet
