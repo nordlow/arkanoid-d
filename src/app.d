@@ -269,7 +269,7 @@ struct Scene {
 	Ball[] balls;
 	Bullet[] bullets;
 	BrickGrid brickGrid;
-	void draw() @trusted {
+	void draw() {
 		brickGrid.draw();
 		paddle.draw();
 		balls.drawN();
