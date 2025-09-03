@@ -169,7 +169,7 @@ void main() @trusted {
 						&& ball.position.y + ball.radius >= brick.position.y
 						&& ball.position.y - ball.radius
 						<= brick.position.y + brick.size.y) {
-						brick.startFlashing();
+						brick.restartFlashing();
 						ball.velocity.y *= -1;
 						PlaySound(brickSound);
 						break;
@@ -195,7 +195,7 @@ void main() @trusted {
 							&& bullet.position.y + bullet.radius >= brick.position.y
 							&& bullet.position.y - bullet.radius
 							<= brick.position.y + brick.size.y) {
-							startFlashing(brick); // Start flashing
+							restartFlashing(brick); // Start flashing
 							bullet.active = false;
 							PlaySound(brickSound);
 							break;
@@ -314,7 +314,7 @@ struct Brick/+Tegelsten+/ {
 
 static immutable float FLASH_DURATION = 0.3f;
 
-void startFlashing(ref Brick brick) {
+void restartFlashing(ref Brick brick) {
 	brick.isFlashing = true;
 	brick.flashTimer = 0.0f;
 }
