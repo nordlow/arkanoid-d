@@ -484,6 +484,10 @@ void drawBalls(in Ball[] balls) @trusted {
 	}
 }
 
+/++ Bounce `balls`.
+
+	See_Also: Symbols in raylib containing `CheckCollision`
+ +/
 void bounceAll(ref Ball[] balls) pure nothrow @nogc { // studsa alla
 	foreach (i, ref Ball ballA; balls) {
 		foreach (ref Ball ballB; balls[i + 1 .. $]) {
