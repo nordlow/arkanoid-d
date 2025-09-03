@@ -49,7 +49,7 @@ void main() @trusted {
 		pianoSounds ~= generatePianoWave(f, 1.0f, 1.0f, game.soundSampleRate).LoadSoundFromWave();
 	}
 
-	game.paddle = Paddle(positionedEntity: PositionedEntity(position: Vec2(screenWidth / 2 - 60, screenHeight - 30)),
+	game.paddle = Paddle(posEnt: PositionedEntity(position: Vec2(screenWidth / 2 - 60, screenHeight - 30)),
 						 size: Vec2(250, 20),
 						 color: Colors.BLUE);
 
@@ -294,7 +294,7 @@ struct PositionedEntity {
 }
 
 struct Paddle {
-	PositionedEntity positionedEntity; alias this = positionedEntity;
+	PositionedEntity posEnt; alias this = posEnt;
 	Vec2 size;
 	ColorR8G8B8A8 color;
 }
@@ -321,7 +321,7 @@ void draw(in BrickGrid brickGrid) @trusted {
 }
 
 struct Brick/+Tegelsten+/ {
-	PositionedEntity positionedEntity; alias this = positionedEntity;
+	PositionedEntity posEnt; alias this = posEnt;
 	Entity entity;
 	Vec2 size;
 	ColorR8G8B8A8 color;
@@ -343,7 +343,7 @@ void layoutBricks(scope Brick[] bricks, in int screenWidth, in int screenHeight,
 	foreach (const row; 0 .. brickRows) {
 		foreach (const col; 0 .. brickCols) {
 			const index = row * brickCols + col;
-			bricks[index] = Brick(positionedEntity: PositionedEntity(Vec2(col * brickWidth,
+			bricks[index] = Brick(posEnt: PositionedEntity(Vec2(col * brickWidth,
 											   row * brickHeight + 250)),
 								  size: Vec2(brickWidth - 2,
 											 brickHeight - 2),
