@@ -343,7 +343,7 @@ alias Vec2 = Vector2;
 
 float dot(in Vec2 v1, in Vec2 v2) pure nothrow @safe @nogc {
 	version(D_Coverage) {} else pragma(inline, true);
-	return (v1.x * v2.x) + (v1.y * v2.y);
+	return v1.x*v2.x + v1.y*v2.y;
 }
 
 float lengthSquared(in Vec2 v) pure nothrow @safe @nogc {
@@ -353,12 +353,12 @@ float lengthSquared(in Vec2 v) pure nothrow @safe @nogc {
 
 float length(in Vec2 v) pure nothrow @safe @nogc {
 	version(D_Coverage) {} else pragma(inline, true);
-	return sqrt(lengthSquared(v));
+	return v.lengthSquared.sqrt;
 }
 
 Vec2 normalized(in Vec2 v) pure nothrow @safe @nogc {
 	version(D_Coverage) {} else pragma(inline, true);
-	const float l = length(v);
+	const float l = v.length;
 	if (l == 0)
 		return Vec2(0, 0);
 	return v / l;
