@@ -63,9 +63,7 @@ nothrow:
             close(fd);
     }
 
-    @property bool isValid() const pure nothrow @nogc {
-        return fd >= 0;
-    }
+    @property bool isValid() const pure nothrow @nogc => fd >= 0;
 
     /++
      + Check if a specific button is currently held down.
