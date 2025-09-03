@@ -62,6 +62,10 @@ void layoutBullets(Bullet[] bullets) {
 	}
 }
 
+void clearCanvas() @trusted {
+	ClearBackground(Colors.BLACK);
+}
+
 void drawPaddle(in Paddle paddle) @trusted {
 	DrawRectangleV(paddle.position, paddle.size, paddle.color);
 }
@@ -359,14 +363,12 @@ void main() @trusted {
 		}
 
 		BeginDrawing();
-		scope(exit) EndDrawing();
-
-		ClearBackground(Colors.BLACK);
-
+		clearCanvas();
 		bricks.drawBricks();
 		paddle.drawPaddle();
 		balls.drawBalls();
 		bullets.drawBullets();
+		EndDrawing();
 
 		if (gameWon) {
 			const text = "YOU WON! Press R to restart";
