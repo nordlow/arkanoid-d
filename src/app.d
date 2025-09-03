@@ -271,8 +271,14 @@ void draw(in Scene scene) @trusted {
        recursion. +/
 	scene.brickGrid.draw();
 	scene.paddle.drawPaddle();
-	scene.balls.drawBalls();
+	scene.balls.drawBalls(); // TODO: Add generic draw of vector
 	scene.bullets.drawBullets();
+}
+
+/++ Draw entities `ents`. +/
+void draw(T)(in T[] ents) @trusted {
+	foreach (const ref ent; ents)
+		ents.draw();
 }
 
 struct Paddle {
@@ -447,6 +453,11 @@ struct Ball {
 	Vec2 vel;
 	Color color;
 	bool active; // Added to track active balls
+	void draw() @trusted {
+		if (!active)
+			return;
+		DrawCircleV(pos, rad, color);
+	}
 }
 
 Ball[] makeBalls(uint count, Vec2 ballVelocity, uint screenWidth, uint screenHeight) {
