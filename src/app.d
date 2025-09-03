@@ -13,6 +13,10 @@ import joystick;
 
 @safe:
 
+struct Game {
+	@disable this(this);
+}
+
 alias Vec2 = Vector2;
 
 float dot(in Vec2 v1, in Vec2 v2) pure nothrow @safe @nogc {
@@ -122,6 +126,8 @@ void main() @trusted {
 	}
 	if (!IsAudioDeviceReady())
 		stderr.writeln("ERROR: Audio device not ready!");
+
+	Game game;
 
 	// Detect Gamepad
 	if (false) {
