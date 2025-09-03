@@ -132,8 +132,7 @@ nothrow:
             event.type = (rawEvent.value == 1) ?
                         JoystickEvent.Type.buttonPressed :
                         JoystickEvent.Type.buttonReleased;
-
-            // Update button state tracking
+            // update button state tracking
             buttonStates[rawEvent.number] = (rawEvent.value == 1);
         } else if (rawEvent.type & JS_EVENT_AXIS) {
             event.type = JoystickEvent.Type.axisMoved;
