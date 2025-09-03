@@ -185,7 +185,7 @@ void main() @trusted {
 		}
 		if ((game.over || game.won) && IsKeyPressed(KeyboardKey.KEY_R)) {
 			foreach (ref ball; game.balls) {
-				ball.position = Vec2(screenWidth / 2 + (game.ballCountMax - 1) * 20 - 20, screenHeight - 150);
+				ball.position = Vec2(screenWidth / 2 + (game.balls.length - 1) * 20 - 20, screenHeight - 150);
 				ball.velocity = game.ballVelocity;
 				ball.active = true;
 			}
@@ -241,7 +241,7 @@ struct Game {
 	this(in uint screenWidth, in uint screenHeight) @trusted {
 		joystick = openDefaultJoystick();
 		rng = Random(unpredictableSeed());
-		balls = makeBalls(ballCountMax, ballVelocity, screenWidth, screenHeight);
+		balls = makeBalls(ballCount, ballVelocity, screenWidth, screenHeight);
 		bullets = makeBullets(30);
 		brickGrid = BrickGrid(rows: 15, cols: 20);
 		brickGrid.bricks.layoutBricks(screenWidth, screenHeight, brickGrid.rows, brickGrid.cols);
@@ -263,8 +263,8 @@ struct Game {
 
 	const ballVelocity = Vec2(100, -800); // boll hastighet
 
-	enum ballCountMax = 10; // Maximum number of balls
-	Ball[ballCountMax] balls;
+	static immutable ballCount = 3;
+	Ball[] balls;
 
 	Bullet[] bullets;
 	BrickGrid brickGrid;
