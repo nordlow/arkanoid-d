@@ -49,7 +49,7 @@ void main() @trusted {
 		pianoSounds ~= generatePianoWave(f, 1.0f, 1.0f, game.soundSampleRate).LoadSoundFromWave();
 	}
 
-	game.paddle = Paddle(posEnt: PositionedEntity(position: Vec2(screenWidth / 2 - 60, screenHeight - 30)),
+	game.paddle = Paddle(posEnt: PositionedEntity(pos: Vec2(screenWidth / 2 - 60, screenHeight - 30)),
 						 size: Vec2(250, 20),
 						 color: Colors.BLUE);
 
@@ -67,17 +67,17 @@ void main() @trusted {
 		}
 
 		if (!game.over && !game.won) {
-			if (IsKeyDown(KeyboardKey.KEY_LEFT) && game.paddle.position.x > 0) {
-				game.paddle.position.x -= 800 * deltaTime;
+			if (IsKeyDown(KeyboardKey.KEY_LEFT) && game.paddle.pos.x > 0) {
+				game.paddle.pos.x -= 800 * deltaTime;
 			}
 			if (IsKeyDown(KeyboardKey.KEY_RIGHT)
-				&& game.paddle.position.x < screenWidth - game.paddle.size.x) {
-				game.paddle.position.x += 800 * deltaTime;
+				&& game.paddle.pos.x < screenWidth - game.paddle.size.x) {
+				game.paddle.pos.x += 800 * deltaTime;
 			}
 			if (IsKeyPressed(KeyboardKey.KEY_SPACE)) {
 				foreach (ref bullet; game.bullets) {
 					if (!bullet.active) {
-						bullet.position = Vec2(game.paddle.position.x + game.paddle.size.x / 2, game.paddle.position.y);
+						bullet.pos = Vec2(game.paddle.pos.x + game.paddle.size.x / 2, game.paddle.pos.y);
 						bullet.active = true;
 						game.shootSound.PlaySound();
 						break;
@@ -89,61 +89,61 @@ void main() @trusted {
 
 			foreach (ref ball; game.balls) {
 				if (!ball.active) continue;
-				ball.position.x += ball.velocity.x * deltaTime;
-				ball.position.y += ball.velocity.y * deltaTime;
-				if (ball.position.x <= ball.radius || ball.position.x >= screenWidth - ball.radius) {
-					ball.velocity.x *= -1;
+				ball.pos.x += ball.vel.x * deltaTime;
+				ball.pos.y += ball.vel.y * deltaTime;
+				if (ball.pos.x <= ball.radius || ball.pos.x >= screenWidth - ball.radius) {
+					ball.vel.x *= -1;
 					game.wallSound.PlaySound();
 				}
-				if (ball.position.y <= ball.radius) {
-					ball.velocity.y *= -1;
+				if (ball.pos.y <= ball.radius) {
+					ball.vel.y *= -1;
 					game.wallSound.PlaySound();
 				}
-				if (ball.position.y + ball.radius >= game.paddle.position.y
-					&& ball.position.y - ball.radius
-					<= game.paddle.position.y + game.paddle.size.y
-					&& ball.position.x >= game.paddle.position.x
-					&& ball.position.x <= game.paddle.position.x + game.paddle.size.x) {
-					ball.velocity.y = -abs(ball.velocity.y);
+				if (ball.pos.y + ball.radius >= game.paddle.pos.y
+					&& ball.pos.y - ball.radius
+					<= game.paddle.pos.y + game.paddle.size.y
+					&& ball.pos.x >= game.paddle.pos.x
+					&& ball.pos.x <= game.paddle.pos.x + game.paddle.size.x) {
+					ball.vel.y = -abs(ball.vel.y);
 					game.paddleSound.PlaySound();
-					const float hitPos = (ball.position.x - game.paddle.position.x) / game.paddle.size.x;
-					ball.velocity.x = 200 * (hitPos - 0.5f) * 2;
+					const float hitPos = (ball.pos.x - game.paddle.pos.x) / game.paddle.size.x;
+					ball.vel.x = 200 * (hitPos - 0.5f) * 2;
 				}
 				foreach (ref brick; game.brickGrid.bricks) {
 					if (!brick.active || brick.isFlashing)
 						continue;
-					if (ball.position.x + ball.radius >= brick.position.x
-						&& ball.position.x - ball.radius
-						<= brick.position.x + brick.size.x
-						&& ball.position.y + ball.radius >= brick.position.y
-						&& ball.position.y - ball.radius
-						<= brick.position.y + brick.size.y) {
+					if (ball.pos.x + ball.radius >= brick.pos.x
+						&& ball.pos.x - ball.radius
+						<= brick.pos.x + brick.size.x
+						&& ball.pos.y + ball.radius >= brick.pos.y
+						&& ball.pos.y - ball.radius
+						<= brick.pos.y + brick.size.y) {
 						brick.restartFlashing();
-						ball.velocity.y *= -1;
+						ball.vel.y *= -1;
 						PlaySound(game.brickSound);
 						break;
 					}
 				}
-				if (ball.position.y > screenHeight) {
+				if (ball.pos.y > screenHeight) {
 					ball.active = false;
 				}
 			}
 			foreach (ref bullet; game.bullets) {
 				if (bullet.active) {
-					bullet.position.x += bullet.velocity.x * deltaTime;
-					bullet.position.y += bullet.velocity.y * deltaTime;
-					if (bullet.position.y < 0) {
+					bullet.pos.x += bullet.vel.x * deltaTime;
+					bullet.pos.y += bullet.vel.y * deltaTime;
+					if (bullet.pos.y < 0) {
 						bullet.active = false;
 					}
 					foreach (ref brick; game.brickGrid.bricks) {
 						if (!brick.active || brick.isFlashing)
 							continue;
-						if (bullet.position.x + bullet.radius >= brick.position.x
-							&& bullet.position.x - bullet.radius
-							<= brick.position.x + brick.size.x
-							&& bullet.position.y + bullet.radius >= brick.position.y
-							&& bullet.position.y - bullet.radius
-							<= brick.position.y + brick.size.y) {
+						if (bullet.pos.x + bullet.radius >= brick.pos.x
+							&& bullet.pos.x - bullet.radius
+							<= brick.pos.x + brick.size.x
+							&& bullet.pos.y + bullet.radius >= brick.pos.y
+							&& bullet.pos.y - bullet.radius
+							<= brick.pos.y + brick.size.y) {
 							restartFlashing(brick); // Start flashing
 							bullet.active = false;
 							PlaySound(game.brickSound);
@@ -183,18 +183,18 @@ void main() @trusted {
 		}
 		if ((game.over || game.won) && IsKeyPressed(KeyboardKey.KEY_R)) {
 			foreach (ref ball; game.balls) {
-				ball.position = Vec2(screenWidth / 2 + (game.balls.length - 1) * 20 - 20, screenHeight - 150);
-				ball.velocity = game.ballVelocity;
+				ball.pos = Vec2(screenWidth / 2 + (game.balls.length - 1) * 20 - 20, screenHeight - 150);
+				ball.vel = game.ballVelocity;
 				ball.active = true;
 			}
-			game.paddle.position = Vec2(screenWidth / 2 - 60, screenHeight - 30);
+			game.paddle.pos = Vec2(screenWidth / 2 - 60, screenHeight - 30);
 			foreach (ref brick; game.brickGrid.bricks) {
 				brick.active = true;
 				brick.isFlashing = false; // Reset flashing state on restart
 				brick.flashTimer = 0.0f;
-				if (brick.position.y + brick.size.y < 250 + 2 * 30)
+				if (brick.pos.y + brick.size.y < 250 + 2 * 30)
 					brick.color = Colors.RED;
-				else if (brick.position.y + brick.size.y < 250 + 4 * 30)
+				else if (brick.pos.y + brick.size.y < 250 + 4 * 30)
 					brick.color = Colors.YELLOW;
 				else
 					brick.color = Colors.GREEN;
@@ -285,11 +285,11 @@ struct Entity {
 }
 
 struct PositionedEntity {
-	this(Vec2 position) pure nothrow @nogc {
-		this.position = position;
+	this(Vec2 pos) pure nothrow @nogc {
+		this.pos = pos;
 	}
 	Entity ent;
-	Vec2 position;
+	Vec2 pos;
 }
 
 struct Paddle {
@@ -299,7 +299,7 @@ struct Paddle {
 }
 
 void drawPaddle(in Paddle paddle) @trusted {
-	DrawRectangleV(paddle.position, paddle.size, paddle.color);
+	DrawRectangleV(paddle.pos, paddle.size, paddle.color);
 }
 
 struct BrickGrid {
@@ -368,7 +368,7 @@ void drawBrick(in Brick brick) @trusted {
 				drawColor = Colors.WHITE;
 			}
 		}
-		DrawRectangleV(brick.position, brick.size, drawColor);
+		DrawRectangleV(brick.pos, brick.size, drawColor);
 	}
 }
 
@@ -380,7 +380,7 @@ void drawBricks(in Brick[] bricks) @trusted {
 /++ Skott. +/
 struct Bullet {
 	PositionedEntity posEnt; alias this = posEnt;
-	Vec2 velocity/+hastighet+/;
+	Vec2 vel/+hastighet+/;
 	float radius;
 	ColorR8G8B8A8 color;
 	bool active;
@@ -391,7 +391,7 @@ Bullet makeBullet() {
 	ret.active = false;
 	ret.radius = 10; // radie, 2*radie == diameter
 	ret.color = Colors.YELLOW;
-	ret.velocity = Vec2(0, -333);
+	ret.vel = Vec2(0, -333);
 	return ret;
 }
 
@@ -405,7 +405,7 @@ Bullet[] makeBullets(uint count) {
 
 void drawBullet(in Bullet bullet) @trusted {
 	if (bullet.active)
-		DrawCircleV(bullet.position, bullet.radius, bullet.color);
+		DrawCircleV(bullet.pos, bullet.radius, bullet.color);
 }
 
 void drawBullets(in Bullet[] bullets) @trusted {
@@ -445,7 +445,7 @@ void clearCanvas() @trusted {
 /++ Boll. +/
 struct Ball {
 	PositionedEntity posEnt; alias this = posEnt;
-	Vec2 velocity;
+	Vec2 vel;
 	float radius;
 	ColorR8G8B8A8 color;
 	bool active; // Added to track active balls
@@ -456,7 +456,7 @@ Ball[] makeBalls(uint count, Vec2 ballVelocity, uint screenWidth, uint screenHei
 	ret.length = count;
 	foreach (const i, ref ball; ret)
 		ball = Ball(posEnt: PositionedEntity(Vec2(screenWidth / 2 + i * 20 - 20, screenHeight - 150)),
-					velocity: ballVelocity,
+					vel: ballVelocity,
 					radius: 15,
 					color: Colors.GRAY,
 					active: true
@@ -468,7 +468,7 @@ void drawBalls(in Ball[] balls) @trusted {
 	foreach (const ref ball; balls) {
 		if (!ball.active)
 			continue;
-		DrawCircleV(ball.position, ball.radius, ball.color);
+		DrawCircleV(ball.pos, ball.radius, ball.color);
 	}
 }
 
@@ -478,7 +478,7 @@ void bounceAll(ref Ball[] balls) pure nothrow @nogc { // studsa alla
 			if (!ballA.active || !ballB.active)
 				continue;
 
-			const delta = ballB.position - ballA.position;
+			const delta = ballB.pos - ballA.pos;
 			const distanceSquared = delta.lengthSquared;
 			const combinedRadii = ballA.radius + ballB.radius;
 			const combinedRadiiSquared = combinedRadii * combinedRadii;
@@ -488,21 +488,21 @@ void bounceAll(ref Ball[] balls) pure nothrow @nogc { // studsa alla
 				const overlap = combinedRadii - distance;
 				const normal = delta.normalized;
 
-				ballA.position -= normal * (overlap / 2.0f);
-				ballB.position += normal * (overlap / 2.0f);
+				ballA.pos -= normal * (overlap / 2.0f);
+				ballB.pos += normal * (overlap / 2.0f);
 
 				const tangent = Vec2(-normal.y, normal.x);
 
-				const v1n = dot(ballA.velocity, normal);
-				const v1t = dot(ballA.velocity, tangent);
-				const v2n = dot(ballB.velocity, normal);
-				const v2t = dot(ballB.velocity, tangent);
+				const v1n = dot(ballA.vel, normal);
+				const v1t = dot(ballA.vel, tangent);
+				const v2n = dot(ballB.vel, normal);
+				const v2t = dot(ballB.vel, tangent);
 
 				const v1n_prime = v2n;
 				const v2n_prime = v1n;
 
-				ballA.velocity = (normal * v1n_prime) + (tangent * v1t);
-				ballB.velocity = (normal * v2n_prime) + (tangent * v2t);
+				ballA.vel = (normal * v1n_prime) + (tangent * v1t);
+				ballB.vel = (normal * v2n_prime) + (tangent * v2t);
 			}
 		}
 	}
