@@ -68,7 +68,7 @@ void main() @trusted {
 	auto brickGrid = BrickGrid(rows: 15, cols: 20);
 	brickGrid.bricks.layoutBricks(screenWidth, screenHeight, brickGrid.rows, brickGrid.cols);
 
-	auto bullets = makeBullets(30);
+	game.bullets = makeBullets(30);
 
 	uint keyCounter;
 	for (uint frameCounter; !WindowShouldClose(); ++frameCounter) {
@@ -92,7 +92,7 @@ void main() @trusted {
 				paddle.position.x += 800 * deltaTime;
 			}
 			if (IsKeyPressed(KeyboardKey.KEY_SPACE)) {
-				foreach (ref bullet; bullets) {
+				foreach (ref bullet; game.bullets) {
 					if (!bullet.active) {
 						bullet.position = Vec2(paddle.position.x + paddle.size.x / 2, paddle.position.y);
 						bullet.active = true;
@@ -145,7 +145,7 @@ void main() @trusted {
 					ball.active = false;
 				}
 			}
-			foreach (ref bullet; bullets) {
+			foreach (ref bullet; game.bullets) {
 				if (bullet.active) {
 					bullet.position.x += bullet.velocity.x * deltaTime;
 					bullet.position.y += bullet.velocity.y * deltaTime;
@@ -216,7 +216,7 @@ void main() @trusted {
 				else
 					brick.color = Colors.GREEN;
 			}
-			foreach (ref bullet; bullets) {
+			foreach (ref bullet; game.bullets) {
 				bullet.active = false;
 			}
 			game.over = false;
@@ -228,7 +228,7 @@ void main() @trusted {
 		brickGrid.bricks.drawBricks();
 		paddle.drawPaddle();
 		game.balls.drawBalls();
-		bullets.drawBullets();
+		game.bullets.drawBullets();
 		EndDrawing();
 
 		if (game.won) {
@@ -270,6 +270,7 @@ struct Game {
 	const ballVelocity = Vec2(100, -800); // boll hastighet
 	enum ballCountMax = 10; // Maximum number of balls
 	Ball[ballCountMax] balls;
+	Bullet[] bullets;
 
 	static immutable soundSampleRate = 44100;
 	Random rng;
