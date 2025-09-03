@@ -289,12 +289,12 @@ void main() @trusted {
 
 struct Game {
 	@disable this(this);
-	Joystick joystick;
-	bool won;
-	bool over;
 	this(in bool) nothrow {
 		joystick = openDefaultJoystick();
 	}
+	Joystick joystick;
+	bool won;
+	bool over;
 }
 
 struct Paddle {
