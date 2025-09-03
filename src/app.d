@@ -44,16 +44,6 @@ struct Paddle {
 	Color color;
 }
 
-/++ Tegelsten. +/
-struct Brick {
-	Vec2 position;
-	Vec2 size;
-	Color color;
-	bool active;
-	bool isFlashing = false; // New flag for flashing
-	float flashTimer = 0.0f; // New timer for flashing duration
-}
-
 /++ Skott. +/
 struct Bullet {
 	Vec2 position;
@@ -78,15 +68,6 @@ void drawBullets(Bullet[] bullets) @trusted {
 			continue;
 		DrawCircleV(bullet.position, bullet.radius, bullet.color);
 	}
-}
-
-// Global constant for the flashing duration
-const float FLASH_DURATION = 0.3f;
-
-// New function to start the flashing effect on a brick
-void flash(ref Brick brick) {
-	brick.isFlashing = true;
-	brick.flashTimer = 0.0f;
 }
 
 void main() @trusted {
@@ -295,6 +276,7 @@ void main() @trusted {
 					}
 				}
 			}
+
 			// Update logic for flashing bricks
 			foreach (ref brick; bricks) {
 				if (brick.isFlashing) {
@@ -305,6 +287,7 @@ void main() @trusted {
 					}
 				}
 			}
+
 			bool allBricksDestroyed = true;
 			foreach (const brick; bricks) {
 				if (brick.active) {
@@ -387,6 +370,25 @@ void main() @trusted {
 		}
 		frameCounter += 1;
 	}
+}
+
+/++ Tegelsten. +/
+struct Brick {
+	Vec2 position;
+	Vec2 size;
+	Color color;
+	bool active;
+	bool isFlashing = false; // New flag for flashing
+	float flashTimer = 0.0f; // New timer for flashing duration
+}
+
+// Global constant for the flashing duration
+const float FLASH_DURATION = 0.3f;
+
+// New function to start the flashing effect on a brick
+void flash(ref Brick brick) {
+	brick.isFlashing = true;
+	brick.flashTimer = 0.0f;
 }
 
 /++ Boll. +/
