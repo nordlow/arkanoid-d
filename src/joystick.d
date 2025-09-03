@@ -22,7 +22,6 @@ struct JoystickEvent {
     ubyte number;        // button/axis number
     short value;         // axis value (for `Type.axisMoved` events)
     uint timestamp;      // event timestamp in milliseconds
-
 @property const pure nothrow @nogc:
 	bool opCast(T: bool)() => type != Type.none;
     bool isButton() => (type == Type.buttonPressed || type == Type.buttonReleased);
