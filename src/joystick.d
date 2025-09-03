@@ -117,7 +117,7 @@ nothrow:
             return JoystickEvent(JoystickEvent.Type.none);
         }
 
-        // Skip initialization events but still update button states from them
+        // skip initialization events but still update button states from them
         if (rawEvent.type & JS_EVENT_INIT) {
             if (rawEvent.type & JS_EVENT_BUTTON)
                 buttonStates[rawEvent.number] = (rawEvent.value == 1);
