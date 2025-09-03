@@ -266,6 +266,9 @@ struct Scene {
 }
 
 void draw(in Scene scene) @trusted {
+	/+ TODO: Specify a generic draw function that recurse fields and checks for
+       geometric shapes. If a structure has a draw function it overrides
+       recursion. +/
 	scene.brickGrid.draw();
 	scene.paddle.drawPaddle();
 	scene.balls.drawBalls();
