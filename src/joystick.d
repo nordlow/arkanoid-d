@@ -67,8 +67,7 @@ nothrow:
      + Returns: JoystickEvent with type 'none' if no event is available,
      +          otherwise returns the event details.
      +/
-    JoystickEvent tryNextEvent() @trusted
-    in(isValid, "Joystick must be valid before reading events") {
+    JoystickEvent tryNextEvent() @trusted in(isValid) {
         js_event rawEvent;
         auto pfd = pollfd(fd, POLLIN);
 
@@ -113,8 +112,7 @@ nothrow:
      + This is a convenience method that reads all available events
      + and logs them using the warning function.
      +/
-    void processPendingEvents() @trusted
-    in(isValid, "Joystick must be valid before processing events") {
+    void processPendingEvents() @trusted in(isValid) {
         JoystickEvent event;
         while ((event = tryNextEvent()).type != JoystickEvent.Type.none) {
             final switch (event.type) {
