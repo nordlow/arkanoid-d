@@ -347,20 +347,23 @@ void layoutBricks(scope Brick[] bricks, in int screenWidth, in int screenHeight,
 
 }
 
-void drawBricks(in Brick[] bricks) @trusted {
-	foreach (const i, const ref brick; bricks) {
-		if (brick.active || brick.isFlashing) {
-			ColorR8G8B8A8 drawColor = brick.color;
-			if (brick.isFlashing) {
-				// Alternate between the original color and a bright white/yellow
-				// to create the flashing effect.
-				if (cast(int)(brick.flashTimer * 10) % 2 == 0) {
-					drawColor = Colors.WHITE;
-				}
+void drawBrick(in Brick brick) @trusted {
+	if (brick.active || brick.isFlashing) {
+		ColorR8G8B8A8 drawColor = brick.color;
+		if (brick.isFlashing) {
+			// Alternate between the original color and a bright white/yellow
+			// to create the flashing effect.
+			if (cast(int)(brick.flashTimer * 10) % 2 == 0) {
+				drawColor = Colors.WHITE;
 			}
-			DrawRectangleV(brick.position, brick.size, drawColor);
 		}
+		DrawRectangleV(brick.position, brick.size, drawColor);
 	}
+}
+
+void drawBricks(in Brick[] bricks) @trusted {
+	foreach (const ref brick; bricks)
+		brick.drawBrick();
 }
 
 /++ Skott. +/
