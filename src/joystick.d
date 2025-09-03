@@ -14,9 +14,7 @@ import core.stdc.errno;
 
 @safe:
 
-Joystick openDefaultJoystick() nothrow {
-	return typeof(return)("/dev/input/js0");
-}
+Joystick openDefaultJoystick() nothrow => typeof(return)("/dev/input/js0");
 
 struct Joystick {
 	int fd;
