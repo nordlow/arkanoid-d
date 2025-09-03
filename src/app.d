@@ -1,13 +1,19 @@
 import core.time : Duration;
+
 import std.random : uniform, Random, unpredictableSeed;
 import std.math : abs, sqrt;
+
 import nxt.io : writeln;
 import nxt.geometry;
 import nxt.color : ColorRGBA;
+
 import raylib;
+alias Vec2 = Vector2;
+
 import music;
 import waves;
 import joystick;
+
 
 @safe:
 
@@ -353,24 +359,6 @@ void layoutBricks(scope Brick[] bricks, in int screenWidth, in int screenHeight,
 
 }
 
-// TODO: Move to `nxt.geometry`
-struct Circle {
-	Vec2 centerPosition;
-	float radius;
-}
-
-// TODO: Move to `nxt.geometry`
-struct Square {
-	Vec2 centerPosition;
-	float radius;
-}
-
-// TODO: Move to `nxt.geometry`
-struct Box {
-	Vec2 centerPosition;
-	Vec2 size;
-}
-
 /++ Skott. +/
 struct Bullet {
 	Vec2 pos;
@@ -400,8 +388,6 @@ Bullet[] makeBullets(uint count) {
 		bullet = makeBullet();
 	return ret;
 }
-
-alias Vec2 = Vector2;
 
 float dot(in Vec2 v1, in Vec2 v2) pure nothrow @nogc {
 	version(D_Coverage) {} else pragma(inline, true);
