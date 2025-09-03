@@ -196,7 +196,7 @@ void main() @trusted {
 
 		BeginDrawing();
 		clearCanvas();
-		game.draw();
+		game.scene.draw();
 		EndDrawing();
 
 		if (game.won) {
@@ -265,11 +265,11 @@ struct Scene {
 	BrickGrid brickGrid;
 }
 
-void draw(in Game game) @trusted {
-	game.scene.brickGrid.draw();
-	game.scene.paddle.drawPaddle();
-	game.scene.balls.drawBalls();
-	game.scene.bullets.drawBullets();
+void draw(in Scene scene) @trusted {
+	scene.brickGrid.draw();
+	scene.paddle.drawPaddle();
+	scene.balls.drawBalls();
+	scene.bullets.drawBullets();
 }
 
 struct Paddle {
