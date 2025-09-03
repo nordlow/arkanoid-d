@@ -71,7 +71,6 @@ void main() @trusted {
 	auto bullets = makeBullets(30);
 
 	uint keyCounter;
-
 	for (uint frameCounter; !WindowShouldClose(); ++frameCounter) {
 		version(none)
 			game.joystick.readPendingEvents();
