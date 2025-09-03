@@ -145,7 +145,7 @@ void main() @trusted {
 			foreach (ref brick; game.scene.brickGrid.bricks) {
 				if (brick.isFlashing) {
 					brick.flashTimer += deltaTime;
-					if (brick.flashTimer >= FLASH_DURATION) {
+					if (brick.flashTimer >= Brick.FLASH_DURATION) {
 						brick.active = false; // Deactivate the brick after flashing
 						brick.isFlashing = false; // Reset flashing state
 					}
@@ -187,9 +187,8 @@ void main() @trusted {
 				else
 					brick.color = Colors.GREEN;
 			}
-			foreach (ref bullet; game.scene.bullets) {
+			foreach (ref bullet; game.scene.bullets)
 				bullet.active = false;
-			}
 			game.over = false;
 			game.won = false;
 		}
@@ -306,6 +305,7 @@ struct BrickGrid {
 }
 
 struct Brick/+Tegelsten+/ {
+	static immutable float FLASH_DURATION = 0.3f;
 	Vec2 pos;
 	Vec2 size;
 	Color color;
@@ -326,8 +326,6 @@ struct Brick/+Tegelsten+/ {
 		}
 	}
 }
-
-static immutable float FLASH_DURATION = 0.3f;
 
 void restartFlashing(ref Brick brick) {
 	brick.isFlashing = true; // start
