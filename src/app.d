@@ -38,7 +38,7 @@ void main() @trusted {
 	if (!IsAudioDeviceReady())
 		stderr.writeln("ERROR: Audio device not ready!");
 
-	auto game = Game.make();
+	auto game = Game(screenWidth, screenHeight);
 
 	if (false) raylib_detectGamepad();
 
@@ -245,12 +245,10 @@ void main() @trusted {
 struct Game {
 	@disable this(this);
 	static immutable pianoKeys = __traits(allMembers, Key);
-	static typeof(this) make() @trusted {
-		typeof(return) ret;
-		ret.joystick = openDefaultJoystick();
-		ret.rng = Random(unpredictableSeed());
-		ret.generateSounds();
-		return ret;
+	this(uint screenWidth, uint screenHeight) @trusted {
+		joystick = openDefaultJoystick();
+		rng = Random(unpredictableSeed());
+		generateSounds();
 	}
 	void generateSounds() @trusted {
 		paddleSound = generateBoingWave(300.0f, 1000.0f, 0.30f, soundSampleRate).LoadSoundFromWave();
