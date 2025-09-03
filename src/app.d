@@ -317,6 +317,22 @@ struct Brick/+Tegelsten+/ {
 	float flashTimer = 0.0f; // Timer for flashing duration.
 }
 
+void drawBricks(in Brick[] bricks) @trusted {
+	foreach (const i, const ref brick; bricks) {
+		if (brick.active || brick.isFlashing) {
+			ColorR8G8B8A8 drawColor = brick.color;
+			if (brick.isFlashing) {
+				// Alternate between the original color and a bright white/yellow
+				// to create the flashing effect.
+				if (cast(int)(brick.flashTimer * 10) % 2 == 0) {
+					drawColor = Colors.WHITE;
+				}
+			}
+			DrawRectangleV(brick.position, brick.size, drawColor);
+		}
+	}
+}
+
 static immutable float FLASH_DURATION = 0.3f;
 
 void restartFlashing(ref Brick brick) {
@@ -373,22 +389,6 @@ void clearCanvas() @trusted {
 
 void drawPaddle(in Paddle paddle) @trusted {
 	DrawRectangleV(paddle.position, paddle.size, paddle.color);
-}
-
-void drawBricks(in Brick[] bricks) @trusted {
-	foreach (const i, const ref brick; bricks) {
-		if (brick.active || brick.isFlashing) {
-			ColorR8G8B8A8 drawColor = brick.color;
-			if (brick.isFlashing) {
-				// Alternate between the original color and a bright white/yellow
-				// to create the flashing effect.
-				if (cast(int)(brick.flashTimer * 10) % 2 == 0) {
-					drawColor = Colors.WHITE;
-				}
-			}
-			DrawRectangleV(brick.position, brick.size, drawColor);
-		}
-	}
 }
 
 void drawBullets(in Bullet[] bullets) @trusted {
