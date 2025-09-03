@@ -53,7 +53,7 @@ struct BrickGrid {
 	uint rows;
 	uint cols;
 	Brick[] bricks;
-	void draw() const @trusted {
+	void draw() const {
 		bricks.draw();
 	}
 }
@@ -86,7 +86,7 @@ struct Brick/+Tegelsten+/ {
 }
 
 /++ Draw generic entities `ents`. +/
-void draw(T)(in T[] ents) @trusted {
+void draw(T)(in T[] ents) {
 	foreach (const ref ent; ents)
 		ent.draw();
 }
