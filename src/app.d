@@ -160,6 +160,7 @@ void main() @trusted {
 				bricks[index].color = Colors.GREEN;
 		}
 	}
+
 	/// Create Bullets (Skapa Skott)
 	enum bulletCountMax = 30; // maximalt antal skott samtidigt
 	Bullet[bulletCountMax] bullets;
@@ -169,19 +170,23 @@ void main() @trusted {
 		bullets[i].color = Colors.YELLOW;
 		bullets[i].velocity = Vec2(0, -333);
 	}
+
 	bool gameWon = false;
 	bool gameOver = false;
 	uint frameCounter;
 	uint keyCounter;
+
 	while (!WindowShouldClose()) {
 		joystick.readPendingEvents();
 
 		const deltaTime = GetFrameTime();
 		const absTime = GetTime();
+
 		if (playPiano && absTime > keyCounter) {
-			PlaySound(pianoSounds[keyCounter]);
+			pianoSounds[keyCounter].PlaySound();
 			keyCounter += 1;
 		}
+
 		if (!gameOver && !gameWon) {
 			if (IsKeyDown(KeyboardKey.KEY_LEFT) && paddle.position.x > 0) {
 				paddle.position.x -= 800 * deltaTime;
@@ -195,7 +200,7 @@ void main() @trusted {
 					if (!bullet.active) {
 						bullet.position = Vec2(paddle.position.x + paddle.size.x / 2, paddle.position.y);
 						bullet.active = true;
-						PlaySound(shootSound);
+						shootSound.PlaySound();
 						break;
 					}
 				}
@@ -207,11 +212,11 @@ void main() @trusted {
 				ball.position.y += ball.velocity.y * deltaTime;
 				if (ball.position.x <= ball.radius || ball.position.x >= screenWidth - ball.radius) {
 					ball.velocity.x *= -1;
-					PlaySound(wallSound);
+					wallSound.PlaySound();
 				}
 				if (ball.position.y <= ball.radius) {
 					ball.velocity.y *= -1;
-					PlaySound(wallSound);
+					wallSound.PlaySound();
 				}
 				if (ball.position.y + ball.radius >= paddle.position.y
 					&& ball.position.y - ball.radius
@@ -219,9 +224,8 @@ void main() @trusted {
 					&& ball.position.x >= paddle.position.x
 					&& ball.position.x <= paddle.position.x + paddle.size.x) {
 					ball.velocity.y = -abs(ball.velocity.y);
-					PlaySound(paddleSound);
-					const float hitPos =
-						(ball.position.x - paddle.position.x) / paddle.size.x;
+					paddleSound.PlaySound();
+					const float hitPos = (ball.position.x - paddle.position.x) / paddle.size.x;
 					ball.velocity.x = 200 * (hitPos - 0.5f) * 2;
 				}
 				foreach (ref brick; bricks) {
@@ -365,25 +369,26 @@ void main() @trusted {
 	}
 }
 
-// Free functions for vector math to be
-@safe @nogc nothrow pure:
+float dot(in Vec2 v1, in Vec2 v2) pure nothrow @safe @nogc {
+	version(D_Coverage) {} else pragma(inline, true);
+	return (v1.x * v2.x) + (v1.y * v2.y);
+}
 
-float lengthSquared(Vector2 v) {
+float lengthSquared(in Vec2 v) pure nothrow @safe @nogc {
+	version(D_Coverage) {} else pragma(inline, true);
 	return v.x*v.x + v.y*v.y;
 }
 
-float length(Vector2 v) {
+float length(in Vec2 v) pure nothrow @safe @nogc {
+	version(D_Coverage) {} else pragma(inline, true);
 	return sqrt(lengthSquared(v));
 }
 
-Vector2 normalize(Vector2 v) {
+Vec2 normalize(in Vec2 v) pure nothrow @safe @nogc {
+	version(D_Coverage) {} else pragma(inline, true);
 	const float l = length(v);
-	if (l == 0) return Vector2(0, 0);
+	if (l == 0) return Vec2(0, 0);
 	return v / l;
-}
-
-float dot(Vector2 v1, Vector2 v2) {
-	return (v1.x * v2.x) + (v1.y * v2.y);
 }
 
 void bounceAll(ref Ball[] balls) { // studsa alla
@@ -405,7 +410,7 @@ void bounceAll(ref Ball[] balls) { // studsa alla
 				ballA.position -= normal * (overlap / 2.0f);
 				ballB.position += normal * (overlap / 2.0f);
 
-				const tangent = Vector2(-normal.y, normal.x);
+				const tangent = Vec2(-normal.y, normal.x);
 
 				const float v1n = dot(ballA.velocity, normal);
 				const float v1t = dot(ballA.velocity, tangent);
