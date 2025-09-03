@@ -1,7 +1,7 @@
 import core.time : Duration;
 import std.random : uniform, Random, unpredictableSeed;
 import std.math : abs, sqrt;
-import std.string;
+import std.string : fromStringz;
 import nxt.io;
 import nxt.geometry;
 import nxt.color : ColorRGBA;
