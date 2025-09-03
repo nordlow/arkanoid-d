@@ -83,6 +83,12 @@ void main() @trusted {
 					else if (ev.value > 0)
 						moveRight();
 				}
+				if (ev.type == JoystickEvent.Type.axisMoved && ev.number == 6) {
+					if (ev.value < 0)
+						moveLeft();
+					else if (ev.value > 0)
+						moveRight();
+				}
 			}
 
 			if (IsKeyDown(KeyboardKey.KEY_LEFT) && game.scene.paddle.pos.x > 0)
