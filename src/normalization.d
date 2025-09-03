@@ -2,14 +2,12 @@
 module normalization;
 
 import std.math : sqrt, abs;
+import std.algorithm.searching : maxElement;
+import std.algorithm.iteration : map;
 import std.algorithm.comparison : min, max, clamp;
 import waves : Sample;
 
 @safe:
-
-import std.algorithm.searching : maxElement;
-import std.algorithm.iteration : map;
-import std.math : abs;
 
 float[] peakNormalize(scope return float[] data, in float targetLevel = 1.0f) pure nothrow @nogc {
     float peak = 0.0f;
