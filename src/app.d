@@ -16,6 +16,8 @@ import joystick;
 struct Game {
 	@disable this(this);
 	Joystick joystick;
+	bool won;
+	bool over;
 	this(in bool) nothrow {
 		joystick = openDefaultJoystick();
 	}
@@ -214,8 +216,6 @@ void main() @trusted {
 	Bullet[bulletCountMax] bullets;
 	bullets.layoutBullets();
 
-	bool gameWon = false;
-	bool gameOver = false;
 	uint frameCounter;
 	uint keyCounter;
 
@@ -230,7 +230,7 @@ void main() @trusted {
 			keyCounter += 1;
 		}
 
-		if (!gameOver && !gameWon) {
+		if (!game.over && !game.won) {
 			if (IsKeyDown(KeyboardKey.KEY_LEFT) && paddle.position.x > 0) {
 				paddle.position.x -= 800 * deltaTime;
 			}
@@ -335,7 +335,7 @@ void main() @trusted {
 					break;
 				}
 			}
-			gameWon = allBricksDestroyed;
+			game.won = allBricksDestroyed;
 			bool allBallsLost = true;
 			foreach (const ball; balls) {
 				if (ball.active) {
@@ -343,9 +343,9 @@ void main() @trusted {
 					break;
 				}
 			}
-			gameOver = allBallsLost;
+			game.over = allBallsLost;
 		}
-		if ((gameOver || gameWon) && IsKeyPressed(KeyboardKey.KEY_R)) {
+		if ((game.over || game.won) && IsKeyPressed(KeyboardKey.KEY_R)) {
 			foreach (ref ball; balls) {
 				ball.position = Vec2(screenWidth / 2 + (ballCountMax - 1) * 20 - 20, screenHeight - 150);
 				ball.velocity = ballVelocity;
@@ -366,8 +366,8 @@ void main() @trusted {
 			foreach (ref bullet; bullets) {
 				bullet.active = false;
 			}
-			gameOver = false;
-			gameWon = false;
+			game.over = false;
+			game.won = false;
 		}
 
 		BeginDrawing();
@@ -378,13 +378,13 @@ void main() @trusted {
 		bullets.drawBullets();
 		EndDrawing();
 
-		if (gameWon) {
+		if (game.won) {
 			const text = "YOU WON! Press R to restart";
 			const fontSize = 32;
 			const textWidth = MeasureText(text.ptr, fontSize);
 			DrawText(text.ptr, (screenWidth - textWidth) / 2, screenHeight / 2,
 					 fontSize, Colors.GREEN);
-		} else if (gameOver) {
+		} else if (game.over) {
 			const text = "GAME OVER! Press R to restart";
 			const fontSize = 32;
 			const textWidth = MeasureText(text.ptr, fontSize);
