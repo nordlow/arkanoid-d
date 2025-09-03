@@ -269,16 +269,15 @@ struct Scene {
 	Ball[] balls;
 	Bullet[] bullets;
 	BrickGrid brickGrid;
-}
-
-void draw(in Scene scene) @trusted {
-	/+ TODO: Specify a generic draw function that recurses fields and checks for
-       geometric shapes. If a structure has a draw function it overrides
-       recursion. +/
-	scene.brickGrid.draw();
-	scene.paddle.draw();
-	scene.balls.drawN();
-	scene.bullets.drawN();
+	void draw() @trusted {
+		/+ TODO: Specify a generic draw function that recurses fields and checks for
+		   geometric shapes. If a structure has a draw function it overrides
+		   recursion. +/
+		brickGrid.draw();
+		paddle.draw();
+		balls.drawN();
+		bullets.drawN();
+	}
 }
 
 void restartFlashing(ref Brick brick) {
