@@ -413,7 +413,7 @@ struct Ball {
 	bool active; // Added to track active balls
 }
 
-void bounceAll(ref Ball[] balls) { // studsa alla
+void bounceAll(ref Ball[] balls) pure nothrow @nogc { // studsa alla
 	foreach (i, ref Ball ballA; balls) {
 		foreach (ref Ball ballB; balls[i + 1 .. $]) {
 			if (!ballA.active || !ballB.active)
