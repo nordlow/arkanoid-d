@@ -78,16 +78,14 @@ nothrow:
 
         const bytesRead = read(fd, &rawEvent, js_event.sizeof);
         if (bytesRead != js_event.sizeof) {
-            if (bytesRead == -1) {
+            if (bytesRead == -1)
                 perror("Error reading from joystick");
-            }
             return JoystickEvent(JoystickEvent.Type.none);
         }
 
         // Skip initialization events
-        if (rawEvent.type & JS_EVENT_INIT) {
+        if (rawEvent.type & JS_EVENT_INIT)
             return JoystickEvent(JoystickEvent.Type.none);
-        }
 
         JoystickEvent event;
         event.number = rawEvent.number;
