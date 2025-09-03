@@ -483,7 +483,6 @@ void bounceAll(ref Ball[] balls) pure nothrow @nogc { // studsa alla
 			const combinedRadii = ballA.rad + ballB.rad;
 			const combinedRadiiSquared = combinedRadii * combinedRadii;
 			const bool isOverlap = distSqr < combinedRadiiSquared;
-
 			if (isOverlap) {
 				const dist = distSqr.sqrt;
 				const overlap = combinedRadii - dist;
