@@ -282,6 +282,7 @@ void draw(in Game game) @trusted {
 	game.bullets.drawBullets();
 }
 
+/++ Common term for a game object. +/
 struct Entity {
 }
 
