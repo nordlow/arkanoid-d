@@ -282,7 +282,12 @@ void draw(in Game game) @trusted {
 	game.bullets.drawBullets();
 }
 
+struct Entity {
+}
+
 struct Paddle {
+	Entity entity;
+	alias this = entity;
 	Vec2 position;
 	Vec2 size;
 	ColorR8G8B8A8 color;
@@ -293,6 +298,7 @@ void drawPaddle(in Paddle paddle) @trusted {
 }
 
 struct BrickGrid {
+	Entity entity;
 	@disable this(this);
 	this(in uint rows, in uint cols) {
 		this.rows = rows;
@@ -309,6 +315,7 @@ void draw(in BrickGrid brickGrid) @trusted {
 }
 
 struct Brick/+Tegelsten+/ {
+	Entity entity;
 	Vec2 position;
 	Vec2 size;
 	ColorR8G8B8A8 color;
@@ -367,6 +374,7 @@ void drawBricks(in Brick[] bricks) @trusted {
 
 /++ Skott. +/
 struct Bullet {
+	Entity entity;
 	Vec2 position;
 	Vec2 velocity/+hastighet+/;
 	float radius;
@@ -432,6 +440,7 @@ void clearCanvas() @trusted {
 
 /++ Boll. +/
 struct Ball {
+	Entity entity;
 	Vec2 position;
 	Vec2 velocity;
 	float radius;
