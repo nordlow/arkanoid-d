@@ -10,11 +10,7 @@ int main(string[] args)
         return 1;
     }
 
-    SDL_Window* window = SDL_CreateWindow(
-        "SDL3 Complete D Application",
-        SCREEN_WIDTH, SCREEN_HEIGHT,
-        SDL_WINDOW_RESIZABLE
-    );
+    SDL_Window* window = SDL_CreateWindow("SDL3 Complete D Application", SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_RESIZABLE);
 
     if (window is null) {
         stderr.fprintf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
