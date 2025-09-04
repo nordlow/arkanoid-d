@@ -15,7 +15,8 @@ Joystick openDefaultJoystick() nothrow
 	=> typeof(return)("/dev/input/js0");
 
 struct JoystickEvent {
-	alias ButtonOrAxis = ubyte; // number
+	alias ButtonOrAxis = ubyte;
+	alias AxisValue = short;
     enum Type {
         none, // for the sake of (implicit) cast to `bool`
         buttonPressed,
@@ -24,14 +25,10 @@ struct JoystickEvent {
     }
     Type type;
     ButtonOrAxis buttonOrAxis;
-    short value;         // axis value (for `Type.axisMoved` events)
-    uint timestamp;      // event timestamp in milliseconds
+    AxisValue value; // for `Type.axisMoved` events
+    uint timestamp; // event timestamp in milliseconds
 @property const pure nothrow @nogc:
     bool opCast(T: bool)() => type != Type.none;
-    bool isButton() => (type == Type.buttonPressed || type == Type.buttonReleased);
-    bool isAxis() => type == Type.axisMoved;
-    bool isPressed() => type == Type.buttonPressed;
-    bool isReleased() => type == Type.buttonReleased;
 }
 
 struct Joystick {
@@ -146,7 +143,7 @@ private:
 extern (C) {
     struct js_event {
         uint time;     // event timestamp in milliseconds
-        short value;   // value
+        short value;   // (axis) value
         ubyte type;    // event type
         ubyte number;  // axis/button number
     }
