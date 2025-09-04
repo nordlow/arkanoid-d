@@ -35,7 +35,6 @@ int main(string[] args)
         printf("VSync enabled\n");
 
     bool quit = false;
-    SDL_Event e;
 
     float rect_x = SCREEN_WIDTH / 2.0f - 25;
     float rect_y = SCREEN_HEIGHT / 2.0f - 25;
@@ -49,10 +48,11 @@ int main(string[] args)
     printf("  SPACE to reset bouncing rectangle\n");
 
     while (!quit) {
-        ulong current_time = SDL_GetTicks();
-        float delta_time = (current_time - last_time) / 1000.0f;
+        const current_time = SDL_GetTicks();
+        const delta_time = (current_time - last_time) / 1000.0f;
         last_time = current_time;
 
+		SDL_Event e;
         while (SDL_PollEvent(&e)) {
             switch (e.type) {
                 case SDL_EVENT_QUIT:
@@ -101,12 +101,12 @@ int main(string[] args)
         SDL_SetRenderDrawColor(renderer, 25, 25, 112, 255);
         SDL_RenderClear(renderer);
 
-        SDL_FRect rect = SDL_FRect(rect_x, rect_y, 50, 50);
+        const rect = SDL_FRect(rect_x, rect_y, 50, 50);
         SDL_SetRenderDrawColor(renderer, 255, 165, 0, 255);
         SDL_RenderFillRect(renderer, &rect);
 
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-        SDL_FRect border = SDL_FRect(10, 10, SCREEN_WIDTH - 20, SCREEN_HEIGHT - 20);
+        const border = SDL_FRect(10, 10, SCREEN_WIDTH - 20, SCREEN_HEIGHT - 20);
         SDL_RenderRect(renderer, &border);
 
         SDL_RenderPresent(renderer); // present and wait for VSync
