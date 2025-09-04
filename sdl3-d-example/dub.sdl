@@ -1,0 +1,8 @@
+name "sdl3-d-example"
+description "An SDL3 application."
+authors "Per Nordlöw"
+copyright "Copyright © 2025, Per Nordlöw"
+license "BSL-1.0"
+libs "SDL3" "c"
+dflags "-I/home/per/.local/sdl-snapshot/include"
+lflags "-L/home/per/.local/sdl-snapshot/lib"
