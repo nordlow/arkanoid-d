@@ -122,7 +122,7 @@ int main(string[] args)
     return 0;
 }
 
-extern(C):
+extern(C) @trusted nothrow @nogc:
 
 struct SDL_Window;
 struct SDL_Renderer;
