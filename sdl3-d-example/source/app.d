@@ -6,7 +6,7 @@ enum SCREEN_HEIGHT = 600;
 int main(string[] args)
 {
     if (!SDL_Init(SDL_INIT_VIDEO)) {
-        fprintf(stderr, "SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
+        stderr.fprintf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
         return 1;
     }
 
@@ -17,7 +17,7 @@ int main(string[] args)
     );
 
     if (window is null) {
-        fprintf(stderr, "Window could not be created! SDL_Error: %s\n", SDL_GetError());
+        stderr.fprintf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
         SDL_Quit();
         return 1;
     }
@@ -25,18 +25,17 @@ int main(string[] args)
     // Create renderer with VSync enabled
     SDL_Renderer* renderer = SDL_CreateRenderer(window, null);
     if (renderer is null) {
-        fprintf(stderr, "Renderer could not be created! SDL_Error: %s\n", SDL_GetError());
+        stderr.fprintf("Renderer could not be created! SDL_Error: %s\n", SDL_GetError());
         SDL_DestroyWindow(window);
         SDL_Quit();
         return 1;
     }
 
     // Enable VSync (adaptive VSync if supported, otherwise regular VSync)
-    if (!SDL_SetRenderVSync(renderer, 1)) {
-        printf("Warning: VSync not supported, falling back to no VSync\n");
-    } else {
+    if (!SDL_SetRenderVSync(renderer, 1))
+        stderr.fprintf("Warning: VSync not supported, falling back to no VSync\n");
+	else
         printf("VSync enabled\n");
-    }
 
     bool quit = false;
     SDL_Event e;
