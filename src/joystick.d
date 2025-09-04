@@ -76,7 +76,7 @@ nothrow:
      +/
     JoystickEvent.ButtonOrAxisNumber[] getHeldButtons() const pure nothrow {
         typeof(return) held;
-        held.reserve(32); // Reasonable initial capacity
+        held.reserve(32); // reasonable initial capacity
         foreach (const JoystickEvent.ButtonOrAxisNumber i, const bool pressed; _buttonStates)
             if (pressed)
                 held ~= i;
