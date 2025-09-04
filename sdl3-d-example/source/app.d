@@ -183,6 +183,5 @@ int SDL_RenderFillRect(SDL_Renderer* renderer, const SDL_FRect* rect);
 int SDL_RenderRect(SDL_Renderer* renderer, const SDL_FRect* rect);
 int SDL_RenderPresent(SDL_Renderer* renderer);
 bool SDL_SetRenderVSync(SDL_Renderer* renderer, int vsync);
-void SDL_Delay(uint ms);
 ulong SDL_GetTicks();
 const(char)* SDL_GetError();
