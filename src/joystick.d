@@ -35,39 +35,36 @@ struct JoystickEvent {
 }
 
 struct Joystick {
-    private int fd;
-    private bool[256] _buttonStates; // button states indexed by button number
-
 nothrow:
     @disable this(this);
 
     this(in char[] devicePath) @trusted {
         import std.string : toStringz;
-        this.fd = open(devicePath.toStringz, O_RDONLY | O_NONBLOCK);
-        if (fd == -1) {
+        this._fd = open(devicePath.toStringz, O_RDONLY | O_NONBLOCK);
+        if (_fd == -1) {
             perror(("Could not open joystick " ~ devicePath).ptr);
-            return; // leave fd as -1 to indicate failure
+            return; // leave _fd as -1 to indicate failure
         }
 
         // Set the file descriptor to non-blocking mode.
         // This is optional if O_NONBLOCK is used in open(), but
         // ensures the flag is set if the file was opened differently.
-        const flags = fcntl(fd, F_GETFL, 0);
+        const flags = fcntl(_fd, F_GETFL, 0);
         if (flags == -1) {
             perror("Could not get file descriptor flags");
-            close(fd);
-            fd = -1;
+            close(_fd);
+            _fd = -1;
             return;
         }
-        fcntl(fd, F_SETFL, flags | O_NONBLOCK);
+        fcntl(_fd, F_SETFL, flags | O_NONBLOCK);
     }
 
     ~this() @trusted {
-        if (fd >= 0)
-            close(fd);
+        if (_fd >= 0)
+            close(_fd);
     }
 
-    @property bool isValid() const pure nothrow @nogc => fd >= 0;
+    @property bool isValid() const pure nothrow @nogc => _fd >= 0;
 
     /++ Returns: `true` iff `buttonNumber` is currently being pressed (held), `false` otherwise +/
     bool isHeld(in JoystickEvent.ButtonOrAxisNumber buttonNumber) const pure nothrow @nogc
@@ -86,21 +83,20 @@ nothrow:
         return held;
     }
 
-    /++
-     + Try to read the next joystick event.
-     + Returns: JoystickEvent that evaluates to false if no event is available,
+    /++ Try to read the next joystick event.
+     + Returns: `JoystickEvent` that evaluates to false if no event is available,
      +          otherwise returns the event details.
-     + Note: This method automatically updates the internal button state tracking.
+     + Note: Automatically updates the internal button hold state tracking.
      +/
     JoystickEvent tryNextEvent() @trusted in(isValid) {
         js_event rawEvent;
-        auto pfd = pollfd(fd, POLLIN);
+        auto pfd = pollfd(_fd, POLLIN);
 
         // Check if there's data available with 0ms timeout
         if (poll(&pfd, 1, 0) <= 0 || !(pfd.revents & POLLIN))
             return JoystickEvent(JoystickEvent.Type.none);
 
-        const bytesRead = read(fd, &rawEvent, js_event.sizeof);
+        const bytesRead = read(_fd, &rawEvent, js_event.sizeof);
         if (bytesRead != js_event.sizeof) {
             if (bytesRead == -1)
                 perror("Error reading from joystick");
@@ -135,6 +131,9 @@ nothrow:
 
         return event;
     }
+private:
+    int _fd; // device file descriptor
+    bool[256] _buttonStates; // button states indexed by button number
 }
 
 extern (C) {
