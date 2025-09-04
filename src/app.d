@@ -78,11 +78,11 @@ void main() @trusted {
 				import nxt.io : writeln;
 				writeln("Read ", ev, ", heldButtons:", game.joystick.getHeldButtons);
 				if (ev.type == JoystickEvent.Type.axisMoved) {
-					if (ev.number == 0) {
+					if (ev.buttonOrAxis == 0) {
 						if (ev.value < 0) moveLeft();
 						else if (ev.value > 0) moveRight();
 					}
-					if (ev.number == 6) {
+					if (ev.buttonOrAxis == 6) {
 						if (ev.value < 0) moveLeft();
 						else if (ev.value > 0) moveRight();
 					}
