@@ -112,8 +112,7 @@ int main(string[] args)
         SDL_FRect border = SDL_FRect(10, 10, SCREEN_WIDTH - 20, SCREEN_HEIGHT - 20);
         SDL_RenderRect(renderer, &border);
 
-        // Present and wait for VSync
-        SDL_RenderPresent(renderer);
+        SDL_RenderPresent(renderer); // present and wait for VSync
     }
 
     SDL_DestroyRenderer(renderer);
@@ -197,6 +196,3 @@ bool SDL_SetRenderVSync(SDL_Renderer* renderer, int vsync);
 void SDL_Delay(uint ms);
 ulong SDL_GetTicks();
 const(char)* SDL_GetError();
-int printf(const char* format, ...);
-int fprintf(void* stream, const char* format, ...);
-__gshared void* stderr;
