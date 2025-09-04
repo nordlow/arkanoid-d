@@ -70,7 +70,7 @@ nothrow:
     @property bool isValid() const pure nothrow @nogc => fd >= 0;
 
     /++ Returns: `true` iff `buttonNumber` is currently being pressed (held), `false` otherwise +/
-    bool isHeld(JoystickEvent.ButtonOrAxisNumber buttonNumber) const pure nothrow @nogc
+    bool isHeld(in JoystickEvent.ButtonOrAxisNumber buttonNumber) const pure nothrow @nogc
 		=> _buttonStates[buttonNumber];
 
     /++
