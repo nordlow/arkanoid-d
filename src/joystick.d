@@ -69,12 +69,8 @@ nothrow:
 
     @property bool isValid() const pure nothrow @nogc => fd >= 0;
 
-    /++
-     + Check if a specific button is currently held down.
-     + Params: buttonNumber = The button number to check
-     + Returns: true if the button is currently pressed, false otherwise
-     +/
-    bool isButtonHeld(JoystickEvent.ButtonOrAxisNumber buttonNumber) const pure nothrow @nogc
+    /++ Returns: `true` iff `buttonNumber` is currently being pressed (held), `false` otherwise +/
+    bool isHeld(JoystickEvent.ButtonOrAxisNumber buttonNumber) const pure nothrow @nogc
 		=> _buttonStates[buttonNumber];
 
     /++
