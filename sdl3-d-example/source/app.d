@@ -122,27 +122,21 @@ int main(string[] args)
     return 0;
 }
 
-// SDL3 extern(C) bindings
 extern(C):
 
-// Opaque pointer types
 struct SDL_Window;
 struct SDL_Renderer;
 
-// Constants
 enum uint SDL_INIT_VIDEO = 0x00000020;
 enum uint SDL_WINDOW_RESIZABLE = 0x00000020;
 
-// Event types
 enum uint SDL_EVENT_QUIT = 0x100;
 enum uint SDL_EVENT_KEY_DOWN = 0x300;
 enum uint SDL_EVENT_WINDOW_RESIZED = 0x203;
 
-// Key codes
 enum uint SDLK_ESCAPE = 27;
 enum uint SDLK_SPACE = 32;
 
-// Structures
 struct SDL_FRect {
     float x, y, w, h;
 }
@@ -179,7 +173,6 @@ union SDL_Event {
     ubyte[128] padding; // Ensure enough space for any event
 }
 
-// Function declarations
 bool SDL_Init(uint flags);
 void SDL_Quit();
 SDL_Window* SDL_CreateWindow(const char* title, int w, int h, uint flags);
