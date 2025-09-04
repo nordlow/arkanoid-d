@@ -22,13 +22,20 @@ int main(string[] args)
         return 1;
     }
 
-    // Create renderer
+    // Create renderer with VSync enabled
     SDL_Renderer* renderer = SDL_CreateRenderer(window, null);
     if (renderer is null) {
         fprintf(stderr, "Renderer could not be created! SDL_Error: %s\n", SDL_GetError());
         SDL_DestroyWindow(window);
         SDL_Quit();
         return 1;
+    }
+
+    // Enable VSync (adaptive VSync if supported, otherwise regular VSync)
+    if (!SDL_SetRenderVSync(renderer, 1)) {
+        printf("Warning: VSync not supported, falling back to no VSync\n");
+    } else {
+        printf("VSync enabled\n");
     }
 
     bool quit = false;
@@ -106,9 +113,8 @@ int main(string[] args)
         SDL_FRect border = SDL_FRect(10, 10, SCREEN_WIDTH - 20, SCREEN_HEIGHT - 20);
         SDL_RenderRect(renderer, &border);
 
+        // Present and wait for VSync
         SDL_RenderPresent(renderer);
-
-        SDL_Delay(16);
     }
 
     SDL_DestroyRenderer(renderer);
@@ -188,6 +194,7 @@ int SDL_RenderClear(SDL_Renderer* renderer);
 int SDL_RenderFillRect(SDL_Renderer* renderer, const SDL_FRect* rect);
 int SDL_RenderRect(SDL_Renderer* renderer, const SDL_FRect* rect);
 int SDL_RenderPresent(SDL_Renderer* renderer);
+bool SDL_SetRenderVSync(SDL_Renderer* renderer, int vsync);
 void SDL_Delay(uint ms);
 ulong SDL_GetTicks();
 const(char)* SDL_GetError();
