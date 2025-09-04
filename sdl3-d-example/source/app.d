@@ -22,7 +22,7 @@ int main(string[] args)
         return 1;
     }
 
-    SDL_Renderer* renderer = SDL_CreateRenderer(window, null);
+    auto renderer = SDL_CreateRenderer(window, null);
     if (renderer is null) {
         stderr.fprintf("Renderer could not be created! SDL_Error: %s\n", SDL_GetError());
         SDL_DestroyWindow(window);
