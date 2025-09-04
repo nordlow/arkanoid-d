@@ -1,28 +1,33 @@
 module entities;
 
-import raylib;
-alias Vec2 = Vector2;
+import nxt.geometry;
+import nxt.color : Color = ColorRGBA, Colors = RaylibColors;
+
+alias Pos2 = Point!(float, 2);
+alias Dim2 = Point!(float, 2); // TODO: Add Dimension/Size whatever to `nxt.geometry`
+alias Vec2 = Vector!(float, 2);
 
 @safe:
 
 struct Paddle {
-	Vec2 pos;
-	Vec2 size;
+	Pos2 pos;
+	Dim2 size;
 	Color color;
 	void draw() const nothrow @trusted {
-		DrawRectangleV(pos, size, color);
+		// DrawRectangleV(pos, size, color);
 	}
 }
 
 struct Bullet {
-	Vec2 pos;
+	Pos2 pos;
 	float rad;
 	Vec2 vel;
 	Color color;
 	bool active;
 	void draw() const nothrow @trusted {
-		if (active)
-			DrawCircleV(pos, rad, color);
+		if (!active)
+			return;
+		// DrawCircleV(pos, rad, color);
 	}
 }
 
@@ -60,8 +65,8 @@ struct BrickGrid {
 
 struct Brick/+Tegelsten+/ {
 	static immutable float FLASH_DURATION = 0.3f;
-	Vec2 pos;
-	Vec2 size;
+	Pos2 pos;
+	Dim2 size;
 	Color color;
 	bool active;
 	bool isFlashing = false;
@@ -80,7 +85,7 @@ struct Brick/+Tegelsten+/ {
 					drawColor = Colors.WHITE;
 				}
 			}
-			DrawRectangleV(pos, size, drawColor);
+			// DrawRectangleV(pos, size, drawColor);
 		}
 	}
 }
@@ -89,22 +94,4 @@ struct Brick/+Tegelsten+/ {
 void draw(T)(in T[] ents) {
 	foreach (const ref ent; ents)
 		ent.draw();
-}
-
-// TODO: Move to `nxt.geometry`
-struct Circle {
-	Vec2 centerPosition;
-	float radius;
-}
-
-// TODO: Move to `nxt.geometry`
-struct Square {
-	Vec2 centerPosition;
-	float radius;
-}
-
-// TODO: Move to `nxt.geometry`
-struct Box {
-	Vec2 centerPosition;
-	Vec2 size;
 }
