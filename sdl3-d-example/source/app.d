@@ -6,13 +6,11 @@ enum SCREEN_HEIGHT = 600;
 
 int main(string[] args)
 {
-    // Initialize SDL
     if (!SDL_Init(SDL_INIT_VIDEO)) {
         fprintf(stderr, "SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
         return 1;
     }
 
-    // Create window
     SDL_Window* window = SDL_CreateWindow(
         "SDL3 Complete D Application",
         SCREEN_WIDTH, SCREEN_HEIGHT,
@@ -34,11 +32,9 @@ int main(string[] args)
         return 1;
     }
 
-    // Main loop flag
     bool quit = false;
     SDL_Event e;
 
-    // Animation variables
     float rect_x = SCREEN_WIDTH / 2.0f - 25;
     float rect_y = SCREEN_HEIGHT / 2.0f - 25;
     float vel_x = 100.0f; // pixels per second
@@ -50,14 +46,11 @@ int main(string[] args)
     printf("  ESC or close window to quit\n");
     printf("  SPACE to reset bouncing rectangle\n");
 
-    // Main loop
     while (!quit) {
-        // Calculate delta time
         ulong current_time = SDL_GetTicks();
         float delta_time = (current_time - last_time) / 1000.0f;
         last_time = current_time;
 
-        // Handle events
         while (SDL_PollEvent(&e)) {
             switch (e.type) {
                 case SDL_EVENT_QUIT:
@@ -91,11 +84,9 @@ int main(string[] args)
             }
         }
 
-        // Update bouncing rectangle
         rect_x += vel_x * delta_time;
         rect_y += vel_y * delta_time;
 
-        // Bounce off edges
         if (rect_x <= 0 || rect_x >= SCREEN_WIDTH - 50) {
             vel_x = -vel_x;
             rect_x = (rect_x <= 0) ? 0 : SCREEN_WIDTH - 50;
@@ -105,30 +96,22 @@ int main(string[] args)
             rect_y = (rect_y <= 0) ? 0 : SCREEN_HEIGHT - 50;
         }
 
-        // Clear screen with dark blue
         SDL_SetRenderDrawColor(renderer, 25, 25, 112, 255);
         SDL_RenderClear(renderer);
 
-        // Draw bouncing rectangle (orange)
         SDL_FRect rect = SDL_FRect(rect_x, rect_y, 50, 50);
         SDL_SetRenderDrawColor(renderer, 255, 165, 0, 255);
         SDL_RenderFillRect(renderer, &rect);
 
-        // Draw a static border (white)
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
         SDL_FRect border = SDL_FRect(10, 10, SCREEN_WIDTH - 20, SCREEN_HEIGHT - 20);
         SDL_RenderRect(renderer, &border);
 
-        // Present the renderer
         SDL_RenderPresent(renderer);
 
-        // Cap to roughly 60 FPS
         SDL_Delay(16);
     }
 
-    printf("Cleaning up and exiting...\n");
-
-    // Clean up
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
