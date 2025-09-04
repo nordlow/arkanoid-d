@@ -1,6 +1,5 @@
 import core.stdc.stdio;
 
-// Screen dimensions
 enum SCREEN_WIDTH = 800;
 enum SCREEN_HEIGHT = 600;
 
