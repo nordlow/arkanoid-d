@@ -22,7 +22,6 @@ int main(string[] args)
         return 1;
     }
 
-    // Create renderer with VSync enabled
     SDL_Renderer* renderer = SDL_CreateRenderer(window, null);
     if (renderer is null) {
         stderr.fprintf("Renderer could not be created! SDL_Error: %s\n", SDL_GetError());
@@ -30,9 +29,7 @@ int main(string[] args)
         SDL_Quit();
         return 1;
     }
-
-    // Enable VSync (adaptive VSync if supported, otherwise regular VSync)
-    if (!SDL_SetRenderVSync(renderer, 1))
+    if (!SDL_SetRenderVSync(renderer, 1)) // enable adaptive VSync if supported, otherwise regular VSync
         stderr.fprintf("Warning: VSync not supported, falling back to no VSync\n");
 	else
         printf("VSync enabled\n");
