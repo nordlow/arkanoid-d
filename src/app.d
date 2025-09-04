@@ -79,12 +79,12 @@ void main() @trusted {
 				writeln("Read ", ev, ", heldButtons:", game.joystick.getHeldButtons);
 				if (ev.type == JoystickEvent.Type.axisMoved) {
 					if (ev.buttonOrAxis == 0) {
-						if (ev.value < 0) moveLeft();
-						else if (ev.value > 0) moveRight();
+						if (ev.axisValue < 0) moveLeft();
+						else if (ev.axisValue > 0) moveRight();
 					}
 					if (ev.buttonOrAxis == 6) {
-						if (ev.value < 0) moveLeft();
-						else if (ev.value > 0) moveRight();
+						if (ev.axisValue < 0) moveLeft();
+						else if (ev.axisValue > 0) moveRight();
 					}
 				}
 

@@ -25,7 +25,7 @@ struct JoystickEvent {
     }
     Type type;
     ButtonOrAxis buttonOrAxis;
-    AxisValue value; // for `Type.axisMoved` events
+    AxisValue axisValue; // for `Type.axisMoved` events
     uint timestamp; // event timestamp in milliseconds
 @property const pure nothrow @nogc:
     bool opCast(T: bool)() => type != Type.none;
@@ -125,7 +125,7 @@ nothrow:
 			setButtonState(rawEvent);
         } else if (rawEvent.type & JS_EVENT_AXIS) {
             event.type = R.Type.axisMoved;
-            event.value = rawEvent.value;
+            event.axisValue = rawEvent.value;
         } else
             event.type = R.Type.none;
 
