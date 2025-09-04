@@ -1,25 +1,29 @@
 module joystick;
-import nxt.io;
-import nxt.logger;
+
 import core.sys.posix.poll;
 import core.sys.posix.fcntl;
 import core.sys.posix.unistd;
 import core.sys.posix.stdio;
 import core.stdc.errno;
 
+import nxt.io;
+import nxt.logger;
+
 @safe:
 
-Joystick openDefaultJoystick() nothrow => typeof(return)("/dev/input/js0");
+Joystick openDefaultJoystick() nothrow
+	=> typeof(return)("/dev/input/js0");
 
 struct JoystickEvent {
+	alias ButtonOrAxisNumber = ubyte;
     enum Type {
-        none,
+        none, // for the sake of (implicit) cast to `bool`
         buttonPressed,
         buttonReleased,
         axisMoved
     }
     Type type;
-    ubyte number;        // button/axis number
+    ButtonOrAxisNumber number;
     short value;         // axis value (for `Type.axisMoved` events)
     uint timestamp;      // event timestamp in milliseconds
 @property const pure nothrow @nogc:
@@ -31,8 +35,8 @@ struct JoystickEvent {
 }
 
 struct Joystick {
-    int fd;
-    private bool[256] buttonStates; // track button states, indexed by button number
+    private int fd;
+    private bool[256] _buttonStates; // button states indexed by button number
 
 nothrow:
     @disable this(this);
@@ -70,16 +74,17 @@ nothrow:
      + Params: buttonNumber = The button number to check
      + Returns: true if the button is currently pressed, false otherwise
      +/
-    bool isButtonHeld(ubyte buttonNumber) const pure nothrow @nogc => buttonStates[buttonNumber];
+    bool isButtonHeld(JoystickEvent.ButtonOrAxisNumber buttonNumber) const pure nothrow @nogc
+		=> _buttonStates[buttonNumber];
 
     /++
      + Get all currently held button numbers.
      + Returns: An array of button numbers that are currently pressed
      +/
-    ubyte[] getHeldButtons() const pure nothrow {
+    JoystickEvent.ButtonOrAxisNumber[] getHeldButtons() const pure nothrow {
         typeof(return) held;
         held.reserve(32); // Reasonable initial capacity
-        foreach (const ubyte i, const bool pressed; buttonStates)
+        foreach (const JoystickEvent.ButtonOrAxisNumber i, const bool pressed; _buttonStates)
             if (pressed)
                 held ~= i;
         return held;
@@ -109,8 +114,8 @@ nothrow:
         // skip initialization events but still update button states from them
         if (rawEvent.type & JS_EVENT_INIT) {
             if (rawEvent.type & JS_EVENT_BUTTON) {
-                buttonStates[rawEvent.number] = (rawEvent.value == 1);
-				writeln("Set button ", rawEvent.number, ", buttonStates: ", buttonStates);
+                _buttonStates[rawEvent.number] = (rawEvent.value == 1);
+				// writeln("Set button ", rawEvent.number, ", _buttonStates: ", _buttonStates);
 			}
             return JoystickEvent(JoystickEvent.Type.none);
         }
@@ -124,8 +129,8 @@ nothrow:
                         JoystickEvent.Type.buttonPressed :
                         JoystickEvent.Type.buttonReleased;
             // update button state tracking
-            buttonStates[rawEvent.number] = (rawEvent.value == 1);
-			writeln("Set button ", rawEvent.number, ", buttonStates: ", buttonStates);
+            _buttonStates[rawEvent.number] = (rawEvent.value == 1);
+			// writeln("Set button ", rawEvent.number, ", _buttonStates: ", _buttonStates);
         } else if (rawEvent.type & JS_EVENT_AXIS) {
             event.type = JoystickEvent.Type.axisMoved;
             event.value = rawEvent.value;
