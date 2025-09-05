@@ -152,8 +152,8 @@ struct RectGrid(Ent) {
 			}
 		}
 	}
-	uint rows;
-	uint cols;
+	uint rows; ///< Number of rows.
+	uint cols; ///< Number of columns.
 	Ent[] bricks;
 }
 alias BrickGrid = RectGrid!Brick;
