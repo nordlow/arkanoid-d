@@ -1,12 +1,9 @@
 module entities;
 
-import sdl3;
 import nxt.geometry;
 import nxt.color : Color = ColorRGBA, Colors = RaylibColors;
-
-alias Pos2 = Point!(float, 2);
-alias Dim2 = Point!(float, 2); // TODO: Add Dimension/Size whatever to `nxt.geometry`
-alias Vec2 = Vector!(float, 2);
+import sdl3;
+import aliases;
 
 @safe:
 

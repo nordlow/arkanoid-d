@@ -9,6 +9,7 @@ import nxt.geometry;
 import nxt.color : Color = ColorRGBA, Colors = RaylibColors;
 
 import sdl3;
+import aliases;
 import renderer;
 import entities;
 import music;
