@@ -306,7 +306,7 @@ struct Game {
 		scene = Scene(balls: makeBalls(ballCount, ballVelocity, screenWidth, screenHeight),
 					  bullets: makeBullets(30),
 					  brickGrid: BrickGrid(nRows: 10, nCols: 10));
-		scene.brickGrid.layout(screenWidth, screenHeight, Colors.GREEN, Colors.RED, Colors.BLUE, Colors.YELLOW);
+		scene.brickGrid.layout(screenWidth, screenHeight, Colors.DARKGREEN, Colors.DARKRED, Colors.DARKBLUE, Colors.DARKYELLOW);
 	}
 
 	Joystick joystick;
