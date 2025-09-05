@@ -133,14 +133,15 @@ struct RectGrid(Ent) {
 		this.cols = cols;
 		bricks = new Ent[rows * cols];
 	}
-	void draw(SDL_Renderer* rndr) const nothrow {
-		bricks.draw(rndr);
-	}
 	uint rows;
 	uint cols;
 	Ent[] bricks;
 }
 alias BrickGrid = RectGrid!Brick;
+
+void draw(Ent)(ref RectGrid!(Ent) grid, SDL_Renderer* rndr) nothrow {
+	grid.bricks.draw(rndr);
+}
 
 struct Brick {
 	static immutable float FLASH_DURATION = 0.3f;
