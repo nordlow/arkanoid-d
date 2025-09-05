@@ -14,7 +14,7 @@ struct Paddle {
 	}
 	Color color;
 	void draw(SDL_Renderer* rndr) const nothrow @trusted {
-		SDL_SetRenderDrawColor(rndr, color.r, color.g, color.b, color.a);
+		SDL_SetRenderDrawColor(rndr, color);
 		SDL_RenderFillRect(rndr, &frect);
 	}
 }
@@ -28,7 +28,8 @@ struct Bullet {
 	void draw(SDL_Renderer* rndr) const nothrow @trusted {
 		if (!active)
 			return;
-		// DrawCircleV(pos, rad, color);
+		SDL_SetRenderDrawColor(rndr, color);
+		// SDL_RenderFillRect(rndr, &frect);
 	}
 }
 

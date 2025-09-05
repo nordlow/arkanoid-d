@@ -1,7 +1,16 @@
 module sdl3;
 
+import nxt.color : Color = ColorRGBA;
+
+nothrow:
+
+int SDL_SetRenderDrawColor(SDL_Renderer* renderer, in Color color) {
+	version(D_Coverage) {} else pragma(inline, true);
+	return SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
+}
+
 // SDL3 extern(C) function declarations
-extern(C) nothrow @nogc:
+extern(C) @nogc:
 
 // Forward declarations
 struct SDL_Window;
@@ -34,48 +43,48 @@ enum uint SDL_SCANCODE_LEFT = 80;
 enum uint SDL_SCANCODE_RIGHT = 79;
 
 // Structures
-struct SDL_Color { 
-    ubyte r, g, b, a; 
+struct SDL_Color {
+	ubyte r, g, b, a;
 }
 
-struct SDL_FRect { 
-    float x, y, w, h; 
+struct SDL_FRect {
+	float x, y, w, h;
 }
 
 struct SDL_Rect {
-    int x, y, w, h;
+	int x, y, w, h;
 }
 
 struct SDL_KeyboardEvent {
-    uint type;
-    uint reserved;
-    ulong timestamp;
-    uint windowID;
-    ubyte state;
-    ubyte repeat;
-    ubyte padding2;
-    ubyte padding3;
-    uint key;
-    uint mod;
-    ushort raw;
-    ushort unused;
+	uint type;
+	uint reserved;
+	ulong timestamp;
+	uint windowID;
+	ubyte state;
+	ubyte repeat;
+	ubyte padding2;
+	ubyte padding3;
+	uint key;
+	uint mod;
+	ushort raw;
+	ushort unused;
 }
 
 struct SDL_WindowEvent {
-    uint type;
-    uint reserved;
-    ulong timestamp;
-    uint windowID;
-    uint event;
-    int data1;
-    int data2;
+	uint type;
+	uint reserved;
+	ulong timestamp;
+	uint windowID;
+	uint event;
+	int data1;
+	int data2;
 }
 
 union SDL_Event {
-    uint type;
-    SDL_KeyboardEvent key;
-    SDL_WindowEvent window;
-    ubyte[128] padding;
+	uint type;
+	SDL_KeyboardEvent key;
+	SDL_WindowEvent window;
+	ubyte[128] padding;
 }
 
 // Core SDL functions
@@ -118,15 +127,15 @@ alias SDL_AudioDeviceID = uint;
 struct SDL_AudioStream;
 
 struct SDL_AudioSpec {
-    int freq;
-    uint format;
-    ubyte channels;
-    ubyte padding;
-    uint samples;
-    uint silence;
-    uint size;
-    void function(void* userdata, ubyte* stream, int len) callback;
-    void* userdata;
+	int freq;
+	uint format;
+	ubyte channels;
+	ubyte padding;
+	uint samples;
+	uint silence;
+	uint size;
+	void function(void* userdata, ubyte* stream, int len) callback;
+	void* userdata;
 }
 
 enum SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK = 0;
@@ -134,15 +143,15 @@ enum SDL_AUDIO_DEVICE_ALLOW_ANY_CHANGE = 0x00000001 | 0x00000002 | 0x00000004 | 
 
 // Audio functions - Note: SDL3 audio API has significant changes
 SDL_AudioDeviceID SDL_OpenAudioDevice(
-    const(char)* device,
-    const(SDL_AudioSpec)* desired,
-    SDL_AudioSpec* obtained,
-    int allowed_changes
+	const(char)* device,
+	const(SDL_AudioSpec)* desired,
+	SDL_AudioSpec* obtained,
+	int allowed_changes
 );
 void SDL_CloseAudioDevice(SDL_AudioDeviceID dev);
 SDL_AudioStream* SDL_CreateAudioStream(
-    uint src_format, ubyte src_channels, int src_rate,
-    uint dst_format, ubyte dst_channels, int dst_rate
+	uint src_format, ubyte src_channels, int src_rate,
+	uint dst_format, ubyte dst_channels, int dst_rate
 );
 void SDL_DestroyAudioStream(SDL_AudioStream* stream);
 int SDL_BindAudioStreams(SDL_AudioDeviceID dev, SDL_AudioStream** streams, int num_streams);
