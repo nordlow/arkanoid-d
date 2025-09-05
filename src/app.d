@@ -306,8 +306,7 @@ struct Game {
 	Joystick joystick;
 	Random rng;
 	bool playMusic;
-	bool won;
-	bool over;
+	bool won, over;
 }
 
 struct Scene {
