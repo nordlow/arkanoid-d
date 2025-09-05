@@ -350,11 +350,6 @@ void layoutBricks(scope Brick[] bricks, in int screenWidth, in int screenHeight,
 	}
 }
 
-float dot(in Vec2 v1, in Vec2 v2) pure nothrow @nogc {
-	version(D_Coverage) {} else pragma(inline, true);
-	return v1.x*v2.x + v1.y*v2.y;
-}
-
 struct Ball {
 	Pos2 pos;
 	float rad;
