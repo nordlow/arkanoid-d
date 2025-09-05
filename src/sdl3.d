@@ -32,7 +32,8 @@ enum uint SDL_EVENT_KEY_DOWN = 0x300;
 enum uint SDL_EVENT_WINDOW_RESIZED = 0x203;
 
 // Key codes
-enum uint SDLK_ESCAPE = 27;
+enum uint SDLK_ESCAPE = 0x0000001bu;
+enum uint SDLK_RETURN = 0x0000000du;
 enum uint SDLK_SPACE = 32;
 enum uint SDLK_LEFT = 1073741904;
 enum uint SDLK_RIGHT = 1073741903;
