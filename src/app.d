@@ -5,6 +5,7 @@ import core.stdc.math : fabs, sqrtf;
 import std.random : uniform, Random, unpredictableSeed;
 import std.math : abs, sqrt;
 
+import nxt.logger;
 import nxt.geometry;
 import nxt.color : Color = ColorRGBA, Colors = RaylibColors;
 
@@ -86,6 +87,7 @@ void main() @trusted {
 			case SDL_EVENT_KEY_DOWN:
 				switch (e.key.key) {
 				case SDLK_ESCAPE:
+					quit = true;
 					break;
 				case SDLK_LEFT:
 					leftPressed = true;
