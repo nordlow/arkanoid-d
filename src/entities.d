@@ -125,7 +125,8 @@ Bullet[] makeBullets(uint count) {
 	return ret;
 }
 
-struct Grid(Ent) {
+/++	Rectangular Grid. +/
+struct RectGrid(Ent) {
 	@disable this(this);
 	this(in uint rows, in uint cols) {
 		this.rows = rows;
@@ -139,7 +140,7 @@ struct Grid(Ent) {
 		bricks.draw(rndr);
 	}
 }
-alias BrickGrid = Grid!Brick;
+alias BrickGrid = RectGrid!Brick;
 
 struct Brick {
 	static immutable float FLASH_DURATION = 0.3f;
