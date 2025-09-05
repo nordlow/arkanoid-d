@@ -9,6 +9,7 @@ import nxt.logger;
 import nxt.geometry;
 import nxt.interpolation;
 import nxt.color;
+import nxt.colors;
 
 import sdl3;
 import aliases;
