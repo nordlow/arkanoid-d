@@ -139,12 +139,12 @@ struct RectGrid(Ent) {
 }
 alias BrickGrid = RectGrid!Brick;
 
-void layout(Ent)(scope ref RectGrid!(Ent) grid, in int screenWidth, in int screenHeight, in int brickRows, in int brickCols) pure nothrow @nogc {
-	const brickWidth = screenWidth / brickCols;
+void layout(Ent)(scope ref RectGrid!(Ent) grid, in int screenWidth, in int screenHeight) pure nothrow @nogc {
+	const brickWidth = screenWidth / grid.cols;
 	const brickHeight = 30;
-	foreach (const row; 0 .. brickRows) {
-		foreach (const col; 0 .. brickCols) {
-			const index = row * brickCols + col;
+	foreach (const row; 0 .. grid.rows) {
+		foreach (const col; 0 .. grid.cols) {
+			const index = row * grid.cols + col;
 			grid.bricks[index] = Brick(shape: Rect(pos: Pos2(col * brickWidth, row * brickHeight + 250),
 											  dim: Dim2(brickWidth - 2, brickHeight - 2)),
 								  color: Colors.RED, true);
