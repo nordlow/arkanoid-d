@@ -3,84 +3,118 @@ module sdl3;
 // SDL3 extern(C) function declarations
 extern(C) nothrow @nogc:
 
+// Forward declarations
 struct SDL_Window;
 struct SDL_Renderer;
+struct SDL_Texture;
+struct SDL_Surface;
 
+// Initialization flags
 enum uint SDL_INIT_VIDEO = 0x00000020;
 enum uint SDL_INIT_AUDIO = 0x00000010;
+
+// Window flags
 enum uint SDL_WINDOW_RESIZABLE = 0x00000020;
 enum uint SDL_WINDOW_FULLSCREEN_DESKTOP = 0x00001001;
 
+// Event types (these values may need verification against actual headers)
 enum uint SDL_EVENT_QUIT = 0x100;
 enum uint SDL_EVENT_KEY_DOWN = 0x300;
 enum uint SDL_EVENT_WINDOW_RESIZED = 0x203;
 
+// Key codes
 enum uint SDLK_ESCAPE = 27;
 enum uint SDLK_SPACE = 32;
 enum uint SDLK_LEFT = 1073741904;
 enum uint SDLK_RIGHT = 1073741903;
 enum uint SDLK_r = 114;
 
+// Scan codes
 enum uint SDL_SCANCODE_LEFT = 80;
 enum uint SDL_SCANCODE_RIGHT = 79;
 
-struct SDL_Color { ubyte r, g, b, a; }
+// Structures
+struct SDL_Color { 
+    ubyte r, g, b, a; 
+}
 
-struct SDL_FRect { float x, y, w, h; }
+struct SDL_FRect { 
+    float x, y, w, h; 
+}
+
+struct SDL_Rect {
+    int x, y, w, h;
+}
 
 struct SDL_KeyboardEvent {
-	uint type;
-	uint reserved;
-	ulong timestamp;
-	uint windowID;
-	ubyte state;
-	ubyte repeat;
-	ubyte padding2;
-	ubyte padding3;
-	uint key;
-	uint mod;
-	ushort raw;
-	ushort unused;
+    uint type;
+    uint reserved;
+    ulong timestamp;
+    uint windowID;
+    ubyte state;
+    ubyte repeat;
+    ubyte padding2;
+    ubyte padding3;
+    uint key;
+    uint mod;
+    ushort raw;
+    ushort unused;
 }
 
 struct SDL_WindowEvent {
-	uint type;
-	uint reserved;
-	ulong timestamp;
-	uint windowID;
-	uint event;
-	int data1;
-	int data2;
+    uint type;
+    uint reserved;
+    ulong timestamp;
+    uint windowID;
+    uint event;
+    int data1;
+    int data2;
 }
 
 union SDL_Event {
-	uint type;
-	SDL_KeyboardEvent key;
-	SDL_WindowEvent window;
-	ubyte[128] padding;
+    uint type;
+    SDL_KeyboardEvent key;
+    SDL_WindowEvent window;
+    ubyte[128] padding;
 }
 
+// Core SDL functions
 int SDL_Init(uint flags);
 void SDL_Quit();
+void SDL_QuitSubSystem(uint flags);
+const(char)* SDL_GetError();
+ulong SDL_GetTicks();
 
+// Window functions
 SDL_Window* SDL_CreateWindow(const char* title, int w, int h, uint flags);
 void SDL_DestroyWindow(SDL_Window* window);
+void SDL_GetWindowSize(SDL_Window* window, int* w, int* h);
+
+// Renderer functions - CORRECTED based on SDL3 documentation
 SDL_Renderer* SDL_CreateRenderer(SDL_Window* window, const char* name);
 void SDL_DestroyRenderer(SDL_Renderer* renderer);
-bool SDL_PollEvent(SDL_Event* event);
 int SDL_SetRenderDrawColor(SDL_Renderer* renderer, ubyte r, ubyte g, ubyte b, ubyte a);
 int SDL_RenderClear(SDL_Renderer* renderer);
 int SDL_RenderFillRect(SDL_Renderer* renderer, const SDL_FRect* rect);
 int SDL_RenderRect(SDL_Renderer* renderer, const SDL_FRect* rect);
-int SDL_RenderPresent(SDL_Renderer* renderer);
+bool SDL_RenderPresent(SDL_Renderer* renderer); // Returns bool in SDL3
 bool SDL_SetRenderVSync(SDL_Renderer* renderer, int vsync);
-ulong SDL_GetTicks();
-const(char)* SDL_GetError();
-void SDL_GetWindowSize(SDL_Window* window, int* w, int* h);
+
+// Texture and surface functions
+bool SDL_RenderTexture(SDL_Renderer* renderer, SDL_Texture* texture, const SDL_FRect* srcrect, const SDL_FRect* dstrect);
+SDL_Texture* SDL_CreateTextureFromSurface(SDL_Renderer* renderer, SDL_Surface* surface);
+void SDL_DestroyTexture(SDL_Texture* texture);
+SDL_Surface* SDL_LoadBMP(const char* file);
+void SDL_DestroySurface(SDL_Surface* surface);
+
+// Event functions
+bool SDL_PollEvent(SDL_Event* event);
+
+// Input functions
 const(ubyte)* SDL_GetKeyboardState(int* numkeys);
 
+// Audio types and constants
 alias SDL_AudioDeviceID = uint;
-
 struct SDL_AudioStream;
 
 struct SDL_AudioSpec {
@@ -98,8 +132,7 @@ struct SDL_AudioSpec {
 enum SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK = 0;
 enum SDL_AUDIO_DEVICE_ALLOW_ANY_CHANGE = 0x00000001 | 0x00000002 | 0x00000004 | 0x00000008;
 
-void SDL_QuitSubSystem(uint flags);
-const(char)* SDL_GetError();
+// Audio functions - Note: SDL3 audio API has significant changes
 SDL_AudioDeviceID SDL_OpenAudioDevice(
     const(char)* device,
     const(SDL_AudioSpec)* desired,
