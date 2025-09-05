@@ -1,6 +1,6 @@
 module sdl3;
 
-public import nxt.color : Color = ColorRGBA;
+public import nxt.color : Color = ColorRGBA, ColorHSV;
 
 nothrow:
 
@@ -32,11 +32,14 @@ enum uint SDL_EVENT_KEY_DOWN = 0x300;
 enum uint SDL_EVENT_WINDOW_RESIZED = 0x203;
 
 // Key codes
-enum uint SDLK_ESCAPE = 41;
-enum uint SDLK_SPACE = 44;
-enum uint SDLK_LEFT = 1073741904;
-enum uint SDLK_RIGHT = 1073741903;
-enum uint SDLK_r = 114;
+version(linux) {
+	enum uint SDLK_ESCAPE = 41;
+	enum uint SDLK_SPACE = 44;
+	enum uint SDLK_LEFT = 1073741904;
+	enum uint SDLK_RIGHT = 1073741903;
+	enum uint SDLK_F11 = 68;
+	enum uint SDLK_r = 114;
+}
 
 // Scan codes
 enum uint SDL_SCANCODE_LEFT = 80;
@@ -98,6 +101,7 @@ ulong SDL_GetTicks();
 SDL_Window* SDL_CreateWindow(const char* title, int w, int h, uint flags);
 void SDL_DestroyWindow(SDL_Window* window);
 void SDL_GetWindowSize(SDL_Window* window, int* w, int* h);
+bool SDL_SetWindowFullscreen(SDL_Window* window, bool fullscreen);
 
 // Renderer functions - CORRECTED based on SDL3 documentation
 SDL_Renderer* SDL_CreateRenderer(SDL_Window* window, const char* name);

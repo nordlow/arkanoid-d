@@ -98,6 +98,10 @@ void main() @trusted {
 				case SDLK_SPACE:
 					spacePressed = true;
 					break;
+				case SDLK_F11:
+					if (!SDL_SetWindowFullscreen(window, true))
+						stderr.fprintf("Could not set window to fullscreen! SDL_Error: %s\n", SDL_GetError());
+					break;
 				case SDLK_r:
 					rPressed = true;
 					break;
