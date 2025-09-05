@@ -146,7 +146,7 @@ void layout(Ent)(scope ref RectGrid!(Ent) grid, in int screenWidth, in int scree
 		foreach (const col; 0 .. grid.cols) {
 			const index = row * grid.cols + col;
 			grid.bricks[index] = Brick(shape: Rect(pos: Pos2(col * brickWidth, row * brickHeight + 250),
-											  dim: Dim2(brickWidth - 2, brickHeight - 2)),
+												   dim: Dim2(brickWidth - 2, brickHeight - 2)),
 								  color: Colors.RED, true);
 			if (row < 2)
 				grid.bricks[index].color = Colors.RED;
