@@ -356,7 +356,6 @@ struct Ball {
 	Vec2 vel;
 	Color color;
 	bool active;
-
 	void draw(SDL_Renderer* rndr) const nothrow @trusted {
 		if (active) {
 			SDL_SetRenderDrawColor(rndr, color.r, color.g, color.b, color.a);
