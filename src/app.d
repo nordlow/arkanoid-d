@@ -7,6 +7,7 @@ import std.math : abs, sqrt;
 
 import nxt.logger;
 import nxt.geometry;
+import nxt.interpolation;
 import nxt.color;
 
 import sdl3;
@@ -103,7 +104,7 @@ void main() @trusted {
 					break;
 				case SDLK_F11:
 					if (!SDL_SetWindowFullscreen(window, true))
-						stderr.fprintf("Could not set window to fullscreen! SDL_Error: %s\n", SDL_GetError());
+						stderr.fprintf("Could not enter fullscreen! SDL_Error: %s\n", SDL_GetError());
 					break;
 				case SDLK_r:
 					rPressed = true;
@@ -352,80 +353,6 @@ void layoutBricks(scope Brick[] bricks, in int screenWidth, in int screenHeight,
 				bricks[index].color = Colors.YELLOW;
 			else
 				bricks[index].color = Colors.GREEN;
-		}
-	}
-}
-
-struct Ball {
-	Pos2 pos;
-	float rad;
-	Vec2 vel;
-	Color color;
-	bool active;
-	void draw(SDL_Renderer* rndr) const nothrow @trusted {
-		if (active) {
-			SDL_SetRenderDrawColor(rndr, color.r, color.g, color.b, color.a);
-			drawFilledCircle(rndr, cast(int)pos.x, cast(int)pos.y, cast(int)rad);
-		}
-	}
-}
-
-Ball[] makeBalls(uint count, Vec2 ballVelocity, uint screenWidth, uint screenHeight) {
-	typeof(return) ret;
-	ret.length = count;
-	foreach (const i, ref ball; ret)
-		ball = Ball(pos: Pos2(screenWidth / 2 + i * 20 - 20, screenHeight - 150),
-					vel: ballVelocity,
-					rad: 15,
-					color: Colors.GRAY,
-					active: true);
-	return ret;
-}
-
-void bounceAll(ref Ball[] balls) pure nothrow @nogc {
-	foreach (i, ref Ball ballA; balls) {
-		foreach (ref Ball ballB; balls[i + 1 .. $]) {
-			if (!ballA.active || !ballB.active)
-				continue;
-
-			const delta = ballB.pos - ballA.pos;
-			const distSqr = delta.magnitudeSquared;
-			const combinedRadii = ballA.rad + ballB.rad;
-			const combinedRadiiSquared = combinedRadii * combinedRadii;
-			const bool isOverlap = distSqr < combinedRadiiSquared;
-			if (isOverlap) {
-				const dist = distSqr.sqrt;
-				const overlap = combinedRadii - dist;
-				const normal = delta.normalized;
-
-				ballA.pos -= normal * (overlap / 2.0f);
-				ballB.pos += normal * (overlap / 2.0f);
-
-				const tangent = Vec2(-normal.y, normal.x);
-
-				const v1n = dot(ballA.vel, normal);
-				const v1t = dot(ballA.vel, tangent);
-				const v2n = dot(ballB.vel, normal);
-				const v2t = dot(ballB.vel, tangent);
-
-				const v1n_prime = v2n;
-				const v2n_prime = v1n;
-
-				ballA.vel = (normal * v1n_prime) + (tangent * v1t);
-				ballB.vel = (normal * v2n_prime) + (tangent * v2t);
-			}
-		}
-	}
-}
-
-// Helper function to draw filled circle using SDL rectangles
-void drawFilledCircle(SDL_Renderer* rndr, int centerX, int centerY, int radius) nothrow @trusted {
-	for (int y = -radius; y <= radius; y++) {
-		for (int x = -radius; x <= radius; x++) {
-			if (x*x + y*y <= radius*radius) {
-				const rect = SDL_FRect(centerX + x, centerY + y, 1, 1);
-				SDL_RenderFillRect(rndr, &rect);
-			}
 		}
 	}
 }
