@@ -60,8 +60,8 @@ void main() @trusted {
 	// Note: Audio generation removed for SDL3 conversion - would need SDL_mixer or similar
 	// Sound[] pianoSounds; // Audio system would need separate implementation
 
-	game.scene.paddle = Paddle(shape: Rect(pos: Pos2(screenWidth / 2 - 60, screenHeight - 30), dim: Vec2(250, 20)),
-						 color: Colors.BLUE);
+	game.scene.paddle = Paddle(shape: Rect(pos: Pos2(screenWidth / 2 - 60, screenHeight - 30), dim: Dim2(250, 20)),
+							   color: Colors.BLUE);
 
 	uint keyCounter;
 	uint frameCounter;
@@ -183,12 +183,12 @@ void main() @trusted {
 				foreach (ref brick; game.scene.brickGrid.bricks) {
 					if (!brick.active || brick.isFlashing)
 						continue;
-					if (ball.pos.x + ball.rad >= brick.pos.x
+					if (ball.pos.x + ball.rad >= brick.shape.pos.x
 						&& ball.pos.x - ball.rad
-						<= brick.pos.x + brick.size.x
-						&& ball.pos.y + ball.rad >= brick.pos.y
+						<= brick.shape.pos.x + brick.shape.size.x
+						&& ball.pos.y + ball.rad >= brick.shape.pos.y
 						&& ball.pos.y - ball.rad
-						<= brick.pos.y + brick.size.y) {
+						<= brick.shape.pos.y + brick.shape.size.y) {
 						brick.restartFlashing();
 						ball.vel.y *= -1;
 						// PlaySound(game.brickSound); // Audio removed
@@ -207,12 +207,12 @@ void main() @trusted {
 					foreach (ref brick; game.scene.brickGrid.bricks) {
 						if (!brick.active || brick.isFlashing)
 							continue;
-						if (bullet.pos.x + bullet.rad >= brick.pos.x
+						if (bullet.pos.x + bullet.rad >= brick.shape.pos.x
 							&& bullet.pos.x - bullet.rad
-							<= brick.pos.x + brick.size.x
-							&& bullet.pos.y + bullet.rad >= brick.pos.y
+							<= brick.shape.pos.x + brick.shape.size.x
+							&& bullet.pos.y + bullet.rad >= brick.shape.pos.y
 							&& bullet.pos.y - bullet.rad
-							<= brick.pos.y + brick.size.y) {
+							<= brick.shape.pos.y + brick.shape.size.y) {
 							brick.restartFlashing();
 							bullet.active = false;
 							// PlaySound(game.brickSound); // Audio removed
@@ -262,9 +262,9 @@ void main() @trusted {
 				brick.active = true;
 				brick.isFlashing = false;
 				brick.flashTimer = 0.0f;
-				if (brick.pos.y + brick.size.y < 250 + 2 * 30)
+				if (brick.shape.pos.y + brick.shape.size.y < 250 + 2 * 30)
 					brick.color = Colors.RED;
-				else if (brick.pos.y + brick.size.y < 250 + 4 * 30)
+				else if (brick.shape.pos.y + brick.shape.size.y < 250 + 4 * 30)
 					brick.color = Colors.YELLOW;
 				else
 					brick.color = Colors.GREEN;
@@ -337,9 +337,9 @@ void layoutBricks(scope Brick[] bricks, in int screenWidth, in int screenHeight,
 	foreach (const row; 0 .. brickRows) {
 		foreach (const col; 0 .. brickCols) {
 			const index = row * brickCols + col;
-			bricks[index] = Brick(pos: Pos2(col * brickWidth, row * brickHeight + 250),
-								  size: Dim2(brickWidth - 2, brickHeight - 2),
-								  Colors.RED, true);
+			bricks[index] = Brick(shape: Rect(pos: Pos2(col * brickWidth, row * brickHeight + 250),
+											  dim: Dim2(brickWidth - 2, brickHeight - 2)),
+								  color: Colors.RED, true);
 			if (row < 2)
 				bricks[index].color = Colors.RED;
 			else if (row < 4)
