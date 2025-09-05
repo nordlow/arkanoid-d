@@ -1,73 +1,83 @@
 module sdl3;
 
-import std.exception : enforce;
-import nxt.logger;
+// SDL3 extern(C) function declarations
+extern(C) nothrow @nogc:
 
-struct AudioStream {
-    SDL_AudioDeviceID deviceID;
-    SDL_AudioStream* stream;
-    // You could also store a pointer to the queued data if needed
-    // void* dataBuffer;
-    // size_t dataSize;
+struct SDL_Window;
+struct SDL_Renderer;
 
-    /// Initializes and opens the audio device and stream.
-    this(const SDL_AudioSpec* spec) {
-        enforce(SDL_Init(SDL_INIT_AUDIO) == 0, "Failed to initialize SDL_AUDIO");
+enum uint SDL_INIT_VIDEO = 0x00000020;
+enum uint SDL_INIT_AUDIO = 0x00000010;
+enum uint SDL_WINDOW_RESIZABLE = 0x00000020;
+enum uint SDL_WINDOW_FULLSCREEN_DESKTOP = 0x00001001;
 
-        deviceID = SDL_OpenAudioDevice(
-            SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK,
-            spec,
-            null,
-            SDL_AUDIO_DEVICE_ALLOW_ANY_CHANGE
-        );
-        enforce(deviceID != 0, "Failed to open audio device");
+enum uint SDL_EVENT_QUIT = 0x100;
+enum uint SDL_EVENT_KEY_DOWN = 0x300;
+enum uint SDL_EVENT_WINDOW_RESIZED = 0x203;
 
-        // The stream format matches the device spec for simplicity
-        stream = SDL_CreateAudioStream(
-            spec.format, spec.channels, spec.freq,
-            spec.format, spec.channels, spec.freq
-        );
-        enforce(stream, "Failed to create audio stream");
+enum uint SDLK_ESCAPE = 27;
+enum uint SDLK_SPACE = 32;
+enum uint SDLK_LEFT = 1073741904;
+enum uint SDLK_RIGHT = 1073741903;
+enum uint SDLK_r = 114;
 
-        SDL_BindAudioStreams(deviceID, &stream, 1);
-        info("Audio stream initialized successfully.");
-    }
+enum uint SDL_SCANCODE_LEFT = 80;
+enum uint SDL_SCANCODE_RIGHT = 79;
 
-    /// Queues audio data for playback.
-    void queue(const void* data, size_t size) {
-        enforce(SDL_QueueAudio(deviceID, data, cast(Uint32)size) == 0, "Failed to queue audio data");
-    }
+struct SDL_Color { ubyte r, g, b, a; }
 
-    /// Starts audio playback.
-    void play() {
-        SDL_ResumeAudioDevice(deviceID);
-    }
+struct SDL_FRect { float x, y, w, h; }
 
-    /// Stops audio playback.
-    void stop() {
-        SDL_PauseAudioDevice(deviceID);
-    }
-
-    /// Returns the number of bytes left in the queue.
-    size_t getQueueSize() const {
-        return SDL_GetAudioDeviceQueueSize(deviceID);
-    }
-
-    /// Cleans up resources.
-    ~this() {
-        if (stream) {
-            SDL_UnbindAudioStreams(deviceID, &stream, 1);
-            SDL_DestroyAudioStream(stream);
-        }
-        if (deviceID != 0) {
-            SDL_CloseAudioDevice(deviceID);
-        }
-        SDL_QuitSubSystem(SDL_INIT_AUDIO);
-		info("Audio stream cleaned up.");
-    }
+struct SDL_KeyboardEvent {
+	uint type;
+	uint reserved;
+	ulong timestamp;
+	uint windowID;
+	ubyte state;
+	ubyte repeat;
+	ubyte padding2;
+	ubyte padding3;
+	uint key;
+	uint mod;
+	ushort raw;
+	ushort unused;
 }
 
-extern(C):
+struct SDL_WindowEvent {
+	uint type;
+	uint reserved;
+	ulong timestamp;
+	uint windowID;
+	uint event;
+	int data1;
+	int data2;
+}
+
+union SDL_Event {
+	uint type;
+	SDL_KeyboardEvent key;
+	SDL_WindowEvent window;
+	ubyte[128] padding;
+}
+
+int SDL_Init(uint flags);
+void SDL_Quit();
+
+SDL_Window* SDL_CreateWindow(const char* title, int w, int h, uint flags);
+void SDL_DestroyWindow(SDL_Window* window);
+SDL_Renderer* SDL_CreateRenderer(SDL_Window* window, const char* name);
+void SDL_DestroyRenderer(SDL_Renderer* renderer);
+bool SDL_PollEvent(SDL_Event* event);
+int SDL_SetRenderDrawColor(SDL_Renderer* renderer, ubyte r, ubyte g, ubyte b, ubyte a);
+int SDL_RenderClear(SDL_Renderer* renderer);
+int SDL_RenderFillRect(SDL_Renderer* renderer, const SDL_FRect* rect);
+int SDL_RenderRect(SDL_Renderer* renderer, const SDL_FRect* rect);
+int SDL_RenderPresent(SDL_Renderer* renderer);
+bool SDL_SetRenderVSync(SDL_Renderer* renderer, int vsync);
+ulong SDL_GetTicks();
+const(char)* SDL_GetError();
+void SDL_GetWindowSize(SDL_Window* window, int* w, int* h);
+const(ubyte)* SDL_GetKeyboardState(int* numkeys);
 
 alias SDL_AudioDeviceID = uint;
 
@@ -85,11 +95,9 @@ struct SDL_AudioSpec {
     void* userdata;
 }
 
-enum SDL_INIT_AUDIO = 0x00000010;
 enum SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK = 0;
 enum SDL_AUDIO_DEVICE_ALLOW_ANY_CHANGE = 0x00000001 | 0x00000002 | 0x00000004 | 0x00000008;
 
-int SDL_Init(uint flags);
 void SDL_QuitSubSystem(uint flags);
 const(char)* SDL_GetError();
 SDL_AudioDeviceID SDL_OpenAudioDevice(

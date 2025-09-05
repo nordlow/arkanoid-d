@@ -1,5 +1,6 @@
 module entities;
 
+import sdl3;
 import nxt.geometry;
 import nxt.color : Color = ColorRGBA, Colors = RaylibColors;
 
@@ -13,7 +14,7 @@ struct Paddle {
 	Pos2 pos;
 	Dim2 size;
 	Color color;
-	void draw() const nothrow @trusted {
+	void draw(SDL_Renderer* rndr) const nothrow @trusted {
 		// DrawRectangleV(pos, size, color);
 	}
 }
@@ -24,7 +25,7 @@ struct Bullet {
 	Vec2 vel;
 	Color color;
 	bool active;
-	void draw() const nothrow @trusted {
+	void draw(SDL_Renderer* rndr) const nothrow @trusted {
 		if (!active)
 			return;
 		// DrawCircleV(pos, rad, color);
@@ -58,8 +59,8 @@ struct BrickGrid {
 	uint rows;
 	uint cols;
 	Brick[] bricks;
-	void draw() const nothrow {
-		bricks.draw();
+	void draw(SDL_Renderer* rndr) const nothrow {
+		bricks.draw(rndr);
 	}
 }
 
@@ -75,7 +76,7 @@ struct Brick/+Tegelsten+/ {
 		isFlashing = true; // start
 		flashTimer = 0.0f; // restart
 	}
-	void draw() const nothrow @trusted {
+	void draw(SDL_Renderer* rndr) const nothrow @trusted {
 		if (active || isFlashing) {
 			Color drawColor = color;
 			if (isFlashing) {
@@ -91,7 +92,7 @@ struct Brick/+Tegelsten+/ {
 }
 
 /++ Draw generic entities `ents`. +/
-void draw(T)(in T[] ents) {
+void draw(T)(in T[] ents, SDL_Renderer* rndr) {
 	foreach (const ref ent; ents)
-		ent.draw();
+		ent.draw(rndr);
 }

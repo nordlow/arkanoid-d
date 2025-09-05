@@ -2,6 +2,7 @@ module gamepad;
 
 @safe:
 
+version(none) 
 void raylib_detectGamepad() @trusted {
 	import raylib : IsGamepadAvailable, GetGamepadName, IsGamepadButtonDown;
 	import nxt.logger : info;

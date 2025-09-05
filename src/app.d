@@ -8,6 +8,8 @@ import std.math : abs, sqrt;
 import nxt.geometry;
 import nxt.color : Color = ColorRGBA, Colors = RaylibColors;
 
+import sdl3;
+import renderer;
 import entities;
 import music;
 import waves;
@@ -35,19 +37,19 @@ void main() @trusted {
 	int screenWidth, screenHeight;
 	SDL_GetWindowSize(window, &screenWidth, &screenHeight);
 
-	SDL_Renderer* renderer = SDL_CreateRenderer(window, null);
-	if (renderer is null) {
+	SDL_Renderer* rndr = SDL_CreateRenderer(window, null);
+	if (rndr is null) {
 		stderr.fprintf("Renderer could not be created! SDL_Error: %s\n", SDL_GetError());
 		SDL_DestroyWindow(window);
 		SDL_Quit();
 		return;
 	}
 
-	if (!SDL_SetRenderVSync(renderer, 1))
+	if (!SDL_SetRenderVSync(rndr, 1))
 		stderr.fprintf("Warning: VSync not supported\n");
 
 	scope(exit) {
-		SDL_DestroyRenderer(renderer);
+		SDL_DestroyRenderer(rndr);
 		SDL_DestroyWindow(window);
 		SDL_Quit();
 	}
@@ -274,14 +276,14 @@ void main() @trusted {
 		}
 
 		// Rendering
-		SDL_SetRenderDrawColor(renderer, Colors.BLACK.r, Colors.BLACK.g, Colors.BLACK.b, Colors.BLACK.a);
-		SDL_RenderClear(renderer);
-		game.scene.draw(renderer);
+		SDL_SetRenderDrawColor(rndr, Colors.BLACK.r, Colors.BLACK.g, Colors.BLACK.b, Colors.BLACK.a);
+		SDL_RenderClear(rndr);
+		game.scene.draw(rndr);
 		if (game.won)
 			printf("YOU WON! Press R to restart\n");
 		else if (game.over)
 			printf("GAME OVER! Press R to restart\n");
-		SDL_RenderPresent(renderer);
+		SDL_RenderPresent(rndr);
 	}
 }
 
@@ -321,11 +323,11 @@ struct Scene {
 	Ball[] balls;
 	Bullet[] bullets;
 	BrickGrid brickGrid;
-	void draw(SDL_Renderer* renderer) @trusted {
-		brickGrid.draw(renderer);
-		paddle.draw(renderer);
-		balls.draw(renderer);
-		bullets.draw(renderer);
+	void draw(SDL_Renderer* rndr) @trusted {
+		brickGrid.draw(rndr);
+		paddle.draw(rndr);
+		balls.draw(rndr);
+		bullets.draw(rndr);
 	}
 }
 
@@ -363,14 +365,6 @@ float length(in Vec2 v) pure nothrow @nogc {
 	return v.lengthSquared.sqrt;
 }
 
-Vec2 normalized(in Vec2 v) pure nothrow @nogc {
-	version(D_Coverage) {} else pragma(inline, true);
-	const l = v.length;
-	if (l == 0)
-		return Vec2(0, 0);
-	return v / l;
-}
-
 struct Ball {
 	Pos2 pos;
 	float rad;
@@ -378,11 +372,11 @@ struct Ball {
 	Color color;
 	bool active;
 
-	void draw(SDL_Renderer* renderer) const nothrow @trusted {
+	void draw(SDL_Renderer* rndr) const nothrow @trusted {
 		if (active) {
-			SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
+			SDL_SetRenderDrawColor(rndr, color.r, color.g, color.b, color.a);
 			// Draw circle using filled rectangles (simple approximation)
-			drawFilledCircle(renderer, cast(int)pos.x, cast(int)pos.y, cast(int)rad);
+			drawFilledCircle(rndr, cast(int)pos.x, cast(int)pos.y, cast(int)rad);
 		}
 	}
 }
@@ -436,95 +430,13 @@ void bounceAll(ref Ball[] balls) pure nothrow @nogc {
 }
 
 // Helper function to draw filled circle using SDL rectangles
-void drawFilledCircle(SDL_Renderer* renderer, int centerX, int centerY, int radius) nothrow @trusted {
+void drawFilledCircle(SDL_Renderer* rndr, int centerX, int centerY, int radius) nothrow @trusted {
 	for (int y = -radius; y <= radius; y++) {
 		for (int x = -radius; x <= radius; x++) {
 			if (x*x + y*y <= radius*radius) {
 				const rect = SDL_FRect(centerX + x, centerY + y, 1, 1);
-				SDL_RenderFillRect(renderer, &rect);
+				SDL_RenderFillRect(rndr, &rect);
 			}
 		}
 	}
 }
-
-// SDL3 extern(C) function declarations
-extern(C) nothrow @nogc:
-
-struct SDL_Window;
-struct SDL_Renderer;
-
-enum uint SDL_INIT_VIDEO = 0x00000020;
-enum uint SDL_INIT_AUDIO = 0x00000010;
-enum uint SDL_WINDOW_RESIZABLE = 0x00000020;
-enum uint SDL_WINDOW_FULLSCREEN_DESKTOP = 0x00001001;
-
-enum uint SDL_EVENT_QUIT = 0x100;
-enum uint SDL_EVENT_KEY_DOWN = 0x300;
-enum uint SDL_EVENT_WINDOW_RESIZED = 0x203;
-
-enum uint SDLK_ESCAPE = 27;
-enum uint SDLK_SPACE = 32;
-enum uint SDLK_LEFT = 1073741904;
-enum uint SDLK_RIGHT = 1073741903;
-enum uint SDLK_r = 114;
-
-enum uint SDL_SCANCODE_LEFT = 80;
-enum uint SDL_SCANCODE_RIGHT = 79;
-
-struct SDL_Color {
-	ubyte r, g, b, a;
-}
-
-struct SDL_FRect {
-	float x, y, w, h;
-}
-
-struct SDL_KeyboardEvent {
-	uint type;
-	uint reserved;
-	ulong timestamp;
-	uint windowID;
-	ubyte state;
-	ubyte repeat;
-	ubyte padding2;
-	ubyte padding3;
-	uint key;
-	uint mod;
-	ushort raw;
-	ushort unused;
-}
-
-struct SDL_WindowEvent {
-	uint type;
-	uint reserved;
-	ulong timestamp;
-	uint windowID;
-	uint event;
-	int data1;
-	int data2;
-}
-
-union SDL_Event {
-	uint type;
-	SDL_KeyboardEvent key;
-	SDL_WindowEvent window;
-	ubyte[128] padding;
-}
-
-bool SDL_Init(uint flags);
-void SDL_Quit();
-SDL_Window* SDL_CreateWindow(const char* title, int w, int h, uint flags);
-void SDL_DestroyWindow(SDL_Window* window);
-SDL_Renderer* SDL_CreateRenderer(SDL_Window* window, const char* name);
-void SDL_DestroyRenderer(SDL_Renderer* renderer);
-bool SDL_PollEvent(SDL_Event* event);
-int SDL_SetRenderDrawColor(SDL_Renderer* renderer, ubyte r, ubyte g, ubyte b, ubyte a);
-int SDL_RenderClear(SDL_Renderer* renderer);
-int SDL_RenderFillRect(SDL_Renderer* renderer, const SDL_FRect* rect);
-int SDL_RenderRect(SDL_Renderer* renderer, const SDL_FRect* rect);
-int SDL_RenderPresent(SDL_Renderer* renderer);
-bool SDL_SetRenderVSync(SDL_Renderer* renderer, int vsync);
-ulong SDL_GetTicks();
-const(char)* SDL_GetError();
-void SDL_GetWindowSize(SDL_Window* window, int* w, int* h);
-const(ubyte)* SDL_GetKeyboardState(int* numkeys);
