@@ -35,7 +35,7 @@ float[] peakNormalizeAlgorithmic(scope return float[] data, in float targetLevel
     return data;
 }
 
-// Method 2: RMS Normalization (for perceived loudness)
+/++ Method 2: RMS Normalization (for perceived loudness) +/
 float[] rmsNormalize(scope return float[] data, in float targetRMS = 0.25f) pure nothrow {
     // Calculate RMS (Root Mean Square)
     float sumSquares = 0.0f;
