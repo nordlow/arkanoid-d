@@ -18,16 +18,16 @@ import joystick;
 
 @safe:
 
-enum SCREEN_WIDTH = 800;
-enum SCREEN_HEIGHT = 600;
-
 void main() @trusted {
+	int SCREEN_WIDTH = 1200;
+	int SCREEN_HEIGHT = 800;
+
 	if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO)) {
 		stderr.fprintf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
 		return;
 	}
 
-	SDL_Window* window = SDL_CreateWindow("Arkanoid Clone", SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_RESIZABLE | SDL_WINDOW_FULLSCREEN_DESKTOP);
+	SDL_Window* window = SDL_CreateWindow("Arkanoid Clone", SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_RESIZABLE);
 	if (window is null) {
 		stderr.fprintf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
 		SDL_Quit();
@@ -60,8 +60,7 @@ void main() @trusted {
 	// Note: Audio generation removed for SDL3 conversion - would need SDL_mixer or similar
 	// Sound[] pianoSounds; // Audio system would need separate implementation
 
-	game.scene.paddle = Paddle(pos: Pos2(screenWidth / 2 - 60, screenHeight - 30),
-						 size: Dim2(250, 20),
+	game.scene.paddle = Paddle(shape: Rect(Pos2(screenWidth / 2 - 60, screenHeight - 30), size: Vec2(250, 20)),
 						 color: Colors.BLUE);
 
 	uint keyCounter;
@@ -117,12 +116,12 @@ void main() @trusted {
 
 		if (!game.over && !game.won) {
 			void moveLeft() {
-				if (game.scene.paddle.pos.x > 0)
-					game.scene.paddle.pos.x -= 800 * deltaTime;
+				if (game.scene.paddle.shape.center.x > 0)
+					game.scene.paddle.shape.center.x -= 800 * deltaTime;
 			}
 			void moveRight() {
-				if (game.scene.paddle.pos.x < screenWidth - game.scene.paddle.size.x)
-					game.scene.paddle.pos.x += 800 * deltaTime;
+				if (game.scene.paddle.shape.center.x < screenWidth - game.scene.paddle.shape.size.x)
+					game.scene.paddle.shape.center.x += 800 * deltaTime;
 			}
 
 			// Handle joystick input (keeping original logic)
@@ -141,17 +140,17 @@ void main() @trusted {
 				}
 			}
 
-			if (leftHeld && game.scene.paddle.pos.x > 0)
+			if (leftHeld && game.scene.paddle.shape.center.x > 0)
 				moveLeft();
 
-			if (rightHeld && game.scene.paddle.pos.x < screenWidth - game.scene.paddle.size.x)
+			if (rightHeld && game.scene.paddle.shape.center.x < screenWidth - game.scene.paddle.shape.size.x)
 				moveRight();
 
 			if (spacePressed) {
 				foreach (ref bullet; game.scene.bullets) {
 					if (bullet.active)
 						continue;
-					bullet.pos = Pos2(game.scene.paddle.pos.x + game.scene.paddle.size.x / 2, game.scene.paddle.pos.y);
+					bullet.pos = Pos2(game.scene.paddle.shape.center.x + game.scene.paddle.shape.size.x / 2, game.scene.paddle.shape.center.y);
 					bullet.active = true;
 					// game.shootSound.PlaySound(); // Audio removed
 					break;
@@ -171,14 +170,14 @@ void main() @trusted {
 					ball.vel.y *= -1;
 					// game.wallSound.PlaySound(); // Audio removed
 				}
-				if (ball.pos.y + ball.rad >= game.scene.paddle.pos.y
+				if (ball.pos.y + ball.rad >= game.scene.paddle.shape.center.y
 					&& ball.pos.y - ball.rad
-					<= game.scene.paddle.pos.y + game.scene.paddle.size.y
-					&& ball.pos.x >= game.scene.paddle.pos.x
-					&& ball.pos.x <= game.scene.paddle.pos.x + game.scene.paddle.size.x) {
+					<= game.scene.paddle.shape.center.y + game.scene.paddle.shape.size.y
+					&& ball.pos.x >= game.scene.paddle.shape.center.x
+					&& ball.pos.x <= game.scene.paddle.shape.center.x + game.scene.paddle.shape.size.x) {
 					ball.vel.y = -abs(ball.vel.y);
 					// game.paddleSound.PlaySound(); // Audio removed
-					const float hitPos = (ball.pos.x - game.scene.paddle.pos.x) / game.scene.paddle.size.x;
+					const float hitPos = (ball.pos.x - game.scene.paddle.shape.center.x) / game.scene.paddle.shape.size.x;
 					ball.vel.x = 200 * (hitPos - 0.5f) * 2;
 				}
 				foreach (ref brick; game.scene.brickGrid.bricks) {
@@ -258,7 +257,7 @@ void main() @trusted {
 				ball.vel = game.ballVelocity;
 				ball.active = true;
 			}
-			game.scene.paddle.pos = Pos2(screenWidth / 2 - 60, screenHeight - 30);
+			game.scene.paddle.shape.center = Pos2(screenWidth / 2 - 60, screenHeight - 30);
 			foreach (ref brick; game.scene.brickGrid.bricks) {
 				brick.active = true;
 				brick.isFlashing = false;
@@ -376,7 +375,6 @@ struct Ball {
 	void draw(SDL_Renderer* rndr) const nothrow @trusted {
 		if (active) {
 			SDL_SetRenderDrawColor(rndr, color.r, color.g, color.b, color.a);
-			// Draw circle using filled rectangles (simple approximation)
 			drawFilledCircle(rndr, cast(int)pos.x, cast(int)pos.y, cast(int)rad);
 		}
 	}

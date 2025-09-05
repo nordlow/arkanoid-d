@@ -8,11 +8,14 @@ import aliases;
 @safe:
 
 struct Paddle {
-	Pos2 pos;
-	Dim2 size;
+	union {
+		Rect shape;
+		SDL_FRect frect;
+	}
 	Color color;
 	void draw(SDL_Renderer* rndr) const nothrow @trusted {
-		// DrawRectangleV(pos, size, color);
+		SDL_SetRenderDrawColor(rndr, color.r, color.g, color.b, color.a);
+		SDL_RenderFillRect(rndr, &frect);
 	}
 }
 
