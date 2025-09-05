@@ -133,31 +133,30 @@ struct RectGrid(Ent) {
 		this.cols = cols;
 		bricks = new Ent[rows * cols];
 	}
+	void layout(in int screenWidth, in int screenHeight) scope pure nothrow @nogc {
+		import nxt.interpolation : lerp;
+		const brickWidth = screenWidth / cols;
+		const brickHeight = screenHeight / rows / 2;
+		foreach (const row; 0 .. rows) {
+			foreach (const col; 0 .. cols) {
+				const index = row * cols + col;
+				bricks[index] = Brick(shape: Rect(pos: Pos2(col * brickWidth, row * brickHeight + 0),
+													   dim: Dim2(brickWidth - 2, brickHeight - 2)),
+										   color: Colors.RED, true);
+				if (row < 2)
+					bricks[index].color = Colors.RED;
+				else if (row < 4)
+					bricks[index].color = Colors.YELLOW;
+				else
+					bricks[index].color = Colors.GREEN;
+			}
+		}
+	}
 	uint rows;
 	uint cols;
 	Ent[] bricks;
 }
 alias BrickGrid = RectGrid!Brick;
-
-void layout(Ent)(scope ref RectGrid!(Ent) grid, in int screenWidth, in int screenHeight) pure nothrow @nogc {
-	import nxt.interpolation : lerp;
-	const brickWidth = screenWidth / grid.cols;
-	const brickHeight = screenHeight / grid.rows / 2;
-	foreach (const row; 0 .. grid.rows) {
-		foreach (const col; 0 .. grid.cols) {
-			const index = row * grid.cols + col;
-			grid.bricks[index] = Brick(shape: Rect(pos: Pos2(col * brickWidth, row * brickHeight + 0),
-												   dim: Dim2(brickWidth - 2, brickHeight - 2)),
-									   color: Colors.RED, true);
-			if (row < 2)
-				grid.bricks[index].color = Colors.RED;
-			else if (row < 4)
-				grid.bricks[index].color = Colors.YELLOW;
-			else
-				grid.bricks[index].color = Colors.GREEN;
-		}
-	}
-}
 
 void draw(Ent)(ref RectGrid!(Ent) grid, SDL_Renderer* rndr) nothrow {
 	grid.bricks.draw(rndr);
