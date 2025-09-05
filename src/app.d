@@ -305,7 +305,7 @@ struct Game {
 		scene = Scene(balls: makeBalls(ballCount, ballVelocity, screenWidth, screenHeight),
 					  bullets: makeBullets(30),
 					  brickGrid: BrickGrid(rows: 10, cols: 10));
-		scene.brickGrid.bricks.layoutBricks(screenWidth, screenHeight, scene.brickGrid.rows, scene.brickGrid.cols);
+		scene.brickGrid.layout(screenWidth, screenHeight, scene.brickGrid.rows, scene.brickGrid.cols);
 	}
 
 	Joystick joystick;
@@ -335,24 +335,5 @@ struct Scene {
 		paddle.draw(rndr);
 		balls.draw(rndr);
 		bullets.draw(rndr);
-	}
-}
-
-void layoutBricks(scope Brick[] bricks, in int screenWidth, in int screenHeight, in int brickRows, in int brickCols) pure nothrow @nogc {
-	const brickWidth = screenWidth / brickCols;
-	const brickHeight = 30;
-	foreach (const row; 0 .. brickRows) {
-		foreach (const col; 0 .. brickCols) {
-			const index = row * brickCols + col;
-			bricks[index] = Brick(shape: Rect(pos: Pos2(col * brickWidth, row * brickHeight + 250),
-											  dim: Dim2(brickWidth - 2, brickHeight - 2)),
-								  color: Colors.RED, true);
-			if (row < 2)
-				bricks[index].color = Colors.RED;
-			else if (row < 4)
-				bricks[index].color = Colors.YELLOW;
-			else
-				bricks[index].color = Colors.GREEN;
-		}
 	}
 }

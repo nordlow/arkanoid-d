@@ -139,6 +139,25 @@ struct RectGrid(Ent) {
 }
 alias BrickGrid = RectGrid!Brick;
 
+void layout(Ent)(scope ref RectGrid!(Ent) grid, in int screenWidth, in int screenHeight, in int brickRows, in int brickCols) pure nothrow @nogc {
+	const brickWidth = screenWidth / brickCols;
+	const brickHeight = 30;
+	foreach (const row; 0 .. brickRows) {
+		foreach (const col; 0 .. brickCols) {
+			const index = row * brickCols + col;
+			grid.bricks[index] = Brick(shape: Rect(pos: Pos2(col * brickWidth, row * brickHeight + 250),
+											  dim: Dim2(brickWidth - 2, brickHeight - 2)),
+								  color: Colors.RED, true);
+			if (row < 2)
+				grid.bricks[index].color = Colors.RED;
+			else if (row < 4)
+				grid.bricks[index].color = Colors.YELLOW;
+			else
+				grid.bricks[index].color = Colors.GREEN;
+		}
+	}
+}
+
 void draw(Ent)(ref RectGrid!(Ent) grid, SDL_Renderer* rndr) nothrow {
 	grid.bricks.draw(rndr);
 }
