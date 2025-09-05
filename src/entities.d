@@ -186,6 +186,7 @@ Color lerpClamped(in Color x, in Color y, float t) pure nothrow @nogc {
 	auto a = lerp(x.a, y.a, t);
 	return Color(cast(ubyte)r, cast(ubyte)g, cast(ubyte)b, cast(ubyte)a);
 }
+
 struct Brick {
 	static immutable float FLASH_DURATION = 0.3f;
 	union {
