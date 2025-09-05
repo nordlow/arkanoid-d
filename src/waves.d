@@ -11,7 +11,7 @@ alias Sample = short;
 
 @safe:
 
-// Wave, audio wave data
+/++ Audio wave. +/
 struct Wave {
     uint frameCount; // Total number of frames (considering channels)
     uint sampleRate; // Frequency (samples per second)
