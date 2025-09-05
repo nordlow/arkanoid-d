@@ -127,7 +127,7 @@ Bullet[] makeBullets(uint count) {
 	return ret;
 }
 
-/++	Rectangular Grid of entities. +/
+/++	Rectangular Grid of entities all of type `Ent`. +/
 struct RectGrid(Ent) {
 	@disable this(this);
 	this(in uint nRows, in uint nCols) {
