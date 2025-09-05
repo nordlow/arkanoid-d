@@ -1,6 +1,6 @@
 module sdl3;
 
-import nxt.color : Color = ColorRGBA;
+public import nxt.color : Color = ColorRGBA;
 
 nothrow:
 

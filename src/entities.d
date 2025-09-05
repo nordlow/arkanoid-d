@@ -1,7 +1,7 @@
 module entities;
 
 import nxt.geometry;
-import nxt.color : Color = ColorRGBA, Colors = RaylibColors;
+import nxt.color : Color = ColorRGBA, Colors;
 import sdl3;
 import aliases;
 

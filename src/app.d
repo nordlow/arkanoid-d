@@ -7,7 +7,7 @@ import std.math : abs, sqrt;
 
 import nxt.logger;
 import nxt.geometry;
-import nxt.color : Color = ColorRGBA, Colors = RaylibColors;
+import nxt.color;
 
 import sdl3;
 import aliases;
@@ -298,8 +298,6 @@ struct Game {
 					  bullets: makeBullets(30),
 					  brickGrid: BrickGrid(rows: 10, cols: 10));
 		scene.brickGrid.bricks.layoutBricks(screenWidth, screenHeight, scene.brickGrid.rows, scene.brickGrid.cols);
-
-		// Audio generation removed for SDL3 conversion
 	}
 
 	Joystick joystick;
