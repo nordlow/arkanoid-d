@@ -289,7 +289,6 @@ void main() @trusted {
 
 struct Game {
 	@disable this(this);
-
 	this(in uint screenWidth, in uint screenHeight) @trusted {
 		joystick = openDefaultJoystick();
 		rng = Random(unpredictableSeed());
@@ -300,19 +299,13 @@ struct Game {
 					  brickGrid: BrickGrid(nRows: 10, nCols: 10));
 		scene.brickGrid.layout(screenWidth, screenHeight, Colors.DARKGREEN, Colors.DARKRED, Colors.DARKBLUE, Colors.DARKYELLOW);
 	}
-
-	Joystick joystick;
-
 	static immutable ballCount = 10;
-	const ballVelocity = Vec2(100, -200);
-
 	Scene scene;
-
+	static immutable ballVelocity = Vec2(100, -200);
 	static immutable soundSampleRate = 44100;
+	Joystick joystick;
 	Random rng;
-	// Sound objects removed for SDL3 conversion
 	bool playMusic;
-
 	bool won;
 	bool over;
 }
