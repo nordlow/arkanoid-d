@@ -106,7 +106,8 @@ struct Bullet {
 		if (!active)
 			return;
 		SDL_SetRenderDrawColor(rndr, color);
-		// SDL_RenderFillRect(rndr, &frect);
+		auto frect = SDL_FRect(x: pos.x-rad, y: pos.y-rad, w: 2*rad, h: 2*rad);
+		SDL_RenderFillRect(rndr, &frect);
 	}
 }
 
