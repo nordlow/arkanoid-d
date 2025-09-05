@@ -1,7 +1,7 @@
 module entities;
 
 import nxt.geometry;
-import nxt.color : Color = ColorRGBA, Colors;
+import nxt.color : Color = ColorRGBA, ColorHSV, Colors;
 import sdl3;
 import aliases;
 
@@ -140,6 +140,7 @@ struct RectGrid(Ent) {
 alias BrickGrid = RectGrid!Brick;
 
 void layout(Ent)(scope ref RectGrid!(Ent) grid, in int screenWidth, in int screenHeight) pure nothrow @nogc {
+	import nxt.interpolation : lerp;
 	const brickWidth = screenWidth / grid.cols;
 	const brickHeight = 30;
 	foreach (const row; 0 .. grid.rows) {
