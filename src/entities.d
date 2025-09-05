@@ -64,7 +64,7 @@ struct BrickGrid {
 	}
 }
 
-struct Brick/+Tegelsten+/ {
+struct Brick {
 	static immutable float FLASH_DURATION = 0.3f;
 	Pos2 pos;
 	Dim2 size;
@@ -82,8 +82,7 @@ struct Brick/+Tegelsten+/ {
 			if (isFlashing) {
 				// Alternate between the original color and a bright white/yellow
 				// to create the flashing effect.
-				if (cast(int)(flashTimer * 10) % 2 == 0) {
-					drawColor = Colors.WHITE;
+				if (cast(int)(flashTimer * 10) % 2 == 0)
 				}
 			}
 			// DrawRectangleV(pos, size, drawColor);
