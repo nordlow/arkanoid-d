@@ -131,30 +131,30 @@ struct RectGrid(Ent) {
 	this(in uint rows, in uint cols) {
 		this.rows = rows;
 		this.cols = cols;
-		bricks = new Ent[rows * cols];
+		ents = new Ent[rows * cols];
 	}
 	void layout(in int screenWidth, in int screenHeight) scope pure nothrow @nogc {
 		import nxt.interpolation : lerp;
-		const brickWidth = screenWidth / cols;
-		const brickHeight = screenHeight / rows / 2;
+		const entWidth = screenWidth / cols;
+		const entHeight = screenHeight / rows / 2;
 		foreach (const row; 0 .. rows) {
 			foreach (const col; 0 .. cols) {
 				const index = row * cols + col;
-				bricks[index] = Brick(shape: Rect(pos: Pos2(col * brickWidth, row * brickHeight + 0),
-													   dim: Dim2(brickWidth - 2, brickHeight - 2)),
+				ents[index] = Ent(shape: Rect(pos: Pos2(col * entWidth, row * entHeight + 0),
+													   dim: Dim2(entWidth - 2, entHeight - 2)),
 										   color: Colors.RED, true);
 				if (row < 2)
-					bricks[index].color = Colors.RED;
+					ents[index].color = Colors.RED;
 				else if (row < 4)
-					bricks[index].color = Colors.YELLOW;
+					ents[index].color = Colors.YELLOW;
 				else
-					bricks[index].color = Colors.GREEN;
+					ents[index].color = Colors.GREEN;
 			}
 		}
 	}
 	uint rows; ///< Number of rows.
 	uint cols; ///< Number of columns.
-	Ent[] bricks;
+	Ent[] ents; ///< Entities.
 }
 alias BrickGrid = RectGrid!Brick;
 
