@@ -133,12 +133,12 @@ struct RectGrid(Ent) {
 		this.cols = cols;
 		bricks = new Ent[rows * cols];
 	}
-	uint rows;
-	uint cols;
-	Ent[] bricks;
 	void draw(SDL_Renderer* rndr) const nothrow {
 		bricks.draw(rndr);
 	}
+	uint rows;
+	uint cols;
+	Ent[] bricks;
 }
 alias BrickGrid = RectGrid!Brick;
 
