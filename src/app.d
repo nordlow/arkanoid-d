@@ -134,7 +134,6 @@ void main() @trusted {
 					game.scene.paddle.shape.pos.x += 800 * deltaTime;
 			}
 
-			// Handle joystick input (keeping original logic)
 			while (const ev = game.joystick.tryNextEvent()) {
 				import nxt.io : writeln;
 				writeln("Read ", ev, ", heldButtons:", game.joystick.getHeldButtons);
@@ -272,12 +271,6 @@ void main() @trusted {
 				brick.active = true;
 				brick.isFlashing = false;
 				brick.flashTimer = 0.0f;
-				if (brick.shape.pos.y + brick.shape.size.y < 250 + 2 * 30)
-					brick.color = Colors.RED;
-				else if (brick.shape.pos.y + brick.shape.size.y < 250 + 4 * 30)
-					brick.color = Colors.YELLOW;
-				else
-					brick.color = Colors.GREEN;
 			}
 			foreach (ref bullet; game.scene.bullets)
 				bullet.active = false;
