@@ -125,20 +125,21 @@ Bullet[] makeBullets(uint count) {
 	return ret;
 }
 
-struct BrickGrid {
+struct Grid(Ent) {
 	@disable this(this);
 	this(in uint rows, in uint cols) {
 		this.rows = rows;
 		this.cols = cols;
-		bricks = new Brick[rows * cols];
+		bricks = new Ent[rows * cols];
 	}
 	uint rows;
 	uint cols;
-	Brick[] bricks;
+	Ent[] bricks;
 	void draw(SDL_Renderer* rndr) const nothrow {
 		bricks.draw(rndr);
 	}
 }
+alias BrickGrid = Grid!Brick;
 
 struct Brick {
 	static immutable float FLASH_DURATION = 0.3f;
