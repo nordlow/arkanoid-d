@@ -63,9 +63,6 @@ void main() @trusted {
 	// Note: Audio generation removed for SDL3 conversion - would need SDL_mixer or similar
 	// Sound[] pianoSounds; // Audio system would need separate implementation
 
-	game.scene.paddle = Paddle(shape: Rect(pos: Pos2(screenWidth / 2 - 60, screenHeight - 30), dim: Dim2(250, 20)),
-							   color: Colors.BLUE);
-
 	uint keyCounter;
 	uint frameCounter;
 	ulong lastTime = SDL_GetTicks();
@@ -296,7 +293,9 @@ struct Game {
 	this(in uint screenWidth, in uint screenHeight) @trusted {
 		joystick = openDefaultJoystick();
 		rng = Random(unpredictableSeed());
-		scene = Scene(balls: makeBalls(ballCount, ballVelocity, screenWidth, screenHeight),
+		scene = Scene(paddle: Paddle(shape: Rect(pos: Pos2(screenWidth / 2 - 60, screenHeight - 30), dim: Dim2(250, 20)),
+									 color: Colors.BLUE),
+					  balls: makeBalls(ballCount, ballVelocity, screenWidth, screenHeight),
 					  bullets: makeBullets(30),
 					  brickGrid: BrickGrid(nRows: 10, nCols: 10));
 		scene.brickGrid.layout(screenWidth, screenHeight, Colors.DARKGREEN, Colors.DARKRED, Colors.DARKBLUE, Colors.DARKYELLOW);
