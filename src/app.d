@@ -80,32 +80,32 @@ void main() @trusted {
 
 		while (SDL_PollEvent(&e)) {
 			switch (e.type) {
-				case SDL_EVENT_QUIT:
+			case SDL_EVENT_QUIT:
+				quit = true;
+				break;
+			case SDL_EVENT_KEY_DOWN:
+				switch (e.key.key) {
+				case SDLK_ESCAPE:
 					quit = true;
 					break;
-				case SDL_EVENT_KEY_DOWN:
-					switch (e.key.key) {
-						case SDLK_ESCAPE:
-							quit = true;
-							break;
-						case SDLK_LEFT:
-							leftPressed = true;
-							break;
-						case SDLK_RIGHT:
-							rightPressed = true;
-							break;
-						case SDLK_SPACE:
-							spacePressed = true;
-							break;
-						case SDLK_r:
-							rPressed = true;
-							break;
-						default:
-							break;
-					}
+				case SDLK_LEFT:
+					leftPressed = true;
+					break;
+				case SDLK_RIGHT:
+					rightPressed = true;
+					break;
+				case SDLK_SPACE:
+					spacePressed = true;
+					break;
+				case SDLK_r:
+					rPressed = true;
 					break;
 				default:
 					break;
+				}
+				break;
+			default:
+				break;
 			}
 		}
 
