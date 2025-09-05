@@ -84,9 +84,8 @@ struct Brick {
 			if (isFlashing) {
 				// Alternate between the original color and a bright white/yellow
 				// to create the flashing effect.
-				if (cast(int)(flashTimer * 10) % 2 == 0) {
+				if (cast(int)(flashTimer * 10) % 2 == 0)
 					drawColor = Colors.WHITE;
-				}
 			}
 			SDL_SetRenderDrawColor(rndr, drawColor.r, drawColor.g, drawColor.b, drawColor.a);
 			SDL_RenderFillRect(rndr, &frect);
