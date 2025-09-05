@@ -189,7 +189,7 @@ void main() @trusted {
 					const float hitPos = (ball.pos.x - game.scene.paddle.shape.pos.x) / game.scene.paddle.shape.dim.x;
 					ball.vel.x = 200 * (hitPos - 0.5f) * 2;
 				}
-				foreach (ref brick; game.scene.brickGrid.bricks) {
+				foreach (ref brick; game.scene.brickGrid.ents) {
 					if (!brick.active || brick.isFlashing)
 						continue;
 					if (ball.pos.x + ball.rad >= brick.shape.pos.x
@@ -213,7 +213,7 @@ void main() @trusted {
 					bullet.pos += bullet.vel * deltaTime;
 					if (bullet.pos.y < 0)
 						bullet.active = false;
-					foreach (ref brick; game.scene.brickGrid.bricks) {
+					foreach (ref brick; game.scene.brickGrid.ents) {
 						if (!brick.active || brick.isFlashing)
 							continue;
 						if (bullet.pos.x + bullet.rad >= brick.shape.pos.x
@@ -232,7 +232,7 @@ void main() @trusted {
 			}
 
 			// Update logic for flashing bricks
-			foreach (ref brick; game.scene.brickGrid.bricks) {
+			foreach (ref brick; game.scene.brickGrid.ents) {
 				if (brick.isFlashing) {
 					brick.flashTimer += deltaTime;
 					if (brick.flashTimer >= Brick.FLASH_DURATION) {
@@ -243,7 +243,7 @@ void main() @trusted {
 			}
 
 			bool allBricksDestroyed = true;
-			foreach (const brick; game.scene.brickGrid.bricks) {
+			foreach (const brick; game.scene.brickGrid.ents) {
 				if (brick.active) {
 					allBricksDestroyed = false;
 					break;
@@ -267,7 +267,7 @@ void main() @trusted {
 				ball.active = true;
 			}
 			game.scene.paddle.shape.pos = Pos2(screenWidth / 2 - 60, screenHeight - 30);
-			foreach (ref brick; game.scene.brickGrid.bricks) {
+			foreach (ref brick; game.scene.brickGrid.ents) {
 				brick.active = true;
 				brick.isFlashing = false;
 				brick.flashTimer = 0.0f;
@@ -304,7 +304,7 @@ struct Game {
 		rng = Random(unpredictableSeed());
 		scene = Scene(balls: makeBalls(ballCount, ballVelocity, screenWidth, screenHeight),
 					  bullets: makeBullets(30),
-					  brickGrid: BrickGrid(rows: 10, cols: 10));
+					  brickGrid: BrickGrid(nRows: 10, nCols: 10));
 		scene.brickGrid.layout(screenWidth, screenHeight);
 	}
 

@@ -128,18 +128,18 @@ Bullet[] makeBullets(uint count) {
 /++	Rectangular Grid of entities. +/
 struct RectGrid(Ent) {
 	@disable this(this);
-	this(in uint rows, in uint cols) {
-		this.rows = rows;
-		this.cols = cols;
-		ents = new Ent[rows * cols];
+	this(in uint nRows, in uint nCols) {
+		this.nRows = nRows;
+		this.nCols = nCols;
+		ents = new Ent[nRows * nCols];
 	}
 	void layout(in int screenWidth, in int screenHeight) scope pure nothrow @nogc {
 		import nxt.interpolation : lerp;
-		const entWidth = screenWidth / cols;
-		const entHeight = screenHeight / rows / 2;
-		foreach (const row; 0 .. rows) {
-			foreach (const col; 0 .. cols) {
-				const index = row * cols + col;
+		const entWidth = screenWidth / nCols;
+		const entHeight = screenHeight / nRows / 2;
+		foreach (const row; 0 .. nRows) {
+			foreach (const col; 0 .. nCols) {
+				const index = row * nCols + col;
 				ents[index] = Ent(shape: Rect(pos: Pos2(col * entWidth, row * entHeight + 0),
 													   dim: Dim2(entWidth - 2, entHeight - 2)),
 										   color: Colors.RED, true);
@@ -152,15 +152,14 @@ struct RectGrid(Ent) {
 			}
 		}
 	}
-	uint rows; ///< Number of rows.
-	uint cols; ///< Number of columns.
+	void draw(SDL_Renderer* rndr) nothrow {
+		ents.draw(rndr);
+	}
+	uint nRows; ///< Number of nRows.
+	uint nCols; ///< Number of columns.
 	Ent[] ents; ///< Entities.
 }
 alias BrickGrid = RectGrid!Brick;
-
-void draw(Ent)(ref RectGrid!(Ent) grid, SDL_Renderer* rndr) nothrow {
-	grid.bricks.draw(rndr);
-}
 
 struct Brick {
 	static immutable float FLASH_DURATION = 0.3f;
