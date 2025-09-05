@@ -4,13 +4,21 @@ import std.random;
 import std.math;
 import waveform;
 import normalization;
-import raylib : Wave;
 
 alias SampleRate = uint;
 alias FrameCount = uint;
 alias Sample = short;
 
 @safe:
+
+// Wave, audio wave data
+struct Wave {
+    uint frameCount; // Total number of frames (considering channels)
+    uint sampleRate; // Frequency (samples per second)
+    uint sampleSize; // Bit depth (bits per sample): 8, 16, 32 (24 not supported)
+    uint channels; // Number of channels (1-mono, 2-stereo, ...)
+    void* data; // Buffer data pointer
+}
 
 Wave generateStaticWave(in float frequency, in float duration, in SampleRate sampleRate) pure nothrow {
     const frameCount = cast(FrameCount)(sampleRate * duration);
@@ -41,15 +49,14 @@ Wave generateBoingWave(in float startFreq, in float endFreq, in float duration, 
     const frameCount = cast(FrameCount)(sampleRate * duration);
     auto data = new Sample[frameCount];
 
-    // Create a smooth frequency curve for the "boing"
-    float frequencyCurve(float t) {
-        // a combination of a sharp initial drop and a slower rise
-        return startFreq * (1.0f - pow(t, 2.0f)) + endFreq * pow(t, 2.0f);
-    }
+	/++ Create a smooth frequency curve for the "boing".
+		A combination of a sharp initial drop and a slower rise.
+	 +/
+    float frequencyCurve(float t)
+		=> startFreq * (1.0f - pow(t, 2.0f)) + endFreq * pow(t, 2.0f);
 
-    float amplitudeEnvelope(float t) {
-        return pow(1 - t, 4.0f); // a very fast, percussive decay
-    }
+    float amplitudeEnvelope(float t)
+		=> pow(1 - t, 4.0f); // a very fast, percussive decay
 
     foreach (const i; 0 .. frameCount) {
         const t = cast(float)i / frameCount;
@@ -70,14 +77,15 @@ Wave generateGlassBreakWave(scope ref Random rng, in float duration, in float am
     foreach (const i; 0 .. frameCount) {
         const t = cast(float)i / frameCount;
 
-        // Amplitude envelope for the initial "shatter"
+        // amplitude envelope for the initial "shatter"
         const shatterAmp = pow(1.0f - t, 8.0f); // Very fast, percussive decay for the noise
 		const noiseSample = uniform(-1.0f, 1.0f, rng) * Sample.max * shatterAmp;
 
-        // Amplitude envelope for the "tinkle" effect
+        // amplitude envelope for the "tinkle" effect
         const tinkleAmp = 0.5f * (1.0f - t); // Slower, linear decay for the high-frequency tone
+
         // Generate a high-frequency sine wave for the "tinkle"
-        // This makes it sound less like static and more like breaking glass
+        // This makes it sound less like static and more like breaking glass.
 		const frequency = 1000.0f; // initially 10_000.0f
         const tinkleSample = sin(2.0f * cast(float)std.math.PI * frequency * i / sampleRate) * Sample.max * tinkleAmp;
 
@@ -98,11 +106,11 @@ Wave generateScreamWave(scope ref Random rng, in float duration, in SampleRate s
     const float endFreq = 2000.0f; // high frequency for the peak
 
     // overall amplitude envelope
-    float amplitudeEnvelope(float t) {
-        // A sharp rise and a slower, noisy decay
-        // This simulates the vocal cords tightening and then relaxing
-        return pow(t, 0.5f) * pow(1.0f - t, 2.0f);
-    }
+	/++ A sharp rise and a slower, noisy decay.
+		This simulates the vocal cords tightening and then relaxing.
+	 +/
+    float amplitudeEnvelope(float t)
+		=> pow(t, 0.5f) * pow(1.0f - t, 2.0f);
 
     // frequency sweep that rises quickly and then levels off
     float frequencySweep(float t) {
