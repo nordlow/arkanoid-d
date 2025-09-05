@@ -189,7 +189,7 @@ void main() @trusted {
 					const float hitPos = (ball.pos.x - game.scene.paddle.shape.pos.x) / game.scene.paddle.shape.dim.x;
 					ball.vel.x = 200 * (hitPos - 0.5f) * 2;
 				}
-				foreach (ref brick; game.scene.brickGrid.ents) {
+				foreach (ref brick; game.scene.brickGrid[]) {
 					if (!brick.active || brick.isFlashing)
 						continue;
 					if (ball.pos.x + ball.rad >= brick.shape.pos.x
@@ -213,7 +213,7 @@ void main() @trusted {
 					bullet.pos += bullet.vel * deltaTime;
 					if (bullet.pos.y < 0)
 						bullet.active = false;
-					foreach (ref brick; game.scene.brickGrid.ents) {
+					foreach (ref brick; game.scene.brickGrid[]) {
 						if (!brick.active || brick.isFlashing)
 							continue;
 						if (bullet.pos.x + bullet.rad >= brick.shape.pos.x
@@ -232,7 +232,7 @@ void main() @trusted {
 			}
 
 			// Update logic for flashing bricks
-			foreach (ref brick; game.scene.brickGrid.ents) {
+			foreach (ref brick; game.scene.brickGrid[]) {
 				if (brick.isFlashing) {
 					brick.flashTimer += deltaTime;
 					if (brick.flashTimer >= Brick.FLASH_DURATION) {
@@ -243,7 +243,7 @@ void main() @trusted {
 			}
 
 			bool allBricksDestroyed = true;
-			foreach (const brick; game.scene.brickGrid.ents) {
+			foreach (const brick; game.scene.brickGrid[]) {
 				if (brick.active) {
 					allBricksDestroyed = false;
 					break;
@@ -267,7 +267,7 @@ void main() @trusted {
 				ball.active = true;
 			}
 			game.scene.paddle.shape.pos = Pos2(screenWidth / 2 - 60, screenHeight - 30);
-			foreach (ref brick; game.scene.brickGrid.ents) {
+			foreach (ref brick; game.scene.brickGrid[]) {
 				brick.active = true;
 				brick.isFlashing = false;
 				brick.flashTimer = 0.0f;

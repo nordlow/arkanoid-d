@@ -155,9 +155,10 @@ struct RectGrid(Ent) {
 	void draw(SDL_Renderer* rndr) nothrow {
 		ents.draw(rndr);
 	}
+	inout(Ent)[] opSlice() inout return => ents;
 	uint nRows; ///< Number of nRows.
 	uint nCols; ///< Number of columns.
-	Ent[] ents; ///< Entities.
+	private Ent[] ents; ///< Entities.
 }
 alias BrickGrid = RectGrid!Brick;
 
