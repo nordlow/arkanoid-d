@@ -88,7 +88,8 @@ struct Brick {
 					drawColor = Colors.WHITE;
 				}
 			}
-			// DrawRectangleV(pos, size, drawColor);
+			SDL_SetRenderDrawColor(rndr, drawColor.r, drawColor.g, drawColor.b, drawColor.a);
+			SDL_RenderFillRect(rndr, &frect);
 		}
 	}
 }
