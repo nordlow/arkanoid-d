@@ -1,7 +1,7 @@
 module entities;
 
 import nxt.geometry;
-import nxt.color : Color = ColorRGBA, ColorHSV;
+import nxt.color : Color = ColorRGBA, ColorHSV, lerpClamped;
 import nxt.colors;
 
 import sdl3;
@@ -175,17 +175,6 @@ struct RectGrid(Ent) {
 }
 
 alias BrickGrid = RectGrid!Brick;
-
-Color lerpClamped(in Color x, in Color y, float t) pure nothrow @nogc {
-	import std.algorithm.comparison : clamp;
-	t = clamp(t, 0, 1);
-	import nxt.interpolation : lerp;
-	auto r = lerp(x.r, y.r, t);
-	auto g = lerp(x.g, y.g, t);
-	auto b = lerp(x.b, y.b, t);
-	auto a = lerp(x.a, y.a, t);
-	return Color(cast(ubyte)r, cast(ubyte)g, cast(ubyte)b, cast(ubyte)a);
-}
 
 struct Brick {
 	static immutable float FLASH_DURATION = 0.3f;
