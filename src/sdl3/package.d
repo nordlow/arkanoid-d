@@ -38,6 +38,7 @@ version(linux) {
 	enum uint SDLK_LEFT = 1073741904;
 	enum uint SDLK_RIGHT = 1073741903;
 	enum uint SDLK_F11 = 68;
+	enum uint SDLK_q = 20;
 	enum uint SDLK_r = 114;
 }
 

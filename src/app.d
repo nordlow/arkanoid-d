@@ -85,8 +85,11 @@ void main() @trusted {
 				quit = true;
 				break;
 			case SDL_EVENT_KEY_DOWN:
+				if (false)
+					warning(e.key.key);
 				switch (e.key.key) {
 				case SDLK_ESCAPE:
+				case SDLK_q:
 					quit = true;
 					break;
 				case SDLK_LEFT:
