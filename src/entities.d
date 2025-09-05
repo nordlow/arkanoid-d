@@ -114,7 +114,7 @@ struct Bullet {
 Bullet makeBullet() {
 	typeof(return) ret;
 	ret.active = false;
-	ret.rad = 10; // radie, 2*radie == diameter
+	ret.rad = 3; // radie, 2*radie == diameter
 	ret.color = Colors.YELLOW;
 	ret.vel = Vec2(0, -333);
 	return ret;
