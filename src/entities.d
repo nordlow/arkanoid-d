@@ -74,11 +74,12 @@ struct Brick {
 	bool active;
 	bool isFlashing = false;
 	float flashTimer = 0.0f; // Timer for flashing duration.
-	void restartFlashing() scope pure nothrow @nogc {
+nothrow:
+	void restartFlashing() scope pure @nogc {
 		isFlashing = true; // start
 		flashTimer = 0.0f; // restart
 	}
-	void draw(SDL_Renderer* rndr) const nothrow @trusted {
+	void draw(SDL_Renderer* rndr) const @trusted {
 		if (active || isFlashing) {
 			Color drawColor = color;
 			if (isFlashing) {
