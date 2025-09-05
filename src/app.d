@@ -355,16 +355,6 @@ float dot(in Vec2 v1, in Vec2 v2) pure nothrow @nogc {
 	return v1.x*v2.x + v1.y*v2.y;
 }
 
-float lengthSquared(in Vec2 v) pure nothrow @nogc {
-	version(D_Coverage) {} else pragma(inline, true);
-	return v.x*v.x + v.y*v.y;
-}
-
-float length(in Vec2 v) pure nothrow @nogc {
-	version(D_Coverage) {} else pragma(inline, true);
-	return v.lengthSquared.sqrt;
-}
-
 struct Ball {
 	Pos2 pos;
 	float rad;
@@ -399,7 +389,7 @@ void bounceAll(ref Ball[] balls) pure nothrow @nogc {
 				continue;
 
 			const delta = ballB.pos - ballA.pos;
-			const distSqr = delta.lengthSquared;
+			const distSqr = delta.magnitudeSquared;
 			const combinedRadii = ballA.rad + ballB.rad;
 			const combinedRadiiSquared = combinedRadii * combinedRadii;
 			const bool isOverlap = distSqr < combinedRadiiSquared;
