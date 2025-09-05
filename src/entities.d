@@ -127,7 +127,7 @@ Bullet[] makeBullets(uint count) {
 	return ret;
 }
 
-/++	Rectangular Grid of entities all of type `Ent`. +/
+/// Rectangular Grid of entities all of type `Ent`.
 struct RectGrid(Ent) {
 	@disable this(this);
 	this(in uint nRows, in uint nCols) {
@@ -135,35 +135,57 @@ struct RectGrid(Ent) {
 		this.nCols = nCols;
 		ents = new Ent[nRows * nCols];
 	}
-	void layout(in int screenWidth, in int screenHeight) scope pure nothrow @nogc {
-		import nxt.interpolation : lerp;
-		const entWidth = screenWidth / nCols;
-		const entHeight = screenHeight / nRows / 2;
+
+	/// Lays out the entities in a rectangular grid with a 2D color gradient.
+	void layout(in int screenWidth, in int screenHeight, in Color topLeft, in Color topRight, in Color bottomLeft, in Color bottomRight) scope pure nothrow @safe @nogc {
+		const entWidth = cast(float)screenWidth / nCols;
+		const entHeight = cast(float)screenHeight / nRows / 2;
 		foreach (const row; 0 .. nRows) {
 			foreach (const col; 0 .. nCols) {
 				const index = row * nCols + col;
-				ents[index] = Ent(shape: Rect(pos: Pos2(col * entWidth, row * entHeight + 0),
-													   dim: Dim2(entWidth - 2, entHeight - 2)),
-										   color: Colors.RED, true);
-				if (row < 2)
-					ents[index].color = Colors.RED;
-				else if (row < 4)
-					ents[index].color = Colors.YELLOW;
-				else
-					ents[index].color = Colors.GREEN;
+
+				// Calculate interpolation factors (0.0 to 1.0) for row and column
+				const t_col = cast(float)col / (nCols - 1);
+				const t_row = cast(float)row / (nRows - 1);
+
+				// Interpolate colors horizontally at the top and bottom of the grid
+				const top_lerp = lerpClamped(topLeft, topRight, t_col);
+				const bottom_lerp = lerpClamped(bottomLeft, bottomRight, t_col);
+
+				// Interpolate vertically to find the final color for the current entity
+				const finalColor = lerpClamped(top_lerp, bottom_lerp, t_row);
+
+				// Set the entity's position, dimensions, and color
+				ents[index] = Ent(shape: Rect(pos: Pos2(cast(int)(col * entWidth), cast(int)(row * entHeight)),
+											  dim: Dim2(cast(int)(entWidth - 2), cast(int)(entHeight - 2))),
+								  color: finalColor, true);
 			}
 		}
 	}
+
 	void draw(SDL_Renderer* rndr) nothrow {
 		ents.draw(rndr);
 	}
+
 	inout(Ent)[] opSlice() inout return => ents;
+
 	uint nRows; ///< Number of nRows.
 	uint nCols; ///< Number of columns.
 	private Ent[] ents; ///< Entities.
 }
+
 alias BrickGrid = RectGrid!Brick;
 
+Color lerpClamped(in Color x, in Color y, float t) pure nothrow @nogc {
+	import std.algorithm.comparison : clamp;
+	t = clamp(t, 0, 1);
+	import nxt.interpolation : lerp;
+	auto r = lerp(x.r, y.r, t);
+	auto g = lerp(x.g, y.g, t);
+	auto b = lerp(x.b, y.b, t);
+	auto a = lerp(x.a, y.a, t);
+	return Color(cast(ubyte)r, cast(ubyte)g, cast(ubyte)b, cast(ubyte)a);
+}
 struct Brick {
 	static immutable float FLASH_DURATION = 0.3f;
 	union {
