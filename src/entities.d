@@ -65,11 +65,11 @@ struct BrickGrid {
 }
 
 struct Brick {
+	static immutable float FLASH_DURATION = 0.3f;
 	union {
 		Rect shape;
 		SDL_FRect frect;
 	}
-	static immutable float FLASH_DURATION = 0.3f;
 	Color color;
 	bool active;
 	bool isFlashing = false;
