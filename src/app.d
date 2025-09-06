@@ -34,14 +34,14 @@ void main() @trusted {
 		return;
 	}
 
-	SDL_Window* window = SDL_CreateWindow("Arkanoid Clone", ssz.width, ssz.height, SDL_WINDOW_RESIZABLE);
+	auto window = SDL_CreateWindow("Arkanoid Clone", ssz.width, ssz.height, SDL_WINDOW_RESIZABLE);
 	if (window is null) {
 		stderr.fprintf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
 		SDL_Quit();
 		return;
 	}
 
-	SDL_Renderer* rndr = SDL_CreateRenderer(window, null);
+	auto rndr = SDL_CreateRenderer(window, null);
 	if (rndr is null) {
 		stderr.fprintf("Renderer could not be created! SDL_Error: %s\n", SDL_GetError());
 		SDL_DestroyWindow(window);
@@ -73,7 +73,7 @@ void main() @trusted {
 		game.processEvents();
 
 		// Get continuous key states
-		const ubyte* keyStates = SDL_GetKeyboardState(null);
+		const keyStates = SDL_GetKeyboardState(null);
 		const bool leftHeld = keyStates[SDL_SCANCODE_LEFT] != 0;
 		const bool rightHeld = keyStates[SDL_SCANCODE_RIGHT] != 0;
 
