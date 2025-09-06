@@ -63,15 +63,13 @@ void main() @trusted {
 	// Note: Audio generation removed for SDL3 conversion - would need SDL_mixer or similar
 	// Sound[] pianoSounds; // Audio system would need separate implementation
 
-	uint keyCounter;
-	uint frameCounter;
-	ulong lastTime = SDL_GetTicks();
+	ulong lastFrameTime = SDL_GetTicks();
 
 	bool quit = false;
-	while (!quit) {
-		const currentTime = SDL_GetTicks();
-		const deltaTime = (currentTime - lastTime) / 1000.0f;
-		lastTime = currentTime;
+	for (uint frameCounter = 0; !quit; ++frameCounter) {
+		const currentFrameTime = SDL_GetTicks();
+		const deltaTime = (currentFrameTime - lastFrameTime) / 1000.0f;
+		lastFrameTime = currentFrameTime;
 		frameCounter++;
 
 		// Handle events
