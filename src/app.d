@@ -41,9 +41,6 @@ void main() @trusted {
 		return;
 	}
 
-	// Get actual screen size after fullscreen
-	SDL_GetWindowSize(window, &ssz.width, &ssz.height);
-
 	SDL_Renderer* rndr = SDL_CreateRenderer(window, null);
 	if (rndr is null) {
 		stderr.fprintf("Renderer could not be created! SDL_Error: %s\n", SDL_GetError());
@@ -104,8 +101,10 @@ void main() @trusted {
 					spacePressed = true;
 					break;
 				case SDLK_F11:
-					if (!SDL_SetWindowFullscreen(window, true))
+					game.inFullscreen ^= true; // toggle
+					if (!SDL_SetWindowFullscreen(window, game.inFullscreen))
 						stderr.fprintf("Could not enter fullscreen! SDL_Error: %s\n", SDL_GetError());
+					SDL_GetWindowSize(window, &ssz.width, &ssz.height);
 					break;
 				case SDLK_r:
 					rPressed = true;
@@ -307,6 +306,7 @@ struct Game {
 	Joystick joystick;
 	Random rng;
 	bool playMusic;
+	bool inFullscreen;
 	bool won, over;
 }
 
