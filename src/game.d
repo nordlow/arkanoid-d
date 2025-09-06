@@ -58,9 +58,9 @@ struct Game {
 					break;
 				case SDLK_F11:
 					inFullscreen ^= true; // toggle
-					if (!SDL_SetWindowFullscreen(win._win, inFullscreen))
+					if (!SDL_SetWindowFullscreen(win._winP, inFullscreen))
 						warning("Could not enter fullscreen! SDL_Error: %s\n", SDL_GetError());
-					SDL_GetWindowSize(win._win, &ssz.width, &ssz.height);
+					SDL_GetWindowSize(win._winP, &ssz.width, &ssz.height);
 					break;
 				case SDLK_r:
 					rPressed = true;
