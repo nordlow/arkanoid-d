@@ -15,19 +15,19 @@ struct Window {
 			return;
 		}
 		// TODO: Extract to Renderer:
-		_rndrP = SDL_CreateRenderer(_winP, null);
-		if (_rndrP is null) {
+		_rdrP = SDL_CreateRenderer(_winP, null);
+		if (_rdrP is null) {
 			stderr.fprintf("Renderer could not be created! SDL_Error: %s\n", SDL_GetError());
 			SDL_DestroyWindow(_winP);
 			SDL_Quit();
 			return;
 		}
-		if (!SDL_SetRenderVSync(_rndrP, 1))
+		if (!SDL_SetRenderVSync(_rdrP, 1))
 			stderr.fprintf("Warning: VSync not supported\n");
 
 	}
 	~this() nothrow @nogc @trusted {
-		SDL_DestroyRenderer(_rndrP);
+		SDL_DestroyRenderer(_rdrP);
 		SDL_DestroyWindow(_winP);
 	}
 	ScreenSize size() @property @trusted {
@@ -36,5 +36,5 @@ struct Window {
 		return ssz;
 	}
 	SDL_Window* _winP;
-	SDL_Renderer* _rndrP;
+	SDL_Renderer* _rdrP;
 }

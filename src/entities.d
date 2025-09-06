@@ -15,9 +15,9 @@ struct Paddle {
 		SDL_FRect frect;
 	}
 	Color color;
-	void drawIn(SDL_Renderer* rndr) const nothrow @trusted {
-		SDL_SetRenderDrawColor(rndr, color);
-		SDL_RenderFillRect(rndr, &frect);
+	void drawIn(SDL_Renderer* rdr) const nothrow @trusted {
+		SDL_SetRenderDrawColor(rdr, color);
+		SDL_RenderFillRect(rdr, &frect);
 	}
 }
 
@@ -27,21 +27,21 @@ struct Ball {
 	Vec2 vel;
 	Color color;
 	bool active;
-	void drawIn(SDL_Renderer* rndr) const nothrow @trusted {
+	void drawIn(SDL_Renderer* rdr) const nothrow @trusted {
 		if (active) {
-			SDL_SetRenderDrawColor(rndr, color.r, color.g, color.b, color.a);
-			drawFilledCircle(rndr, cast(int)pos.x, cast(int)pos.y, cast(int)rad);
+			SDL_SetRenderDrawColor(rdr, color.r, color.g, color.b, color.a);
+			drawFilledCircle(rdr, cast(int)pos.x, cast(int)pos.y, cast(int)rad);
 		}
 	}
 }
 
 // Helper function to drawIn filled circle using SDL rectangles
-void drawFilledCircle(SDL_Renderer* rndr, int centerX, int centerY, int radius) nothrow @trusted {
+void drawFilledCircle(SDL_Renderer* rdr, int centerX, int centerY, int radius) nothrow @trusted {
 	for (int y = -radius; y <= radius; y++) {
 		for (int x = -radius; x <= radius; x++) {
 			if (x*x + y*y <= radius*radius) {
 				const rect = SDL_FRect(centerX + x, centerY + y, 1, 1);
-				SDL_RenderFillRect(rndr, &rect);
+				SDL_RenderFillRect(rdr, &rect);
 			}
 		}
 	}
@@ -102,12 +102,12 @@ struct Bullet {
 	Vec2 vel;
 	Color color;
 	bool active;
-	void drawIn(SDL_Renderer* rndr) const nothrow @trusted {
+	void drawIn(SDL_Renderer* rdr) const nothrow @trusted {
 		if (!active)
 			return;
-		SDL_SetRenderDrawColor(rndr, color);
+		SDL_SetRenderDrawColor(rdr, color);
 		auto frect = SDL_FRect(x: pos.x-rad, y: pos.y-rad, w: 2*rad, h: 2*rad);
-		SDL_RenderFillRect(rndr, &frect);
+		SDL_RenderFillRect(rdr, &frect);
 	}
 }
 
@@ -164,8 +164,8 @@ struct RectGrid(Ent) {
 		}
 	}
 
-	void drawIn(SDL_Renderer* rndr) nothrow {
-		ents.drawIn(rndr);
+	void drawIn(SDL_Renderer* rdr) nothrow {
+		ents.drawIn(rdr);
 	}
 
 	inout(Ent)[] opSlice() inout return => ents;
@@ -192,7 +192,7 @@ nothrow:
 		isFlashing = true; // start
 		flashTimer = 0.0f; // restart
 	}
-	void drawIn(SDL_Renderer* rndr) const @trusted {
+	void drawIn(SDL_Renderer* rdr) const @trusted {
 		if (active || isFlashing) {
 			Color drawColor = color;
 			if (isFlashing) {
@@ -201,14 +201,14 @@ nothrow:
 				if (cast(int)(flashTimer * 10) % 2 == 0)
 					drawColor = Colors.WHITE;
 			}
-			SDL_SetRenderDrawColor(rndr, drawColor.r, drawColor.g, drawColor.b, drawColor.a);
-			SDL_RenderFillRect(rndr, &frect);
+			SDL_SetRenderDrawColor(rdr, drawColor.r, drawColor.g, drawColor.b, drawColor.a);
+			SDL_RenderFillRect(rdr, &frect);
 		}
 	}
 }
 
 /++ Draw generic entities `ents`. +/
-void drawIn(T)(in T[] ents, SDL_Renderer* rndr) {
+void drawIn(T)(in T[] ents, SDL_Renderer* rdr) {
 	foreach (const ref ent; ents)
-		ent.drawIn(rndr);
+		ent.drawIn(rdr);
 }

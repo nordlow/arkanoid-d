@@ -95,10 +95,10 @@ struct Scene {
 	Ball[] balls;
 	Bullet[] bullets;
 	BrickGrid brickGrid;
-	void drawIn(SDL_Renderer* rndr) @trusted {
-		brickGrid.drawIn(rndr);
-		paddle.drawIn(rndr);
-		balls.drawIn(rndr);
-		bullets.drawIn(rndr);
+	void drawIn(SDL_Renderer* rdr) @trusted {
+		brickGrid.drawIn(rdr);
+		paddle.drawIn(rdr);
+		balls.drawIn(rdr);
+		bullets.drawIn(rdr);
 	}
 }
