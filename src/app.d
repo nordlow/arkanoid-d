@@ -58,63 +58,19 @@ void main() @trusted {
 		SDL_Quit();
 	}
 
-	auto game = Game(ssz);
+	auto game = Game(ssz, window);
 
 	// Note: Audio generation removed for SDL3 conversion - would need SDL_mixer or similar
 	// Sound[] pianoSounds; // Audio system would need separate implementation
 
 	ulong lastFrameTime = SDL_GetTicks();
 
-	bool quit = false;
-	for (uint frameCounter = 0; !quit; ++frameCounter) {
+	for (uint frameCounter = 0; !game.quit; ++frameCounter) {
 		const currentFrameTime = SDL_GetTicks();
 		const deltaTime = (currentFrameTime - lastFrameTime) / 1000.0f;
 		lastFrameTime = currentFrameTime;
-		frameCounter++;
 
-		// Handle events
-		SDL_Event e;
-		bool leftPressed = false, rightPressed = false, spacePressed = false, rPressed = false;
-
-		while (SDL_PollEvent(&e)) {
-			switch (e.type) {
-			case SDL_EVENT_QUIT:
-				quit = true;
-				break;
-			case SDL_EVENT_KEY_DOWN:
-				if (false)
-					warning(e.key.key);
-				switch (e.key.key) {
-				case SDLK_ESCAPE:
-				case SDLK_q:
-					quit = true;
-					break;
-				case SDLK_LEFT:
-					leftPressed = true;
-					break;
-				case SDLK_RIGHT:
-					rightPressed = true;
-					break;
-				case SDLK_SPACE:
-					spacePressed = true;
-					break;
-				case SDLK_F11:
-					game.inFullscreen ^= true; // toggle
-					if (!SDL_SetWindowFullscreen(window, game.inFullscreen))
-						stderr.fprintf("Could not enter fullscreen! SDL_Error: %s\n", SDL_GetError());
-					SDL_GetWindowSize(window, &ssz.width, &ssz.height);
-					break;
-				case SDLK_r:
-					rPressed = true;
-					break;
-				default:
-					break;
-				}
-				break;
-			default:
-				break;
-			}
-		}
+		game.processEvents();
 
 		// Get continuous key states
 		const ubyte* keyStates = SDL_GetKeyboardState(null);
@@ -147,7 +103,7 @@ void main() @trusted {
 				moveLeft();
 			if (rightHeld && game.scene.paddle.shape.pos.x < ssz.width - game.scene.paddle.shape.dim.x)
 				moveRight();
-			if (spacePressed) {
+			if (game.spacePressed) {
 				foreach (ref bullet; game.scene.bullets) {
 					if (bullet.active)
 						continue;
@@ -255,7 +211,7 @@ void main() @trusted {
 			game.over = allBallsLost;
 		}
 
-		if ((game.over || game.won) && rPressed) {
+		if ((game.over || game.won) && game.rPressed) {
 			foreach (ref ball; game.scene.balls) {
 				ball.pos = Pos2(ssz.width / 2 + (game.scene.balls.length - 1) * 20 - 20, ssz.height - 150);
 				ball.vel = game.ballVelocity;
@@ -287,7 +243,9 @@ void main() @trusted {
 
 struct Game {
 	@disable this(this);
-	this(in ScreenSize ssz) @trusted {
+	this(in ScreenSize ssz, SDL_Window* window) @trusted {
+		this.ssz = ssz;
+		this.window = window;
 		joystick = openDefaultJoystick();
 		rng = Random(unpredictableSeed());
 		scene = Scene(paddle: Paddle(shape: Rect(pos: Pos2(ssz.width / 2 - 60, ssz.height - 30), dim: Dim2(250, 20)),
@@ -297,10 +255,56 @@ struct Game {
 					  brickGrid: BrickGrid(nRows: 10, nCols: 15));
 		scene.brickGrid.layout(ssz.width, ssz.height, Colors.DARKGREEN, Colors.DARKRED, Colors.DARKBLUE, Colors.DARKYELLOW);
 	}
+	void processEvents() @trusted {
+		SDL_Event e;
+		while (SDL_PollEvent(&e)) {
+			switch (e.type) {
+			case SDL_EVENT_QUIT:
+				quit = true;
+				break;
+			case SDL_EVENT_KEY_DOWN:
+				if (false)
+					warning(e.key.key);
+				switch (e.key.key) {
+				case SDLK_ESCAPE:
+				case SDLK_q:
+					quit = true;
+					break;
+				case SDLK_LEFT:
+					leftPressed = true;
+					break;
+				case SDLK_RIGHT:
+					rightPressed = true;
+					break;
+				case SDLK_SPACE:
+					spacePressed = true;
+					break;
+				case SDLK_F11:
+					inFullscreen ^= true; // toggle
+					if (!SDL_SetWindowFullscreen(window, inFullscreen))
+						stderr.fprintf("Could not enter fullscreen! SDL_Error: %s\n", SDL_GetError());
+					SDL_GetWindowSize(window, &ssz.width, &ssz.height);
+					break;
+				case SDLK_r:
+					rPressed = true;
+					break;
+				default:
+					break;
+				}
+				break;
+			default:
+				break;
+			}
+		}
+	}
+	ScreenSize ssz;
+	SDL_Window* window;
 	static immutable ballCount = 10;
 	Scene scene;
 	static immutable ballVelocity = Vec2(100, -200);
 	static immutable soundSampleRate = 44100;
+	bool leftPressed, rightPressed, spacePressed, rPressed;
+	bool quit;
 	Joystick joystick;
 	Random rng;
 	bool playMusic;
