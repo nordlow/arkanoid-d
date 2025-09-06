@@ -61,7 +61,7 @@ void main() @trusted {
 		SDL_Quit();
 	}
 
-	auto game = Game(ssz.width, ssz.height);
+	auto game = Game(ssz);
 
 	// Note: Audio generation removed for SDL3 conversion - would need SDL_mixer or similar
 	// Sound[] pianoSounds; // Audio system would need separate implementation
@@ -290,15 +290,15 @@ void main() @trusted {
 
 struct Game {
 	@disable this(this);
-	this(in uint screenWidth, in uint screenHeight) @trusted {
+	this(in ScreenSize ssz) @trusted {
 		joystick = openDefaultJoystick();
 		rng = Random(unpredictableSeed());
-		scene = Scene(paddle: Paddle(shape: Rect(pos: Pos2(screenWidth / 2 - 60, screenHeight - 30), dim: Dim2(250, 20)),
+		scene = Scene(paddle: Paddle(shape: Rect(pos: Pos2(ssz.width / 2 - 60, ssz.height - 30), dim: Dim2(250, 20)),
 									 color: Colors.BLUE),
-					  balls: makeBalls(ballCount, ballVelocity, screenWidth, screenHeight),
+					  balls: makeBalls(ballCount, ballVelocity, ssz.width, ssz.height),
 					  bullets: makeBullets(30),
 					  brickGrid: BrickGrid(nRows: 10, nCols: 15));
-		scene.brickGrid.layout(screenWidth, screenHeight, Colors.DARKGREEN, Colors.DARKRED, Colors.DARKBLUE, Colors.DARKYELLOW);
+		scene.brickGrid.layout(ssz.width, ssz.height, Colors.DARKGREEN, Colors.DARKRED, Colors.DARKBLUE, Colors.DARKYELLOW);
 	}
 	static immutable ballCount = 10;
 	Scene scene;
