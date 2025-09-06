@@ -130,7 +130,6 @@ void main() @trusted {
 				if (game.scene.paddle.shape.pos.x < screenWidth - game.scene.paddle.shape.dim.x)
 					game.scene.paddle.shape.pos.x += 800 * deltaTime;
 			}
-
 			while (const ev = game.joystick.tryNextEvent()) {
 				import nxt.io : writeln;
 				writeln("Read ", ev, ", heldButtons:", game.joystick.getHeldButtons);
@@ -145,13 +144,10 @@ void main() @trusted {
 					}
 				}
 			}
-
 			if (leftHeld && game.scene.paddle.shape.pos.x > 0)
 				moveLeft();
-
 			if (rightHeld && game.scene.paddle.shape.pos.x < screenWidth - game.scene.paddle.shape.dim.x)
 				moveRight();
-
 			if (spacePressed) {
 				foreach (ref bullet; game.scene.bullets) {
 					if (bullet.active)
@@ -163,8 +159,8 @@ void main() @trusted {
 				}
 			}
 
+			// update balls
 			game.scene.balls[].bounceAll();
-
 			foreach (ref ball; game.scene.balls) {
 				if (!ball.active) continue;
 				ball.pos += ball.vel * deltaTime;
@@ -205,6 +201,8 @@ void main() @trusted {
 					ball.active = false;
 				}
 			}
+
+			// update bullets
 			foreach (ref bullet; game.scene.bullets) {
 				if (bullet.active) {
 					bullet.pos += bullet.vel * deltaTime;
@@ -247,6 +245,7 @@ void main() @trusted {
 				}
 			}
 			game.won = allBricksDestroyed;
+
 			bool allBallsLost = true;
 			foreach (const ball; game.scene.balls) {
 				if (ball.active) {
@@ -296,7 +295,7 @@ struct Game {
 									 color: Colors.BLUE),
 					  balls: makeBalls(ballCount, ballVelocity, screenWidth, screenHeight),
 					  bullets: makeBullets(30),
-					  brickGrid: BrickGrid(nRows: 10, nCols: 10));
+					  brickGrid: BrickGrid(nRows: 10, nCols: 15));
 		scene.brickGrid.layout(screenWidth, screenHeight, Colors.DARKGREEN, Colors.DARKRED, Colors.DARKBLUE, Colors.DARKYELLOW);
 	}
 	static immutable ballCount = 10;
