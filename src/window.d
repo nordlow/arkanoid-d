@@ -7,7 +7,7 @@ import sdl3;
 
 struct Window {
 	@disable this(this);
-	this(in ScreenSize ssz, in char* title = "Arkanoid Clone") @trusted {
+	this(in ScreenSize ssz, in char* title) @trusted {
 		_winP = SDL_CreateWindow(title, ssz.width, ssz.height, SDL_WINDOW_RESIZABLE);
 		if (_winP is null) {
 			stderr.fprintf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
