@@ -22,15 +22,19 @@ import joystick;
 @safe:
 
 void main() @trusted {
-	int SCREEN_WIDTH = 1200;
-	int SCREEN_HEIGHT = 800;
+	setLogLevel(LogLevel.info);
+
+	static immutable SCREEN_WIDTH = 1200;
+	static immutable SCREEN_HEIGHT = 800;
+
+	auto ssz = ScreenSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO)) {
 		stderr.fprintf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
 		return;
 	}
 
-	SDL_Window* window = SDL_CreateWindow("Arkanoid Clone", SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_RESIZABLE);
+	SDL_Window* window = SDL_CreateWindow("Arkanoid Clone", ssz.width, ssz.height, SDL_WINDOW_RESIZABLE);
 	if (window is null) {
 		stderr.fprintf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
 		SDL_Quit();
@@ -131,8 +135,7 @@ void main() @trusted {
 					game.scene.paddle.shape.pos.x += 800 * deltaTime;
 			}
 			while (const ev = game.joystick.tryNextEvent()) {
-				import nxt.io : writeln;
-				writeln("Read ", ev, ", heldButtons:", game.joystick.getHeldButtons);
+				info("Read ", ev, ", heldButtons:", game.joystick.getHeldButtons);
 				if (ev.type == JoystickEvent.Type.axisMoved) {
 					if (ev.buttonOrAxis == 0) {
 						if (ev.axisValue < 0) moveLeft();
@@ -277,7 +280,7 @@ void main() @trusted {
 		// Rendering
 		SDL_SetRenderDrawColor(rndr, Colors.BLACK.r, Colors.BLACK.g, Colors.BLACK.b, Colors.BLACK.a);
 		SDL_RenderClear(rndr);
-		game.scene.draw(rndr);
+		game.scene.drawIn(rndr);
 		if (game.won)
 			printf("YOU WON! Press R to restart\n");
 		else if (game.over)
@@ -314,10 +317,10 @@ struct Scene {
 	Ball[] balls;
 	Bullet[] bullets;
 	BrickGrid brickGrid;
-	void draw(SDL_Renderer* rndr) @trusted {
-		brickGrid.draw(rndr);
-		paddle.draw(rndr);
-		balls.draw(rndr);
-		bullets.draw(rndr);
+	void drawIn(SDL_Renderer* rndr) @trusted {
+		brickGrid.drawIn(rndr);
+		paddle.drawIn(rndr);
+		balls.drawIn(rndr);
+		bullets.drawIn(rndr);
 	}
 }

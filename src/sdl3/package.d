@@ -4,6 +4,11 @@ public import nxt.color : Color = ColorRGBA, ColorHSV;
 
 nothrow:
 
+struct ScreenSize {
+	int width;
+	int height;
+}
+
 int SDL_SetRenderDrawColor(SDL_Renderer* renderer, in Color color) {
 	version(D_Coverage) {} else pragma(inline, true);
 	return SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);

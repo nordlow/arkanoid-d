@@ -15,7 +15,7 @@ struct Paddle {
 		SDL_FRect frect;
 	}
 	Color color;
-	void draw(SDL_Renderer* rndr) const nothrow @trusted {
+	void drawIn(SDL_Renderer* rndr) const nothrow @trusted {
 		SDL_SetRenderDrawColor(rndr, color);
 		SDL_RenderFillRect(rndr, &frect);
 	}
@@ -27,7 +27,7 @@ struct Ball {
 	Vec2 vel;
 	Color color;
 	bool active;
-	void draw(SDL_Renderer* rndr) const nothrow @trusted {
+	void drawIn(SDL_Renderer* rndr) const nothrow @trusted {
 		if (active) {
 			SDL_SetRenderDrawColor(rndr, color.r, color.g, color.b, color.a);
 			drawFilledCircle(rndr, cast(int)pos.x, cast(int)pos.y, cast(int)rad);
@@ -35,7 +35,7 @@ struct Ball {
 	}
 }
 
-// Helper function to draw filled circle using SDL rectangles
+// Helper function to drawIn filled circle using SDL rectangles
 void drawFilledCircle(SDL_Renderer* rndr, int centerX, int centerY, int radius) nothrow @trusted {
 	for (int y = -radius; y <= radius; y++) {
 		for (int x = -radius; x <= radius; x++) {
@@ -102,7 +102,7 @@ struct Bullet {
 	Vec2 vel;
 	Color color;
 	bool active;
-	void draw(SDL_Renderer* rndr) const nothrow @trusted {
+	void drawIn(SDL_Renderer* rndr) const nothrow @trusted {
 		if (!active)
 			return;
 		SDL_SetRenderDrawColor(rndr, color);
@@ -164,8 +164,8 @@ struct RectGrid(Ent) {
 		}
 	}
 
-	void draw(SDL_Renderer* rndr) nothrow {
-		ents.draw(rndr);
+	void drawIn(SDL_Renderer* rndr) nothrow {
+		ents.drawIn(rndr);
 	}
 
 	inout(Ent)[] opSlice() inout return => ents;
@@ -192,7 +192,7 @@ nothrow:
 		isFlashing = true; // start
 		flashTimer = 0.0f; // restart
 	}
-	void draw(SDL_Renderer* rndr) const @trusted {
+	void drawIn(SDL_Renderer* rndr) const @trusted {
 		if (active || isFlashing) {
 			Color drawColor = color;
 			if (isFlashing) {
@@ -208,7 +208,7 @@ nothrow:
 }
 
 /++ Draw generic entities `ents`. +/
-void draw(T)(in T[] ents, SDL_Renderer* rndr) {
+void drawIn(T)(in T[] ents, SDL_Renderer* rndr) {
 	foreach (const ref ent; ents)
-		ent.draw(rndr);
+		ent.drawIn(rndr);
 }
