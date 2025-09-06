@@ -145,18 +145,18 @@ struct RectGrid(Ent) {
 			foreach (const col; 0 .. nCols) {
 				const index = row * nCols + col;
 
-				// Calculate interpolation factors (0.0 to 1.0) for row and column
+				// calculate interpolation factors (0.0 to 1.0) for row and column
 				const t_col = cast(float)col / (nCols - 1);
 				const t_row = cast(float)row / (nRows - 1);
 
-				// Interpolate colors horizontally at the top and bottom of the grid
+				// interpolate colors horizontally at the top and bottom of the grid
 				const top_lerp = lerp(topLeft, topRight, t_col);
 				const bottom_lerp = lerp(bottomLeft, bottomRight, t_col);
 
-				// Interpolate vertically to find the final color for the current entity
+				// interpolate vertically to find the final color for the current entity
 				const finalColor = lerp(top_lerp, bottom_lerp, t_row);
 
-				// Set the entity's position, dimensions, and color
+				// set the entity's position, dimensions, and color
 				ents[index] = Ent(shape: Rect(pos: Pos2(cast(int)(col * entWidth), cast(int)(row * entHeight)),
 											  dim: Dim2(cast(int)(entWidth - 2), cast(int)(entHeight - 2))),
 								  color: finalColor, true);
