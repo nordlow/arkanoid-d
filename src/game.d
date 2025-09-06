@@ -10,6 +10,7 @@ import sdl3;
 import aliases;
 import renderer;
 import entities;
+import window;
 import music;
 import waves;
 import joystick;
@@ -19,9 +20,9 @@ import joystick;
 struct Game {
 	import std.random : Random, unpredictableSeed;
 	@disable this(this);
-	this(in ScreenSize ssz, SDL_Window* window) @trusted {
+	this(in ScreenSize ssz) @trusted {
 		this.ssz = ssz;
-		this.window = window;
+		this.win = Window(ssz);
 		joystick = openDefaultJoystick();
 		rng = Random(unpredictableSeed());
 		scene = Scene(paddle: Paddle(shape: Rect(pos: Pos2(ssz.width / 2 - 60, ssz.height - 30), dim: Dim2(250, 20)),
@@ -57,9 +58,9 @@ struct Game {
 					break;
 				case SDLK_F11:
 					inFullscreen ^= true; // toggle
-					if (!SDL_SetWindowFullscreen(window, inFullscreen))
+					if (!SDL_SetWindowFullscreen(win._win, inFullscreen))
 						warning("Could not enter fullscreen! SDL_Error: %s\n", SDL_GetError());
-					SDL_GetWindowSize(window, &ssz.width, &ssz.height);
+					SDL_GetWindowSize(win._win, &ssz.width, &ssz.height);
 					break;
 				case SDLK_r:
 					rPressed = true;
@@ -74,7 +75,7 @@ struct Game {
 		}
 	}
 	ScreenSize ssz;
-	SDL_Window* window;
+	Window win;
 	static immutable ballCount = 10;
 	Scene scene;
 	static immutable ballVelocity = Vec2(100, -200);

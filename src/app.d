@@ -34,31 +34,11 @@ void main() @trusted {
 		return;
 	}
 
-	auto window = SDL_CreateWindow("Arkanoid Clone", ssz.width, ssz.height, SDL_WINDOW_RESIZABLE);
-	if (window is null) {
-		stderr.fprintf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
-		SDL_Quit();
-		return;
-	}
-
-	auto rndr = SDL_CreateRenderer(window, null);
-	if (rndr is null) {
-		stderr.fprintf("Renderer could not be created! SDL_Error: %s\n", SDL_GetError());
-		SDL_DestroyWindow(window);
-		SDL_Quit();
-		return;
-	}
-
-	if (!SDL_SetRenderVSync(rndr, 1))
-		stderr.fprintf("Warning: VSync not supported\n");
-
 	scope(exit) {
-		SDL_DestroyRenderer(rndr);
-		SDL_DestroyWindow(window);
 		SDL_Quit();
 	}
 
-	auto game = Game(ssz, window);
+	auto game = Game(ssz);
 
 	// Note: Audio generation removed for SDL3 conversion - would need SDL_mixer or similar
 	// Sound[] pianoSounds; // Audio system would need separate implementation
@@ -230,13 +210,13 @@ void main() @trusted {
 		}
 
 		// Rendering
-		SDL_SetRenderDrawColor(rndr, Colors.BLACK.r, Colors.BLACK.g, Colors.BLACK.b, Colors.BLACK.a);
-		SDL_RenderClear(rndr);
-		game.scene.drawIn(rndr);
+		SDL_SetRenderDrawColor(game.win._rndr, Colors.BLACK.r, Colors.BLACK.g, Colors.BLACK.b, Colors.BLACK.a);
+		SDL_RenderClear(game.win._rndr);
+		game.scene.drawIn(game.win._rndr);
 		if (game.won)
 			printf("YOU WON! Press R to restart\n");
 		else if (game.over)
 			printf("GAME OVER! Press R to restart\n");
-		SDL_RenderPresent(rndr);
+		SDL_RenderPresent(game.win._rndr);
 	}
 }
