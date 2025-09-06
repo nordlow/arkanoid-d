@@ -24,8 +24,8 @@ import joystick;
 void main() @trusted {
 	setLogLevel(LogLevel.info);
 
-	static immutable SCREEN_WIDTH = 1200;
-	static immutable SCREEN_HEIGHT = 800;
+	static immutable SCREEN_WIDTH = 800;
+	static immutable SCREEN_HEIGHT = 600;
 
 	auto ssz = ScreenSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 
@@ -42,8 +42,7 @@ void main() @trusted {
 	}
 
 	// Get actual screen size after fullscreen
-	int screenWidth, screenHeight;
-	SDL_GetWindowSize(window, &screenWidth, &screenHeight);
+	SDL_GetWindowSize(window, &ssz.width, &ssz.height);
 
 	SDL_Renderer* rndr = SDL_CreateRenderer(window, null);
 	if (rndr is null) {
@@ -62,7 +61,7 @@ void main() @trusted {
 		SDL_Quit();
 	}
 
-	auto game = Game(screenWidth, screenHeight);
+	auto game = Game(ssz.width, ssz.height);
 
 	// Note: Audio generation removed for SDL3 conversion - would need SDL_mixer or similar
 	// Sound[] pianoSounds; // Audio system would need separate implementation
@@ -131,7 +130,7 @@ void main() @trusted {
 					game.scene.paddle.shape.pos.x -= 800 * deltaTime;
 			}
 			void moveRight() {
-				if (game.scene.paddle.shape.pos.x < screenWidth - game.scene.paddle.shape.dim.x)
+				if (game.scene.paddle.shape.pos.x < ssz.width - game.scene.paddle.shape.dim.x)
 					game.scene.paddle.shape.pos.x += 800 * deltaTime;
 			}
 			while (const ev = game.joystick.tryNextEvent()) {
@@ -149,7 +148,7 @@ void main() @trusted {
 			}
 			if (leftHeld && game.scene.paddle.shape.pos.x > 0)
 				moveLeft();
-			if (rightHeld && game.scene.paddle.shape.pos.x < screenWidth - game.scene.paddle.shape.dim.x)
+			if (rightHeld && game.scene.paddle.shape.pos.x < ssz.width - game.scene.paddle.shape.dim.x)
 				moveRight();
 			if (spacePressed) {
 				foreach (ref bullet; game.scene.bullets) {
@@ -167,7 +166,7 @@ void main() @trusted {
 			foreach (ref ball; game.scene.balls) {
 				if (!ball.active) continue;
 				ball.pos += ball.vel * deltaTime;
-				if (ball.pos.x <= ball.rad || ball.pos.x >= screenWidth - ball.rad) {
+				if (ball.pos.x <= ball.rad || ball.pos.x >= ssz.width - ball.rad) {
 					ball.vel.x *= -1;
 					// game.wallSound.PlaySound(); // Audio removed
 				}
@@ -200,7 +199,7 @@ void main() @trusted {
 						break;
 					}
 				}
-				if (ball.pos.y > screenHeight) {
+				if (ball.pos.y > ssz.height) {
 					ball.active = false;
 				}
 			}
@@ -261,11 +260,11 @@ void main() @trusted {
 
 		if ((game.over || game.won) && rPressed) {
 			foreach (ref ball; game.scene.balls) {
-				ball.pos = Pos2(screenWidth / 2 + (game.scene.balls.length - 1) * 20 - 20, screenHeight - 150);
+				ball.pos = Pos2(ssz.width / 2 + (game.scene.balls.length - 1) * 20 - 20, ssz.height - 150);
 				ball.vel = game.ballVelocity;
 				ball.active = true;
 			}
-			game.scene.paddle.shape.pos = Pos2(screenWidth / 2 - 60, screenHeight - 30);
+			game.scene.paddle.shape.pos = Pos2(ssz.width / 2 - 60, ssz.height - 30);
 			foreach (ref brick; game.scene.brickGrid[]) {
 				brick.active = true;
 				brick.isFlashing = false;
