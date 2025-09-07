@@ -1,8 +1,10 @@
 module sdl3;
 
+public import sdl3.log;
+
 public import nxt.color : Color = ColorRGBA, ColorHSV;
 
-nothrow:
+nothrow @nogc:
 
 struct ScreenSize {
 	int width;
@@ -14,8 +16,7 @@ int SDL_SetRenderDrawColor(SDL_Renderer* renderer, in Color color) {
 	return SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
 }
 
-// SDL3 extern(C) function declarations
-extern(C) @nogc:
+extern(C):
 
 // Forward declarations
 struct SDL_Window;

@@ -24,6 +24,9 @@ import game;
 void main() @trusted {
 	setLogLevel(LogLevel.info);
 
+	SDL_SetLogPriority(SDL_LogCategory.SDL_LOG_CATEGORY_APPLICATION,
+					   SDL_LogPriority.SDL_LOG_PRIORITY_TRACE);
+
 	static immutable SCREEN_WIDTH = 800;
 	static immutable SCREEN_HEIGHT = 600;
 
