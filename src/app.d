@@ -5,11 +5,13 @@ import core.stdc.math : fabs, sqrtf;
 import std.random : uniform, Random, unpredictableSeed;
 import std.math : abs, sqrt;
 
+import nxt.algorithm.searching;
 import nxt.logger;
 import nxt.geometry;
 import nxt.interpolation;
 import nxt.color;
 import nxt.colors;
+import nxt.io;
 
 import sdl3;
 import aliases;
@@ -21,11 +23,13 @@ import game;
 
 @safe:
 
-void main() @trusted {
+void main(string[] args) @trusted {
 	setLogLevel(LogLevel.info);
 
-	SDL_SetLogPriority(SDL_LogCategory.SDL_LOG_CATEGORY_APPLICATION,
-					   SDL_LogPriority.SDL_LOG_PRIORITY_TRACE);
+	if (args.canFindAmong(["-v", "--verbose"]))
+		SDL_SetLogPriorities(SDL_LogPriority.SDL_LOG_PRIORITY_TRACE);
+	if (args.canFindAmong(["-h", "--help"]))
+		ewriteln("Help");
 
 	static immutable SCREEN_WIDTH = 800;
 	static immutable SCREEN_HEIGHT = 600;
