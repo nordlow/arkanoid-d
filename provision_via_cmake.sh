@@ -3,7 +3,6 @@
 set -euo pipefail
 
 if [ ! -d "SDL/.git" ]; then
-  echo "Cloning SDL..."
   git clone https://github.com/libsdl-org/SDL.git
 else
   git -C SDL pull
