@@ -19,3 +19,4 @@ cmake --build . --config Release --parallel
 cmake --install . --config Release
 
 popd
+popd
