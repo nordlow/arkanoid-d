@@ -73,16 +73,18 @@ void main(string[] args) @trusted {
 				if (game.scene.paddle.shape.pos.x < ssz.width - game.scene.paddle.shape.dim.x)
 					game.scene.paddle.shape.pos.x += 800 * deltaTime;
 			}
-			while (const ev = game.joystick.tryNextEvent()) {
-				info("Read ", ev, ", heldButtons:", game.joystick.getHeldButtons);
-				if (ev.type == JoystickEvent.Type.axisMoved) {
-					if (ev.buttonOrAxis == 0) {
-						if (ev.axisValue < 0) moveLeft();
-						else if (ev.axisValue > 0) moveRight();
-					}
-					if (ev.buttonOrAxis == 6) {
-						if (ev.axisValue < 0) moveLeft();
-						else if (ev.axisValue > 0) moveRight();
+			if (game.joystick.isValid) {
+				while (const ev = game.joystick.tryNextEvent()) {
+					info("Read ", ev, ", heldButtons:", game.joystick.getHeldButtons);
+					if (ev.type == JoystickEvent.Type.axisMoved) {
+						if (ev.buttonOrAxis == 0) {
+							if (ev.axisValue < 0) moveLeft();
+							else if (ev.axisValue > 0) moveRight();
+						}
+						if (ev.buttonOrAxis == 6) {
+							if (ev.axisValue < 0) moveLeft();
+							else if (ev.axisValue > 0) moveRight();
+						}
 					}
 				}
 			}
