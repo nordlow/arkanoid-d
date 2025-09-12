@@ -67,7 +67,7 @@ Ball[] makeBalls(uint count, Vel2 velocity, uint screenWidth, uint screenHeight)
 							  screenHeight / 16 + i),
 					vel: velocity,
 					rad: 15,
-					color: Colors.GOLD, // TODO: HSV(uniform(0, 1), 0.5, 0.5).toRGBA,
+					color: Colors.STEELBLUE, // TODO: HSV(uniform(0, 1), 0.5, 0.5).toRGBA,
 					active: true);
 	return ret;
 }
