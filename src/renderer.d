@@ -10,10 +10,10 @@ struct Renderer {
 	@disable this(this);
 nothrow:
 	this(scope ref Window win, immutable char* name = null) @trusted {
-		_ptr = SDL_CreateRenderer(win._winP, name);
+		_ptr = SDL_CreateRenderer(win._ptr, name);
 		if (_ptr is null) {
 			stderr.fprintf("Renderer could not be created! SDL_Error: %s\n", SDL_GetError());
-			SDL_DestroyWindow(win._winP);
+			SDL_DestroyWindow(win._ptr);
 			SDL_Quit();
 			return;
 		}

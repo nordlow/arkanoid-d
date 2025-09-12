@@ -13,11 +13,11 @@ struct Window {
 
 		/+ if (fullscreen) +/
 		/+	flags |= SDL_WINDOW_FULLSCREEN_DESKTOP; +/
-		_winP = SDL_CreateWindow(title, ssz.width, ssz.height, flags);
+		_ptr = SDL_CreateWindow(title, ssz.width, ssz.height, flags);
 		if (fullscreen)
-			SDL_SetWindowFullscreen(_winP, true);
+			SDL_SetWindowFullscreen(_ptr, true);
 
-		if (_winP is null) {
+		if (_ptr is null) {
 			stderr.fprintf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
 			SDL_Quit();
 			return;
@@ -25,14 +25,14 @@ struct Window {
 		rdr = Renderer(this);
 	}
 	~this() nothrow @nogc @trusted {
-		SDL_DestroyWindow(_winP);
+		SDL_DestroyWindow(_ptr);
 	}
 	ScreenSize size() @property @trusted {
 		typeof(return) ssz;
-		SDL_GetWindowSize(_winP, &ssz.width, &ssz.height);
+		SDL_GetWindowSize(_ptr, &ssz.width, &ssz.height);
 		return ssz;
 	}
-	SDL_Window* _winP;
-	invariant(_winP);
+	SDL_Window* _ptr;
+	invariant(_ptr);
 	Renderer rdr;
 }
