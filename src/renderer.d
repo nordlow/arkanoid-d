@@ -8,6 +8,7 @@ import sdl3;
 
 struct Renderer {
 	@disable this(this);
+nothrow:
 	this(scope ref Window win, immutable char* name = null) @trusted {
 		_rdrP = SDL_CreateRenderer(win._winP, name);
 		if (_rdrP is null) {
@@ -19,7 +20,7 @@ struct Renderer {
 		if (!SDL_SetRenderVSync(_rdrP, 1))
 			stderr.fprintf("Warning: VSync not supported\n");
 	}
-	~this() nothrow @nogc @trusted {
+	~this() @nogc @trusted {
 		SDL_DestroyRenderer(_rdrP);
 	}
 	SDL_Renderer* _rdrP;
