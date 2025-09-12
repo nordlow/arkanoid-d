@@ -6,9 +6,8 @@ import sdl3;
 
 @safe:
 
-struct Renderer {
+nothrow struct Renderer {
 	@disable this(this);
-nothrow:
 	this(scope ref Window win, immutable char* name = null) @trusted {
 		_ptr = SDL_CreateRenderer(win._ptr, name);
 		if (_ptr is null) {

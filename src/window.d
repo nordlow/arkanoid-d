@@ -6,9 +6,8 @@ import renderer;
 
 @safe:
 
-struct Window {
+nothrow struct Window {
 	@disable this(this);
-nothrow:
 	this(in ScreenSize ssz, in char* title, bool fullscreen = false) @trusted {
 		uint flags = SDL_WINDOW_RESIZABLE;
 
