@@ -96,7 +96,8 @@ void main(string[] args) @trusted {
 				foreach (ref bullet; game.scene.bullets) {
 					if (bullet.active)
 						continue;
-					bullet.pos = Pos2(game.scene.paddle.shape.pos.x + game.scene.paddle.shape.dim.x / 2, game.scene.paddle.shape.pos.y);
+					bullet.pos = Pos2(game.scene.paddle.shape.pos.x + game.scene.paddle.shape.dim.x / 2,
+									  game.scene.paddle.shape.pos.y);
 					bullet.active = true;
 					// game.shootSound.PlaySound(); // Audio removed
 					break;
