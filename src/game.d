@@ -95,17 +95,14 @@ struct Scene {
 	Ball[] balls;
 	Bullet[] bullets;
 	BrickGrid brickGrid;
-	void drawIn(SDL_Renderer* rdr) @trusted {
-		SDL_SetRenderDrawColor(rdr,
-							   Colors.BLACK.r,
-							   Colors.BLACK.g,
-							   Colors.BLACK.b,
+	void drawIn(scope ref Renderer rdr) @trusted {
+		SDL_SetRenderDrawColor(rdr._ptr, Colors.BLACK.r, Colors.BLACK.g, Colors.BLACK.b,
 							   Colors.BLACK.a);
-		SDL_RenderClear(rdr);
+		SDL_RenderClear(rdr._ptr);
 		brickGrid.drawIn(rdr);
 		paddle.drawIn(rdr);
 		balls.drawIn(rdr);
 		bullets.drawIn(rdr);
-		SDL_RenderPresent(rdr);
+		SDL_RenderPresent(rdr._ptr);
 	}
 }

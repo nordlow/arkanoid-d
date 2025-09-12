@@ -6,6 +6,7 @@ import nxt.colors;
 
 import sdl3;
 import aliases;
+import renderer;
 
 @safe:
 
@@ -15,9 +16,9 @@ struct Paddle {
 		SDL_FRect frect;
 	}
 	Color color;
-	void drawIn(SDL_Renderer* rdr) const nothrow @trusted {
-		SDL_SetRenderDrawColor(rdr, color);
-		SDL_RenderFillRect(rdr, &frect);
+	void drawIn(scope ref Renderer rdr) const nothrow @trusted {
+		SDL_SetRenderDrawColor(rdr._ptr, color);
+		SDL_RenderFillRect(rdr._ptr, &frect);
 	}
 }
 
@@ -27,10 +28,10 @@ struct Ball {
 	Vel2 vel;
 	Color color;
 	bool active;
-	void drawIn(SDL_Renderer* rdr) const nothrow @trusted {
+	void drawIn(scope ref Renderer rdr) const nothrow @trusted {
 		if (active) {
-			SDL_SetRenderDrawColor(rdr, color.r, color.g, color.b, color.a);
-			drawFilledCircle(rdr, cast(int)pos.x, cast(int)pos.y, cast(int)rad);
+			SDL_SetRenderDrawColor(rdr._ptr, color.r, color.g, color.b, color.a);
+			drawFilledCircle(rdr._ptr, cast(int)pos.x, cast(int)pos.y, cast(int)rad);
 		}
 	}
 }
@@ -103,12 +104,12 @@ struct Bullet {
 	Vel2 vel;
 	Color color;
 	bool active;
-	void drawIn(SDL_Renderer* rdr) const nothrow @trusted {
+	void drawIn(scope ref Renderer rdr) const nothrow @trusted {
 		if (!active)
 			return;
-		SDL_SetRenderDrawColor(rdr, color);
+		SDL_SetRenderDrawColor(rdr._ptr, color);
 		auto frect = SDL_FRect(x: pos.x-rad, y: pos.y-rad, w: 2*rad, h: 2*rad);
-		SDL_RenderFillRect(rdr, &frect);
+		SDL_RenderFillRect(rdr._ptr, &frect);
 	}
 }
 
@@ -165,7 +166,7 @@ struct RectGrid(Ent) {
 		}
 	}
 
-	void drawIn(SDL_Renderer* rdr) nothrow {
+	void drawIn(scope ref Renderer rdr) nothrow {
 		ents.drawIn(rdr);
 	}
 
@@ -193,7 +194,7 @@ nothrow:
 		isFlashing = true; // start
 		flashTimer = 0.0f; // restart
 	}
-	void drawIn(SDL_Renderer* rdr) const @trusted {
+	void drawIn(scope ref Renderer rdr) const @trusted {
 		if (active || isFlashing) {
 			Color drawColor = color;
 			if (isFlashing) {
@@ -202,14 +203,14 @@ nothrow:
 				if (cast(int)(flashTimer * 10) % 2 == 0)
 					drawColor = Colors.WHITE;
 			}
-			SDL_SetRenderDrawColor(rdr, drawColor.r, drawColor.g, drawColor.b, drawColor.a);
-			SDL_RenderFillRect(rdr, &frect);
+			SDL_SetRenderDrawColor(rdr._ptr, drawColor.r, drawColor.g, drawColor.b, drawColor.a);
+			SDL_RenderFillRect(rdr._ptr, &frect);
 		}
 	}
 }
 
 /++ Draw generic entities `ents`. +/
-void drawIn(T)(in T[] ents, SDL_Renderer* rdr) {
+void drawIn(T)(in T[] ents, scope ref Renderer rdr) {
 	foreach (const ref ent; ents)
 		ent.drawIn(rdr);
 }
