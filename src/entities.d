@@ -11,14 +11,11 @@ import renderer;
 @safe:
 
 struct Paddle {
-	union {
-		Rect shape;
-		SDL_FRect frect;
-	}
+	Rect shape;
 	Color color;
 	void drawIn(scope ref Renderer rdr) const nothrow @trusted {
 		SDL_SetRenderDrawColor(rdr._ptr, color);
-		SDL_RenderFillRect(rdr._ptr, &frect);
+		SDL_RenderFillRect(rdr._ptr, cast(SDL_FRect*)&shape);
 	}
 }
 
