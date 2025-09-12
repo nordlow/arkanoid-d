@@ -51,7 +51,8 @@ Ball[] makeBalls(uint count, Vel2 ballVelocity, uint screenWidth, uint screenHei
 	typeof(return) ret;
 	ret.length = count;
 	foreach (const i, ref ball; ret)
-		ball = Ball(pos: Pos2(screenWidth / 2 + i * 20 - 20, screenHeight - 150),
+		ball = Ball(pos: Pos2(screenWidth / 2 + i,
+							  screenHeight / 16 + i),
 					vel: ballVelocity,
 					rad: 15,
 					color: Colors.GRAY,

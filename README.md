@@ -3,6 +3,7 @@
 Just type `dub` to run.
 
 ## TODO
+- Adjust moves of balls so they don't go outside the border.
 - Record sound effects sounds and play upon events such as bounce
 - Add rotation property
 - Represent velocity as vector
@@ -10,7 +11,6 @@ Just type `dub` to run.
   - update `Game` `Scene` graph
   - draw `Game` `Scene` graph
 + Blinka till på brickorna när det träffas av bollen
-+ Gör färgskala i brickor
 + Sten brickor som inte går sönder
 + Längre paddel och flera paddlar
 + Göra paddeln rundad som i riktiga Arkanoid
