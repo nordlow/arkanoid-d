@@ -108,15 +108,16 @@ void main(string[] args) @trusted {
 			game.scene.balls[].bounceAll();
 			foreach (ref ball; game.scene.balls) {
 				if (!ball.active) continue;
+
 				ball.pos += ball.vel * deltaTime;
-				if (ball.pos.x <= ball.rad || ball.pos.x >= ssz.width - ball.rad) {
-					ball.vel.x *= -1;
-					// game.wallSound.PlaySound(); // Audio removed
-				}
-				if (ball.pos.y <= ball.rad) {
-					ball.vel.y *= -1;
-					// game.wallSound.PlaySound(); // Audio removed
-				}
+
+				// handle bounce against left|right wall
+				if (ball.pos.x <= ball.rad || ball.pos.x >= ssz.width - ball.rad)
+					ball.vel.x *= -1; // flip x velocity. TODO: bounce sound
+				// handle bounce against top wall
+				if (ball.pos.y <= ball.rad)
+					ball.vel.y *= -1; // flip y velocity. TODO: bounce sound
+
 				if (ball.pos.y + ball.rad >= game.scene.paddle.shape.pos.y
 					&& ball.pos.y - ball.rad
 					<= game.scene.paddle.shape.pos.y + game.scene.paddle.shape.dim.y
