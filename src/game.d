@@ -78,7 +78,7 @@ struct Game {
 	Window win;
 	static immutable ballCount = 100;
 	Scene scene;
-	static immutable ballVelocity = Vec2(300, -300);
+	static immutable ballVelocity = Vel2(300, -300);
 	static immutable soundSampleRate = 44100;
 	bool leftPressed, rightPressed, spacePressed, rPressed;
 	bool quit;

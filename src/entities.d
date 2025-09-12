@@ -24,7 +24,7 @@ struct Paddle {
 struct Ball {
 	Pos2 pos;
 	float rad;
-	Vec2 vel;
+	Vel2 vel;
 	Color color;
 	bool active;
 	void drawIn(SDL_Renderer* rdr) const nothrow @trusted {
@@ -47,7 +47,7 @@ void drawFilledCircle(SDL_Renderer* rdr, int centerX, int centerY, int radius) n
 	}
 }
 
-Ball[] makeBalls(uint count, Vec2 ballVelocity, uint screenWidth, uint screenHeight) {
+Ball[] makeBalls(uint count, Vel2 ballVelocity, uint screenWidth, uint screenHeight) {
 	typeof(return) ret;
 	ret.length = count;
 	foreach (const i, ref ball; ret)
@@ -99,7 +99,7 @@ void bounceAll(ref Ball[] balls) pure nothrow @nogc {
 struct Bullet {
 	Pos2 pos;
 	float rad;
-	Vec2 vel;
+	Vel2 vel;
 	Color color;
 	bool active;
 	void drawIn(SDL_Renderer* rdr) const nothrow @trusted {

@@ -3,6 +3,9 @@
 Just type `dub` to run.
 
 ## TODO
+- Record sound effects sounds and play upon events such as bounce
+- Add rotation property
+- Represent velocity as vector
 - Use static introspection to
   - update `Game` `Scene` graph
   - draw `Game` `Scene` graph
