@@ -2,6 +2,7 @@ module window;
 
 import core.stdc.stdio;
 import sdl3;
+import renderer;
 
 @safe:
 
@@ -21,21 +22,10 @@ struct Window {
 			SDL_Quit();
 			return;
 		}
-
-		// TODO: Extract to Renderer:
-		_rdrP = SDL_CreateRenderer(_winP, null);
-		if (_rdrP is null) {
-			stderr.fprintf("Renderer could not be created! SDL_Error: %s\n", SDL_GetError());
-			SDL_DestroyWindow(_winP);
-			SDL_Quit();
-			return;
-		}
-		if (!SDL_SetRenderVSync(_rdrP, 1))
-			stderr.fprintf("Warning: VSync not supported\n");
-
+		rdr = Renderer(this);
 	}
 	~this() nothrow @nogc @trusted {
-		SDL_DestroyRenderer(_rdrP);
+		SDL_DestroyRenderer(rdr._rdrP);
 		SDL_DestroyWindow(_winP);
 	}
 	ScreenSize size() @property @trusted {
@@ -44,5 +34,5 @@ struct Window {
 		return ssz;
 	}
 	SDL_Window* _winP;
-	SDL_Renderer* _rdrP;
+	Renderer rdr;
 }

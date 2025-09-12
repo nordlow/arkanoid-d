@@ -220,18 +220,18 @@ void main(string[] args) @trusted {
 		}
 
 		// Rendering
-		SDL_SetRenderDrawColor(game.win._rdrP,
+		SDL_SetRenderDrawColor(game.win.rdr._rdrP,
 							   Colors.BLACK.r,
 							   Colors.BLACK.g,
 							   Colors.BLACK.b,
 							   Colors.BLACK.a);
-		SDL_RenderClear(game.win._rdrP);
+		SDL_RenderClear(game.win.rdr._rdrP);
 
-		game.scene.drawIn(game.win._rdrP);
+		game.scene.drawIn(game.win.rdr._rdrP);
 		if (game.won)
 			printf("YOU WON! Press R to restart\n");
 		else if (game.over)
 			printf("GAME OVER! Press R to restart\n");
-		SDL_RenderPresent(game.win._rdrP);
+		SDL_RenderPresent(game.win.rdr._rdrP);
 	}
 }
