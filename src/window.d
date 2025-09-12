@@ -25,7 +25,6 @@ struct Window {
 		rdr = Renderer(this);
 	}
 	~this() nothrow @nogc @trusted {
-		SDL_DestroyRenderer(rdr._rdrP);
 		SDL_DestroyWindow(_winP);
 	}
 	ScreenSize size() @property @trusted {

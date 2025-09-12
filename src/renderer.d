@@ -19,5 +19,8 @@ struct Renderer {
 		if (!SDL_SetRenderVSync(_rdrP, 1))
 			stderr.fprintf("Warning: VSync not supported\n");
 	}
+	~this() nothrow @nogc @trusted {
+		SDL_DestroyRenderer(_rdrP);
+	}
 	SDL_Renderer* _rdrP;
 }
