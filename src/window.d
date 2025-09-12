@@ -33,5 +33,6 @@ struct Window {
 		return ssz;
 	}
 	SDL_Window* _winP;
+	invariant(_winP);
 	Renderer rdr;
 }
