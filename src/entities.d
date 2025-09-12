@@ -1,8 +1,12 @@
 module entities;
 
 import nxt.geometry;
-import nxt.color : Color = ColorRGBA, ColorHSV, lerp;
+import nxt.color;
+alias Color = ColorRGBA;
 import nxt.colors;
+
+import std.random : Random, uniform;
+import nxt.sampling : sample;
 
 import sdl3;
 import aliases;
@@ -54,15 +58,16 @@ void drawFilledCircle(SDL_Renderer* rdr, int centerX, int centerY, int radius) n
 	}
 }
 
-Ball[] makeBalls(uint count, Vel2 ballVelocity, uint screenWidth, uint screenHeight) {
+Ball[] makeBalls(uint count, Vel2 velocity, uint screenWidth, uint screenHeight) {
+	auto rnd = Random();
 	typeof(return) ret;
 	ret.length = count;
 	foreach (const i, ref ball; ret)
 		ball = Ball(pos: Pos2(screenWidth / 2 + i,
 							  screenHeight / 16 + i),
-					vel: ballVelocity,
+					vel: velocity,
 					rad: 15,
-					color: Colors.GRAY,
+					color: Colors.GOLD, // TODO: HSV(uniform(0, 1), 0.5, 0.5).toRGBA,
 					active: true);
 	return ret;
 }

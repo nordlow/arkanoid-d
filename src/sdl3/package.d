@@ -3,6 +3,7 @@ module sdl3;
 public import sdl3.log;
 
 public import nxt.color : Color = ColorRGBA, ColorHSV;
+alias HSV = ColorHSV;
 
 nothrow @nogc:
 
