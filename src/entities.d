@@ -59,6 +59,7 @@ void drawFilledCircle(SDL_Renderer* rdr, int centerX, int centerY, int radius) n
 }
 
 Ball[] makeBalls(uint count, Vel2 velocity, uint screenWidth, uint screenHeight) {
+	import nxt.io.dbg;
 	auto rnd = Random();
 	typeof(return) ret;
 	ret.length = count;
