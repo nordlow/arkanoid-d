@@ -4,11 +4,20 @@ module aliases;
 
 import nxt.geometry;
 
+/++ Position. +/
 alias Pos2 = Point!(float, 2);
 
+/++ Vector. +/
 alias Vec2 = Vector!(float, 2, false);
-alias Dim2 = Vector!(float, 2);
-alias Vel2 = Vector!(float, 2, false);
+
+/++ Direction. +/
 alias Dir2 = Vector!(float, 2, true);
 
+/++ Dimension(s). +/
+alias Dim2 = Vector!(float, 2);
+
+/++ Velocity. +/
+alias Vel2 = Vector!(float, 2, false);
+
+/++ Rectangle. +/
 alias Rect = Rectangle!(float);
