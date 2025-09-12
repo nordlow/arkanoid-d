@@ -172,7 +172,7 @@ void main(string[] args) @trusted {
 				}
 			}
 
-			// Update logic for flashing bricks
+			// update logic for flashing bricks. TODO: Move to generic entity color animator
 			foreach (ref brick; game.scene.brickGrid[]) {
 				if (brick.isFlashing) {
 					brick.flashTimer += deltaTime;
