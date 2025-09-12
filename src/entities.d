@@ -187,7 +187,7 @@ struct Brick {
 	Color color;
 	bool active;
 	bool isFlashing = false;
-	float flashTimer = 0.0f; // Timer for flashing duration.
+	float flashTimer = 0.0f;
 nothrow:
 	void restartFlashing() scope pure @nogc {
 		isFlashing = true; // start
