@@ -106,3 +106,28 @@ struct Scene {
 		SDL_RenderPresent(rdr._ptr);
 	}
 }
+
+void animateBullets(scope ref Scene scene, float deltaTime) @trusted {
+	foreach (ref bullet; scene.bullets) {
+		if (!bullet.active)
+			continue;
+		bullet.pos += bullet.vel * deltaTime;
+		if (bullet.pos.y < 0)
+			bullet.active = false;
+		foreach (ref brick; scene.brickGrid[]) {
+			if (!brick.active || brick.isFlashing)
+				continue;
+			if (bullet.pos.x + bullet.rad >= brick.shape.pos.x
+							&& bullet.pos.x - bullet.rad
+							<= brick.shape.pos.x + brick.shape.size.x
+							&& bullet.pos.y + bullet.rad >= brick.shape.pos.y
+							&& bullet.pos.y - bullet.rad
+							<= brick.shape.pos.y + brick.shape.size.y) {
+								brick.restartFlashing();
+								bullet.active = false;
+								// PlaySound(game.brickSound); // Audio removed
+								break;
+							}
+		}
+	}
+}

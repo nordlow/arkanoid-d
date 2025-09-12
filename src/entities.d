@@ -170,7 +170,7 @@ struct RectGrid(Ent) {
 		ents.drawIn(rdr);
 	}
 
-	inout(Ent)[] opSlice() inout return => ents;
+	inout(Ent)[] opSlice() inout return scope => ents;
 
 	uint nRows; ///< Number of nRows.
 	uint nCols; ///< Number of columns.

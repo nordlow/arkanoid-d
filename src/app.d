@@ -169,28 +169,7 @@ void main(string[] args) @trusted {
 			infof("Active: %s/%s", nBallsActive, game.scene.balls.length);
 
 			// update bullets
-			foreach (ref bullet; game.scene.bullets) {
-				if (bullet.active) {
-					bullet.pos += bullet.vel * deltaTime;
-					if (bullet.pos.y < 0)
-						bullet.active = false;
-					foreach (ref brick; game.scene.brickGrid[]) {
-						if (!brick.active || brick.isFlashing)
-							continue;
-						if (bullet.pos.x + bullet.rad >= brick.shape.pos.x
-							&& bullet.pos.x - bullet.rad
-							<= brick.shape.pos.x + brick.shape.size.x
-							&& bullet.pos.y + bullet.rad >= brick.shape.pos.y
-							&& bullet.pos.y - bullet.rad
-							<= brick.shape.pos.y + brick.shape.size.y) {
-							brick.restartFlashing();
-							bullet.active = false;
-							// PlaySound(game.brickSound); // Audio removed
-							break;
-						}
-					}
-				}
-			}
+			game.scene.animateBullets(deltaTime);
 
 			// update logic for flashing bricks. TODO: Move to generic entity color animator
 			foreach (ref brick; game.scene.brickGrid[]) {
