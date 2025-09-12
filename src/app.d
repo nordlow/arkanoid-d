@@ -124,8 +124,7 @@ void main(string[] args) @trusted {
 					<= game.scene.paddle.shape.pos.y + game.scene.paddle.shape.dim.y
 					&& ball.pos.x >= game.scene.paddle.shape.pos.x
 					&& ball.pos.x <= game.scene.paddle.shape.pos.x + game.scene.paddle.shape.dim.x) {
-					ball.vel.y = -abs(ball.vel.y);
-					// game.paddleSound.PlaySound(); // Audio removed
+					ball.vel.y = -abs(ball.vel.y); // TODO: bounce sound
 					const float hitPos = (ball.pos.x - game.scene.paddle.shape.pos.x) / game.scene.paddle.shape.dim.x;
 					ball.vel.x = 200 * (hitPos - 0.5f) * 2;
 				}
@@ -221,7 +220,6 @@ void main(string[] args) @trusted {
 			game.won = false;
 		}
 
-		// Rendering
 		SDL_SetRenderDrawColor(game.win.rdr._ptr,
 							   Colors.BLACK.r,
 							   Colors.BLACK.g,
