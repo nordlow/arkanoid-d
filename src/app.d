@@ -118,6 +118,7 @@ void main(string[] args) @trusted {
 				if (ball.pos.y <= ball.rad)
 					ball.vel.y *= -1; // flip y velocity. TODO: bounce sound
 
+				// ball bounce against paddle
 				if (ball.pos.y + ball.rad >= game.scene.paddle.shape.pos.y
 					&& ball.pos.y - ball.rad
 					<= game.scene.paddle.shape.pos.y + game.scene.paddle.shape.dim.y
@@ -128,6 +129,7 @@ void main(string[] args) @trusted {
 					const float hitPos = (ball.pos.x - game.scene.paddle.shape.pos.x) / game.scene.paddle.shape.dim.x;
 					ball.vel.x = 200 * (hitPos - 0.5f) * 2;
 				}
+
 				foreach (ref brick; game.scene.brickGrid[]) {
 					if (!brick.active || brick.isFlashing)
 						continue;
