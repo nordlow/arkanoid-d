@@ -14,6 +14,7 @@ struct Window {
 			SDL_Quit();
 			return;
 		}
+		SDL_SetWindowFullscreen(_winP, true);
 		// TODO: Extract to Renderer:
 		_rdrP = SDL_CreateRenderer(_winP, null);
 		if (_rdrP is null) {

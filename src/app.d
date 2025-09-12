@@ -31,8 +31,8 @@ void main(string[] args) @trusted {
 	if (args.canFindAmong(["-h", "--help"]))
 		ewriteln("Help");
 
-	static immutable SCREEN_WIDTH = 800;
-	static immutable SCREEN_HEIGHT = 600;
+	static immutable SCREEN_WIDTH = 1920;
+	static immutable SCREEN_HEIGHT = 1200;
 
 	auto ssz = ScreenSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 

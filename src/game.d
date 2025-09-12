@@ -25,11 +25,11 @@ struct Game {
 		this.win = Window(ssz, "Arkanoid Clone");
 		joystick = openDefaultJoystick();
 		rng = Random(unpredictableSeed());
-		scene = Scene(paddle: Paddle(shape: Rect(pos: Pos2(ssz.width / 2 - 60, ssz.height - 30), dim: Dim2(250, 20)),
+		scene = Scene(paddle: Paddle(shape: Rect(pos: Pos2(ssz.width / 2 - 60, ssz.height - 30), dim: Dim2(150, 20)),
 									 color: Colors.BLUE),
 					  balls: makeBalls(ballCount, ballVelocity, ssz.width, ssz.height),
 					  bullets: makeBullets(30),
-					  brickGrid: BrickGrid(nRows: 10, nCols: 15));
+					  brickGrid: BrickGrid(nRows: 20, nCols: 30));
 		scene.brickGrid.layout(ssz.width, ssz.height, Colors.DARKGREEN, Colors.DARKRED, Colors.DARKBLUE, Colors.DARKYELLOW);
 	}
 	void processEvents() @trusted {
@@ -76,9 +76,9 @@ struct Game {
 	}
 	ScreenSize ssz;
 	Window win;
-	static immutable ballCount = 10;
+	static immutable ballCount = 100;
 	Scene scene;
-	static immutable ballVelocity = Vec2(100, -200);
+	static immutable ballVelocity = Vec2(300, -300);
 	static immutable soundSampleRate = 44100;
 	bool leftPressed, rightPressed, spacePressed, rPressed;
 	bool quit;
