@@ -221,6 +221,7 @@ void main(string[] args) @trusted {
 		}
 
 		game.scene.drawIn(game.win.rdr._ptr);
+
 		if (game.won)
 			printf("YOU WON! Press R to restart\n");
 		else if (game.over)
