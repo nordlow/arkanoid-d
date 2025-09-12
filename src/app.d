@@ -106,8 +106,12 @@ void main(string[] args) @trusted {
 
 			// update balls
 			game.scene.balls[].bounceAll();
+
+			uint nBallsActive; // number of active balls
 			foreach (ref ball; game.scene.balls) {
-				if (!ball.active) continue;
+				if (!ball.active)
+					continue;
+				nBallsActive++;
 
 				ball.pos += ball.vel * deltaTime;
 
@@ -117,6 +121,21 @@ void main(string[] args) @trusted {
 				// handle bounce against top wall
 				if (ball.pos.y <= ball.rad)
 					ball.vel.y *= -1; // flip y velocity. TODO: bounce sound
+
+				// snap ball inside region
+				enum EPS = 0.01f;
+				if (ball.pos.x <= ball.rad) {
+					ball.pos.x = ball.rad + EPS;
+					ball.vel.x = abs(ball.vel.x); // ensure moving right
+				}
+				if (ball.pos.x >= ssz.width - ball.rad) {
+					ball.pos.x = (ssz.width - ball.rad) - EPS;
+					ball.vel.x = -abs(ball.vel.x); // ensure moving left
+				}
+				if (ball.pos.y <= ball.rad) {
+					ball.pos.y = ball.rad + EPS;
+					ball.vel.y = abs(ball.vel.y); // ensure moving down
+				}
 
 				// ball bounce against paddle
 				if (ball.pos.y + ball.rad >= game.scene.paddle.shape.pos.y
@@ -147,6 +166,7 @@ void main(string[] args) @trusted {
 				if (ball.pos.y > ssz.height)
 					ball.active = false;
 			}
+			infof("Active: %s/%s", nBallsActive, game.scene.balls.length);
 
 			// update bullets
 			foreach (ref bullet; game.scene.bullets) {
