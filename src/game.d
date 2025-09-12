@@ -96,9 +96,16 @@ struct Scene {
 	Bullet[] bullets;
 	BrickGrid brickGrid;
 	void drawIn(SDL_Renderer* rdr) @trusted {
+		SDL_SetRenderDrawColor(rdr,
+							   Colors.BLACK.r,
+							   Colors.BLACK.g,
+							   Colors.BLACK.b,
+							   Colors.BLACK.a);
+		SDL_RenderClear(rdr);
 		brickGrid.drawIn(rdr);
 		paddle.drawIn(rdr);
 		balls.drawIn(rdr);
 		bullets.drawIn(rdr);
+		SDL_RenderPresent(rdr);
 	}
 }
