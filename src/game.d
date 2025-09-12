@@ -76,7 +76,7 @@ struct Game {
 	}
 	ScreenSize ssz;
 	Window win;
-	static immutable ballCount = 100;
+	static immutable ballCount = 100; // boll antal
 	Scene scene;
 	static immutable ballVelocity = Vel2(300, -300);
 	static immutable soundSampleRate = 44100;

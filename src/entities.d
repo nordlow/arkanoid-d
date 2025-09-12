@@ -156,7 +156,8 @@ struct RectGrid(Ent) {
 				const finalColor = t_row.lerp(top_lerp, bottom_lerp);
 
 				// set the entity's position, dimensions, and color
-				ents[index] = Ent(shape: Rect(pos: Pos2(cast(int)(col * entWidth), cast(int)(row * entHeight)),
+				ents[index] = Ent(shape: Rect(pos: Pos2(cast(int)(col * entWidth ),
+														screenHeight/8 + cast(int)(row * entHeight)),
 											  dim: Dim2(cast(int)(entWidth - 2), cast(int)(entHeight - 2))),
 								  color: finalColor, true);
 			}
