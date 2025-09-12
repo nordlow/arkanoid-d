@@ -32,7 +32,8 @@ struct Window {
 		SDL_GetWindowSize(_ptr, &ssz.width, &ssz.height);
 		return ssz;
 	}
+	Renderer rdr;
+private:
 	SDL_Window* _ptr;
 	invariant(_ptr);
-	Renderer rdr;
 }
