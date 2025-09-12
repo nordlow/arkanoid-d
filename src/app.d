@@ -142,9 +142,8 @@ void main(string[] args) @trusted {
 						break;
 					}
 				}
-				if (ball.pos.y > ssz.height) {
+				if (ball.pos.y > ssz.height)
 					ball.active = false;
-				}
 			}
 
 			// update bullets
