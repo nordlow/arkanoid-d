@@ -17,7 +17,7 @@ import joystick;
 
 @safe:
 
-struct Game {
+nothrow struct Game {
 	import std.random : Random, unpredictableSeed;
 	@disable this(this);
 	this(in ScreenSize ssz) @trusted {
