@@ -10,6 +10,15 @@ import renderer;
 
 @safe:
 
+struct Box {
+	Rect shape;
+	Color color;
+	void drawIn(scope ref Renderer rdr) const nothrow @trusted {
+		SDL_SetRenderDrawColor(rdr._ptr, color);
+		SDL_RenderFillRect(rdr._ptr, cast(SDL_FRect*)&shape);
+	}
+}
+
 struct Paddle {
 	Rect shape;
 	Color color;
