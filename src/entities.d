@@ -96,6 +96,7 @@ void bounceAll(ref Ball[] balls) pure nothrow @nogc {
 }
 
 struct Bullet {
+	// TODO: Use Rect
 	Pos2 pos;
 	float rad;
 	Vel2 vel;
@@ -178,10 +179,7 @@ alias BrickGrid = RectGrid!Brick;
 
 struct Brick {
 	static immutable float FLASH_DURATION = 0.3f;
-	union {
-		Rect shape;
-		SDL_FRect frect;
-	}
+	Rect shape;
 	Color color;
 	bool active;
 	bool isFlashing = false;
@@ -201,7 +199,7 @@ nothrow:
 					drawColor = Colors.WHITE;
 			}
 			SDL_SetRenderDrawColor(rdr._ptr, drawColor.r, drawColor.g, drawColor.b, drawColor.a);
-			SDL_RenderFillRect(rdr._ptr, &frect);
+			SDL_RenderFillRect(rdr._ptr, cast(SDL_FRect*)&shape);
 		}
 	}
 }
