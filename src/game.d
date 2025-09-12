@@ -22,7 +22,7 @@ struct Game {
 	@disable this(this);
 	this(in ScreenSize ssz) @trusted {
 		this.ssz = ssz;
-		this.win = Window(ssz, "Arkanoid Clone");
+		this.win = Window(ssz, "Arkanoid Clone", fullscreen: true);
 		joystick = openDefaultJoystick();
 		rng = Random(unpredictableSeed());
 		scene = Scene(paddle: Paddle(shape: Rect(pos: Pos2(ssz.width / 2 - 60, ssz.height - 30), dim: Dim2(150, 20)),

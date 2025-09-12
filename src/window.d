@@ -7,14 +7,21 @@ import sdl3;
 
 struct Window {
 	@disable this(this);
-	this(in ScreenSize ssz, in char* title) @trusted {
-		_winP = SDL_CreateWindow(title, ssz.width, ssz.height, SDL_WINDOW_RESIZABLE);
+	this(in ScreenSize ssz, in char* title, bool fullscreen = false) @trusted {
+		uint flags = SDL_WINDOW_RESIZABLE;
+
+		/+ if (fullscreen) +/
+		/+	flags |= SDL_WINDOW_FULLSCREEN_DESKTOP; +/
+		_winP = SDL_CreateWindow(title, ssz.width, ssz.height, flags);
+		if (fullscreen)
+			SDL_SetWindowFullscreen(_winP, true);
+
 		if (_winP is null) {
 			stderr.fprintf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
 			SDL_Quit();
 			return;
 		}
-		SDL_SetWindowFullscreen(_winP, true);
+
 		// TODO: Extract to Renderer:
 		_rdrP = SDL_CreateRenderer(_winP, null);
 		if (_rdrP is null) {
