@@ -23,7 +23,7 @@ nothrow struct Renderer {
 	~this() @nogc @trusted {
 		SDL_DestroyRenderer(_ptr);
 	}
-	int setDrawColor(in RGBA color) @trusted @il
+	int setDrawColor(in RGBA color) nothrow @trusted @il
 		=> SDL_SetRenderDrawColor(_ptr, color.r, color.g, color.b, color.a);
 	SDL_Renderer* _ptr;
 	invariant(_ptr);
