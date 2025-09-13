@@ -13,7 +13,7 @@ import nxt.color;
 import nxt.colors;
 import nxt.io;
 
-import sdl3;
+import sdl;
 import aliases;
 import entities;
 import music;

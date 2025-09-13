@@ -6,7 +6,7 @@ import nxt.interpolation;
 import nxt.color;
 import nxt.colors;
 
-import sdl3;
+import sdl;
 import aliases;
 import renderer;
 import entities;

@@ -68,4 +68,4 @@ struct AudioStream {
     }
 }
 
-import sdl3;
+import sdl;

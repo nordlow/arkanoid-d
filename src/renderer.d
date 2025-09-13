@@ -2,7 +2,7 @@ module renderer;
 
 import core.stdc.stdio;
 import window;
-import sdl3;
+import sdl;
 
 @safe:
 

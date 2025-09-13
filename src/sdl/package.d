@@ -1,6 +1,6 @@
-module sdl3;
+module sdl;
 
-public import sdl3.log;
+public import sdl.log;
 
 public import nxt.color : Color = ColorRGBA, ColorHSV;
 alias HSV = ColorHSV;

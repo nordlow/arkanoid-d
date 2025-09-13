@@ -8,7 +8,7 @@ import nxt.colors;
 import std.random : Random, uniform;
 import nxt.sampling : sample;
 
-import sdl3;
+import sdl;
 import aliases;
 import renderer;
 
