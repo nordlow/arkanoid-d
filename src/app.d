@@ -75,7 +75,7 @@ void main(string[] args) @trusted {
 			}
 			if (game.joystick.isValid) {
 				while (const ev = game.joystick.tryNextEvent()) {
-					infof("Read %s heldButtons:", game.joystick.getHeldButtons);
+					tracef("Read %s heldButtons:", game.joystick.getHeldButtons);
 					if (ev.type == JoystickEvent.Type.axisMoved) {
 						if (ev.buttonOrAxis == 0) {
 							if (ev.axisValue < 0) moveLeft();

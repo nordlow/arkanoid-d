@@ -180,6 +180,7 @@ struct RectGrid(Ent) {
 				const t_col = cast(float)col / (nCols - 1);
 				const t_row = cast(float)row / (nRows - 1);
 				// interpolate colors horizontally at the top and bottom of the grid
+				import nxt.interpolation : lerp;
 				const top_lerp = t_col.lerp(topLeft, topRight);
 				const bottom_lerp = t_col.lerp(bottomLeft, bottomRight);
 				// interpolate vertically to find the final color for the current entity
