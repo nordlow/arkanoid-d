@@ -28,15 +28,12 @@ nothrow struct Renderer {
 }
 
 void drawFilledCircle(scope ref Renderer rdr, int centerX, int centerY, int radius) nothrow @trusted {
-	uint n;
 	for (auto y = -radius; y <= radius; y++) {
 		for (auto x = -radius; x <= radius; x++) {
 			if (x*x + y*y <= radius*radius) {
 				const rect = SDL_FRect(centerX + x, centerY + y, 1, 1);
 				SDL_RenderFillRect(rdr._ptr, &rect);
-				++n;
 			}
 		}
 	}
-	warningf("Count:%s", n);
 }
