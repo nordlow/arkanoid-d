@@ -15,8 +15,7 @@ import renderer;
 @safe:
 
 struct Circle {
-	Pos2 center;
-	float radius;
+	Cir shape;
 	RGBA color;
 	// TODO: move these to `Renderer` for all objects in scene which
 	// may require each entity to reference an immutable set of

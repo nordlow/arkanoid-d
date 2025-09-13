@@ -28,6 +28,8 @@ struct Triangle {
 }
 alias Tri = Triangle;
 
+alias Cir = Circle!(float);
+
 /++ Quadangle. +/
 struct Quadangle {
 	Pos2[4] vertices;
