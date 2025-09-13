@@ -25,7 +25,7 @@ nothrow struct Game {
 		this.win = Window(ssz, "Arkanoid Clone", fullscreen: true);
 		joystick = openDefaultJoystick();
 		rng = Random(unpredictableSeed());
-		scene = Scene(paddle: Paddle(shape: Rect(pos: Pos(ssz.width / 2 - 60, ssz.height - 30), size: Dim2(150, 20)),
+		scene = Scene(paddle: Paddle(shape: Rect(pos: Pos(ssz.width / 2 - 60, ssz.height - 30), size: Dim(150, 20)),
 									 color: Colors.BLUE),
 					  balls: makeBalls(ballCount, ballVelocity, ssz.width, ssz.height),
 					  bullets: makeBullets(30),

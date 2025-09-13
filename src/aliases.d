@@ -14,7 +14,7 @@ alias Vec = Vector!(float, 2, false);
 alias Dir = Vector!(float, 2, true);
 
 /++ Dimension(s). +/
-alias Dim2 = Vector!(float, 2);
+alias Dim = Vector!(float, 2);
 
 /++ Velocity. +/
 alias Vel = Vector!(float, 2, false);

@@ -182,7 +182,7 @@ struct RectGrid(Ent) {
 				// set the entity's position, dimensions, and color
 				ents[index] = Ent(shape: Rect(pos: Pos(cast(int)(col * entWidth ),
 														screenHeight/8 + cast(int)(row * entHeight)),
-											  size: Dim2(cast(int)(entWidth - 2), cast(int)(entHeight - 2))),
+											  size: Dim(cast(int)(entWidth - 2), cast(int)(entHeight - 2))),
 								  color: finalColor, true);
 			}
 		}
