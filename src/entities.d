@@ -34,6 +34,7 @@ private:
 
 struct Paddle {
 	Rect shape;
+	alias this = shape;
 	RGBA color;
 	void drawIn(scope ref Renderer rdr) const scope nothrow @trusted {
 		SDL_SetRenderDrawColor(rdr._ptr, color.r, color.g, color.b, color.a);
