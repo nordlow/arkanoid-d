@@ -1,13 +1,11 @@
 module joystick;
 
-import core.sys.posix.poll;
+import base;
+
 import core.sys.posix.fcntl;
 import core.sys.posix.unistd;
 import core.sys.posix.stdio;
 import core.stdc.errno;
-
-import nxt.io;
-import nxt.logger;
 
 @safe:
 
@@ -94,6 +92,7 @@ nothrow:
 	 + Note: Automatically updates the internal button hold state tracking.
 	 +/
 	JoystickEvent tryNextEvent() @trusted in(isValid) {
+		import core.sys.posix.poll : pollfd, poll, POLLIN;
 		alias R = typeof(return);
 
 		js_event rawEvent;
@@ -143,9 +142,9 @@ private:
 extern (C) {
 	struct js_event {
 		uint time;	   // event timestamp in milliseconds
-		short value;   // (axis) value
+		short value;	 // (axis) value
 		ubyte type;	   // event type
-		ubyte number;  // axis/button number
+		ubyte number;	// axis/button number
 	}
 
 	enum {

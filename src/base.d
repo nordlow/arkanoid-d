@@ -12,6 +12,8 @@ public import nxt.geometry;
 public import nxt.color;
 public import nxt.colors;
 public import nxt.logger;
+public import nxt.io;
+public import nxt.io.dbg;
 public import nxt.sampling : sample;
 
 public import sdl;

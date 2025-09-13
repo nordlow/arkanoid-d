@@ -9,7 +9,6 @@ import nxt.colors;
 import sdl;
 import base;
 import entities;
-import window;
 import music;
 import waves;
 import joystick;

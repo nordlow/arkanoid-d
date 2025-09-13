@@ -5,7 +5,6 @@ import std.string : fromStringz;
 import nxt.lut;
 import nxt.logger;
 import nxt.effects;
-import window;
 import sdl;
 
 @safe:

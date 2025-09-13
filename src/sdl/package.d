@@ -1,6 +1,7 @@
 module sdl;
 
 public import sdl.log;
+public import sdl.window;
 public import sdl.renderer;
 
 public import nxt.color;

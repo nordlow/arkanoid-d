@@ -1,4 +1,4 @@
-module window;
+module sdl.window;
 
 import base;
 
