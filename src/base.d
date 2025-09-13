@@ -1,6 +1,8 @@
 module base;
 
+version(none) public import core.stdc.errno;
 public import core.stdc.stdio;
+
 public import std.math;
 public import std.string : fromStringz, toStringz;
 public import std.random : Random, uniform;

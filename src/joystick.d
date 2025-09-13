@@ -2,8 +2,6 @@ module joystick;
 
 import base;
 
-import core.stdc.errno;
-
 @safe:
 
 Joystick openDefaultJoystick() nothrow
