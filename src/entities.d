@@ -14,6 +14,20 @@ import renderer;
 
 @safe:
 
+struct Circle {
+	enum vertexCount = 32;
+	Pos2 center;
+	float radius;
+	Color color;
+	private SDL_Vertex[vertexCount] _vertices;
+	void tesselate() {
+	}
+	void drawIn(scope ref Renderer rdr) const nothrow @trusted {
+		SDL_SetRenderDrawColor(rdr._ptr, color);
+		version(none) SDL_RenderGeometry(renderer, NULL, vertices, 3, NULL, 0);
+	}
+}
+
 struct Box {
 	Rect shape;
 	Color color;

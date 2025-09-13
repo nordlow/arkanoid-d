@@ -7,9 +7,18 @@ alias HSV = ColorHSV;
 
 nothrow @nogc:
 
-struct ScreenSize {
-	int width;
-	int height;
+struct SDL_Point { int x, y; }
+struct SDL_FPoint { float x, y; }
+struct SDL_Color { ubyte r, g, b, a; }
+struct SDL_FColor { float r, g, b, a; }
+struct SDL_FRect { float x, y, w, h; }
+struct SDL_Rect { int x, y, w, h; }
+struct ScreenSize { int width; int height; }
+
+struct SDL_Vertex {
+	SDL_FPoint position; /**< Vertex position, in SDL_Renderer coordinates	*/
+	SDL_FColor color; /**< Vertex color */
+	SDL_FPoint tex_coord; /**< Normalized texture coordinates, if needed */
 }
 
 int SDL_SetRenderDrawColor(SDL_Renderer* renderer, in Color color) {
@@ -52,19 +61,6 @@ version(linux) {
 // Scan codes
 enum uint SDL_SCANCODE_LEFT = 80;
 enum uint SDL_SCANCODE_RIGHT = 79;
-
-// Structures
-struct SDL_Color {
-	ubyte r, g, b, a;
-}
-
-struct SDL_FRect {
-	float x, y, w, h;
-}
-
-struct SDL_Rect {
-	int x, y, w, h;
-}
 
 struct SDL_KeyboardEvent {
 	uint type;
