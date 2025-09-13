@@ -1,5 +1,7 @@
 module sdl.log;
 
+version(none) :
+
 nothrow @nogc:
 
 import core.stdc.stdarg : va_list;

@@ -3,7 +3,9 @@ module sdl;
 public import sdl.log;
 public import nxt.color;
 
-/+ TODO: public import sdl.SDL; +/
+public import sdl.SDL;
+
+struct ScreenSize { int width; int height; }
 
 alias RGBA = ColorRGBA;
 alias HSV = ColorHSV;
@@ -16,17 +18,11 @@ struct SDL_Color { ubyte r, g, b, a; }
 struct SDL_FColor { float r, g, b, a; }
 struct SDL_FRect { float x, y, w, h; }
 struct SDL_Rect { int x, y, w, h; }
-struct ScreenSize { int width; int height; }
 
 struct SDL_Vertex {
 	SDL_FPoint position; /**< Vertex position, in SDL_Renderer coordinates	*/
 	SDL_FColor color; /**< Vertex color */
 	SDL_FPoint tex_coord; /**< Normalized texture coordinates, if needed */
-}
-
-int SDL_SetRenderDrawColor(SDL_Renderer* renderer, in RGBA color) {
-	version(D_Coverage) {} else pragma(inline, true);
-	return SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
 }
 
 extern(C):

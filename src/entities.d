@@ -36,7 +36,7 @@ struct Paddle {
 	Rect shape;
 	RGBA color;
 	void drawIn(scope ref Renderer rdr) const scope nothrow @trusted {
-		SDL_SetRenderDrawColor(rdr._ptr, color);
+		SDL_SetRenderDrawColor(rdr._ptr, color.r, color.g, color.b, color.a);
 		SDL_RenderFillRect(rdr._ptr, cast(SDL_FRect*)&shape);
 	}
 }
@@ -117,7 +117,7 @@ struct Bullet {
 	void drawIn(scope ref Renderer rdr) const scope nothrow @trusted {
 		if (!active)
 			return;
-		SDL_SetRenderDrawColor(rdr._ptr, color);
+		SDL_SetRenderDrawColor(rdr._ptr, color.r, color.g, color.b, color.a);
 		auto frect = SDL_FRect(x: pos.x-rad, y: pos.y-rad, w: 2*rad, h: 2*rad);
 		SDL_RenderFillRect(rdr._ptr, &frect);
 	}
