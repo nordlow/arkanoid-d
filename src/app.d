@@ -15,7 +15,7 @@ import nxt.colors;
 import nxt.io;
 
 import sdl;
-import aliases;
+import base;
 import entities;
 import music;
 import waves;

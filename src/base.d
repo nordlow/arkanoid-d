@@ -1,8 +1,17 @@
-module aliases;
+module base;
 
-@safe:
+public import nxt.geometry;
+public import nxt.color;
+public import nxt.colors;
+public import nxt.logger;
 
-import nxt.geometry;
+public import std.random : Random, uniform;
+public import nxt.sampling : sample;
+
+public import sdl;
+public import renderer;
+
+alias RGBA = ColorRGBA;
 
 /++ Position. +/
 alias Pos = Point!(float, 2);
@@ -36,3 +45,5 @@ struct Quadangle {
 	Pos[4] vertices;
 }
 alias Quad = Quadangle;
+
+@safe:

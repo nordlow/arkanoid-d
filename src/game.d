@@ -7,7 +7,7 @@ import nxt.color;
 import nxt.colors;
 
 import sdl;
-import aliases;
+import base;
 import renderer;
 import entities;
 import window;
