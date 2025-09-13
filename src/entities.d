@@ -42,10 +42,8 @@ struct Paddle {
 }
 
 struct Ball {
-	Pos position;
-	alias pos = position;
-	float radius;
-	alias rad = radius;
+	Cir shape;
+	alias this = shape;
 	Vel vel;
 	RGBA color;
 	bool active;
@@ -64,10 +62,10 @@ Ball[] makeBalls(uint count, Vel velocity, uint screenWidth, uint screenHeight) 
 	typeof(return) ret;
 	ret.length = count;
 	foreach (const i, ref ball; ret)
-		ball = Ball(pos: Pos(screenWidth / 2 + i,
-							 screenHeight / 16 + i),
+		ball = Ball(shape: Cir(pos: Pos(screenWidth / 2 + i,
+										screenHeight / 16 + i),
+							   rad: 15),
 					vel: velocity,
-					rad: 15,
 					color: HSV(uniform(0.0f, 1.0f, rnd), 0.5f, 0.8f).toRGBA,
 					active: true);
 	return ret;
