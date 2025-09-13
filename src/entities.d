@@ -43,7 +43,7 @@ struct Paddle {
 struct Ball {
 	Pos pos;
 	float rad;
-	Vel2 vel;
+	Vel vel;
 	RGBA color;
 	bool active;
 	void drawIn(scope ref Renderer rdr) const scope nothrow @trusted {
@@ -66,7 +66,7 @@ void drawFilledCircle(SDL_Renderer* rdr, int centerX, int centerY, int radius) n
 	}
 }
 
-Ball[] makeBalls(uint count, Vel2 velocity, uint screenWidth, uint screenHeight) {
+Ball[] makeBalls(uint count, Vel velocity, uint screenWidth, uint screenHeight) {
 	import nxt.io.dbg;
 	auto rnd = Random();
 	typeof(return) ret;
@@ -122,7 +122,7 @@ struct Bullet {
 	// TODO: Use Rect
 	Pos pos;
 	float rad;
-	Vel2 vel;
+	Vel vel;
 	RGBA color;
 	bool active;
 	void drawIn(scope ref Renderer rdr) const scope nothrow @trusted {

@@ -11,13 +11,13 @@ alias Pos = Point!(float, 2);
 alias Vec = Vector!(float, 2, false);
 
 /++ Direction. +/
-alias Dir2 = Vector!(float, 2, true);
+alias Dir = Vector!(float, 2, true);
 
 /++ Dimension(s). +/
 alias Dim2 = Vector!(float, 2);
 
 /++ Velocity. +/
-alias Vel2 = Vector!(float, 2, false);
+alias Vel = Vector!(float, 2, false);
 
 /++ Rectangle. +/
 alias Rect = Rectangle!(float);
@@ -28,6 +28,7 @@ struct Triangle {
 }
 alias Tri = Triangle;
 
+/++ Circle. +/
 alias Cir = Circle!(float);
 
 /++ Quadangle. +/
