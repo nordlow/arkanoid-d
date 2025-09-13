@@ -10,7 +10,6 @@ Just type `dub` to run.
 - Use static introspection to
   - update `Game` `Scene` graph
   - draw `Game` `Scene` graph
-+ Blinka till på brickorna när det träffas av bollen
 + Sten brickor som inte går sönder
 + Längre paddel och flera paddlar
 + Göra paddeln rundad som i riktiga Arkanoid
