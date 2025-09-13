@@ -1,18 +1,6 @@
 module entities;
 
-import nxt.geometry;
-import nxt.color;
-import nxt.colors;
-import nxt.logger;
-
-import std.random : Random, uniform;
-import nxt.sampling : sample;
-
-import sdl;
-import aliases;
-import renderer;
-
-alias RGBA = ColorRGBA;
+import base;
 
 @safe:
 
@@ -40,8 +28,7 @@ struct Ball {
 		rdr.fillRect(SDL_FRect(x: pos.x - rad, y: pos.y - rad, w: d, h: d));
 	}
 private:
-	enum vertexCount = 32;
-	SDL_Vertex[vertexCount] vertices;
+	SDL_Vertex[Renderer.vertexCount] vertices;
 }
 
 Ball[] makeBalls(uint count, Vel velocity, uint screenWidth, uint screenHeight) {

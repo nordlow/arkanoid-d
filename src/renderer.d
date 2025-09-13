@@ -34,7 +34,8 @@ nothrow struct Renderer {
 		=> SDL_RenderFillRect(_ptr, &frect);
 
 	SDL_Renderer* _ptr;
-	SinCosLUT!(float, 64) _sincosLUT;
+	enum vertexCount = 32;
+	SinCosLUT!(float, vertexCount) _sincosLUT;
 	invariant(_ptr);
 }
 
