@@ -1,4 +1,4 @@
-module sdl3.log;
+module sdl.log;
 
 nothrow @nogc:
 
