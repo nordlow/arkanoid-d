@@ -56,6 +56,21 @@ Ball[] makeBalls(uint count, Vel velocity, uint screenWidth, uint screenHeight) 
 	return ret;
 }
 
+struct Bullet {
+	Cir shape;
+	alias this = shape;
+	Vel vel;
+	RGBA color;
+	bool active;
+	void drawIn(scope ref Renderer rdr) const scope nothrow @trusted {
+		if (!active)
+			return;
+		rdr.setDrawColor(color);
+		const d = 2*rad;
+		rdr.fillRect(SDL_FRect(x: pos.x - rad, y: pos.y - rad, w: d, h: d));
+	}
+}
+
 void bounceAll(ref Ball[] balls) pure nothrow @nogc {
 	foreach (i, ref Ball ballA; balls) {
 		foreach (ref Ball ballB; balls[i + 1 .. $]) {
@@ -90,21 +105,6 @@ void bounceAll(ref Ball[] balls) pure nothrow @nogc {
 				ballB.vel = (normal * v2n_prime) + (tangent * v2t);
 			}
 		}
-	}
-}
-
-struct Bullet {
-	Cir shape;
-	alias this = shape;
-	Vel vel;
-	RGBA color;
-	bool active;
-	void drawIn(scope ref Renderer rdr) const scope nothrow @trusted {
-		if (!active)
-			return;
-		rdr.setDrawColor(color);
-		const d = 2*rad;
-		rdr.fillRect(SDL_FRect(x: pos.x - rad, y: pos.y - rad, w: d, h: d));
 	}
 }
 
