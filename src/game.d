@@ -8,7 +8,6 @@ import nxt.colors;
 
 import sdl;
 import base;
-import renderer;
 import entities;
 import window;
 import music;

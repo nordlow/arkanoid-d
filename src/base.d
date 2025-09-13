@@ -15,7 +15,6 @@ public import nxt.logger;
 public import nxt.sampling : sample;
 
 public import sdl;
-public import renderer;
 
 alias RGBA = ColorRGBA;
 

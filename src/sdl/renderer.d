@@ -1,4 +1,4 @@
-module renderer;
+module sdl.renderer;
 
 import core.stdc.stdio;
 import std.string : fromStringz;
