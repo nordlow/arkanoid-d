@@ -12,30 +12,7 @@ alias HSV = ColorHSV;
 
 nothrow @nogc:
 
-struct SDL_Point { int x, y; }
-struct SDL_FPoint { float x, y; }
-struct SDL_Color { ubyte r, g, b, a; }
-struct SDL_FColor { float r, g, b, a; }
-struct SDL_FRect { float x, y, w, h; }
-struct SDL_Rect { int x, y, w, h; }
-
-struct SDL_Vertex {
-	SDL_FPoint position; /**< Vertex position, in SDL_Renderer coordinates	*/
-	SDL_FColor color; /**< Vertex color */
-	SDL_FPoint tex_coord; /**< Normalized texture coordinates, if needed */
-}
-
 extern(C):
-
-// Forward declarations
-struct SDL_Window;
-struct SDL_Renderer;
-struct SDL_Texture;
-struct SDL_Surface;
-
-// Initialization flags
-enum uint SDL_INIT_VIDEO = 0x00000020;
-enum uint SDL_INIT_AUDIO = 0x00000010;
 
 // Window flags
 enum uint SDL_WINDOW_RESIZABLE = 0x00000020;
@@ -57,10 +34,6 @@ version(linux) {
 	enum uint SDLK_r = 114;
 }
 
-// Scan codes
-enum uint SDL_SCANCODE_LEFT = 80;
-enum uint SDL_SCANCODE_RIGHT = 79;
-
 struct SDL_KeyboardEvent {
 	uint type;
 	uint reserved;
@@ -74,16 +47,6 @@ struct SDL_KeyboardEvent {
 	uint mod;
 	ushort raw;
 	ushort unused;
-}
-
-struct SDL_WindowEvent {
-	uint type;
-	uint reserved;
-	ulong timestamp;
-	uint windowID;
-	uint event;
-	int data1;
-	int data2;
 }
 
 union SDL_Event {
