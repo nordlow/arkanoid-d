@@ -48,6 +48,7 @@ void main(string[] args) @trusted {
 	// Sound[] pianoSounds; // Audio system would need separate implementation
 
 	ulong lastFrameTime = SDL_GetTicks();
+	tracef("lastFrameTime: %s", lastFrameTime);
 
 	for (uint frameCounter = 0; !game.quit; ++frameCounter) {
 		const currentFrameTime = SDL_GetTicks();

@@ -42,15 +42,18 @@ struct Paddle {
 }
 
 struct Ball {
-	Pos pos;
-	float rad;
+	Pos position;
+	alias pos = position;
+	float radius;
+	alias rad = radius;
 	Vel vel;
 	RGBA color;
 	bool active;
 	void drawIn(scope ref Renderer rdr) const scope nothrow @trusted {
 		if (active) {
 			SDL_SetRenderDrawColor(rdr._ptr, color.r, color.g, color.b, color.a);
-			rdr.drawFilledCircle(cast(int)pos.x, cast(int)pos.y, cast(int)rad);
+			immutable frect = SDL_FRect(x: pos.x - rad, y: pos.y - rad, w: 2*rad, h:2*rad);
+			SDL_RenderFillRect(rdr._ptr, &frect);
 		}
 	}
 }
@@ -62,7 +65,7 @@ Ball[] makeBalls(uint count, Vel velocity, uint screenWidth, uint screenHeight) 
 	ret.length = count;
 	foreach (const i, ref ball; ret)
 		ball = Ball(pos: Pos(screenWidth / 2 + i,
-							  screenHeight / 16 + i),
+							 screenHeight / 16 + i),
 					vel: velocity,
 					rad: 15,
 					color: HSV(uniform(0.0f, 1.0f, rnd), 0.5f, 0.8f).toRGBA,
