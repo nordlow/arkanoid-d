@@ -25,6 +25,8 @@ nothrow struct Renderer {
 	}
 	int setDrawColor(in RGBA color) nothrow @trusted @il
 		=> SDL_SetRenderDrawColor(_ptr, color.r, color.g, color.b, color.a);
+	int fillRect(in SDL_FRect frect) nothrow @trusted @il
+		=> SDL_RenderFillRect(_ptr, &frect);
 	SDL_Renderer* _ptr;
 	invariant(_ptr);
 }

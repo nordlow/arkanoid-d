@@ -22,7 +22,7 @@ struct Paddle {
 	RGBA color;
 	void drawIn(scope ref Renderer rdr) const scope nothrow @trusted {
 		rdr.setDrawColor(color);
-		SDL_RenderFillRect(rdr._ptr, cast(SDL_FRect*)&shape);
+		rdr.fillRect(*cast(SDL_FRect*)&shape);
 	}
 }
 
@@ -37,8 +37,7 @@ struct Ball {
 			return;
 		rdr.setDrawColor(color);
 		const d = 2* rad;
-		const frect = SDL_FRect(x: pos.x - rad, y: pos.y - rad, w: d, h: d);
-		SDL_RenderFillRect(rdr._ptr, &frect);
+		rdr.fillRect(SDL_FRect(x: pos.x - rad, y: pos.y - rad, w: d, h: d));
 	}
 }
 
