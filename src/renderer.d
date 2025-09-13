@@ -17,7 +17,7 @@ nothrow struct Renderer {
 			SDL_Quit();
 		}
 		if (!SDL_SetRenderVSync(_ptr, 1))
-			warningf("VSync not supported\n");
+			warning("VSync not supported");
 	}
 	~this() @nogc @trusted {
 		SDL_DestroyRenderer(_ptr);
