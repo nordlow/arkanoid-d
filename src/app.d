@@ -166,7 +166,7 @@ void main(string[] args) @trusted {
 				if (ball.pos.y > ssz.height)
 					ball.active = false;
 			}
-			infof("Active: %s/%s", nBallsActive, game.scene.balls.length);
+			tracef("Active: %s/%s", nBallsActive, game.scene.balls.length);
 
 			// update bullets
 			game.scene.animateBullets(deltaTime);
