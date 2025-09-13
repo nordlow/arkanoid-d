@@ -2,7 +2,6 @@ module joystick;
 
 import base;
 
-import core.sys.posix.unistd;
 import core.sys.posix.stdio;
 import core.stdc.errno;
 
@@ -29,6 +28,7 @@ struct JoystickEvent {
 }
 
 struct Joystick {
+	import core.sys.posix.unistd : close, read;
 nothrow:
 	@disable this(this);
 
