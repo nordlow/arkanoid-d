@@ -70,7 +70,7 @@ void main(string[] args) @trusted {
 					game.scene.paddle.shape.pos.x -= 800 * deltaTime;
 			}
 			void moveRight() {
-				if (game.scene.paddle.shape.pos.x < ssz.width - game.scene.paddle.shape.dim.x)
+				if (game.scene.paddle.shape.pos.x < ssz.width - game.scene.paddle.shape.size.x)
 					game.scene.paddle.shape.pos.x += 800 * deltaTime;
 			}
 			if (game.joystick.isValid) {
@@ -90,13 +90,13 @@ void main(string[] args) @trusted {
 			}
 			if (leftHeld && game.scene.paddle.shape.pos.x > 0)
 				moveLeft();
-			if (rightHeld && game.scene.paddle.shape.pos.x < ssz.width - game.scene.paddle.shape.dim.x)
+			if (rightHeld && game.scene.paddle.shape.pos.x < ssz.width - game.scene.paddle.shape.size.x)
 				moveRight();
 			if (game.spacePressed) {
 				foreach (ref bullet; game.scene.bullets) {
 					if (bullet.active)
 						continue;
-					bullet.pos = Pos2(game.scene.paddle.shape.pos.x + game.scene.paddle.shape.dim.x / 2,
+					bullet.pos = Pos2(game.scene.paddle.shape.pos.x + game.scene.paddle.shape.size.x / 2,
 									  game.scene.paddle.shape.pos.y);
 					bullet.active = true;
 					// game.shootSound.PlaySound(); // Audio removed
@@ -140,11 +140,11 @@ void main(string[] args) @trusted {
 				// ball bounce against paddle
 				if (ball.pos.y + ball.rad >= game.scene.paddle.shape.pos.y
 					&& ball.pos.y - ball.rad
-					<= game.scene.paddle.shape.pos.y + game.scene.paddle.shape.dim.y
+					<= game.scene.paddle.shape.pos.y + game.scene.paddle.shape.size.y
 					&& ball.pos.x >= game.scene.paddle.shape.pos.x
-					&& ball.pos.x <= game.scene.paddle.shape.pos.x + game.scene.paddle.shape.dim.x) {
+					&& ball.pos.x <= game.scene.paddle.shape.pos.x + game.scene.paddle.shape.size.x) {
 					ball.vel.y = -abs(ball.vel.y); // TODO: bounce sound
-					const float hitPos = (ball.pos.x - game.scene.paddle.shape.pos.x) / game.scene.paddle.shape.dim.x;
+					const float hitPos = (ball.pos.x - game.scene.paddle.shape.pos.x) / game.scene.paddle.shape.size.x;
 					ball.vel.x = 200 * (hitPos - 0.5f) * 2;
 				}
 
