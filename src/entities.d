@@ -2,7 +2,6 @@ module entities;
 
 import nxt.geometry;
 import nxt.color;
-alias RGBA = ColorRGBA;
 import nxt.colors;
 
 import std.random : Random, uniform;
@@ -11,6 +10,8 @@ import nxt.sampling : sample;
 import sdl;
 import aliases;
 import renderer;
+
+alias RGBA = ColorRGBA;
 
 @safe:
 
