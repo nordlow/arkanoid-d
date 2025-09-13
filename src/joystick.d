@@ -2,7 +2,6 @@ module joystick;
 
 import base;
 
-import core.sys.posix.stdio;
 import core.stdc.errno;
 
 @safe:
