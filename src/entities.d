@@ -23,7 +23,7 @@ struct Circle {
 	auto tesselate(uint vertexCount = 32) scope pure nothrow {
 		return _vertices = new SDL_Vertex[vertexCount];
 	}
-	void drawIn(scope ref Renderer rdr) const nothrow @trusted {
+	void drawIn(scope ref Renderer rdr) const scope nothrow @trusted {
 		SDL_SetRenderDrawColor(rdr._ptr, color);
 		version(none) SDL_RenderGeometry(renderer, NULL, vertices, 3, NULL, 0);
 	}
@@ -34,7 +34,7 @@ private:
 struct Box {
 	Rect shape;
 	RGBA color;
-	void drawIn(scope ref Renderer rdr) const nothrow @trusted {
+	void drawIn(scope ref Renderer rdr) const scope nothrow @trusted {
 		SDL_SetRenderDrawColor(rdr._ptr, color);
 		SDL_RenderFillRect(rdr._ptr, cast(SDL_FRect*)&shape);
 	}
@@ -43,7 +43,7 @@ struct Box {
 struct Paddle {
 	Rect shape;
 	RGBA color;
-	void drawIn(scope ref Renderer rdr) const nothrow @trusted {
+	void drawIn(scope ref Renderer rdr) const scope nothrow @trusted {
 		SDL_SetRenderDrawColor(rdr._ptr, color);
 		SDL_RenderFillRect(rdr._ptr, cast(SDL_FRect*)&shape);
 	}
@@ -55,7 +55,7 @@ struct Ball {
 	Vel2 vel;
 	RGBA color;
 	bool active;
-	void drawIn(scope ref Renderer rdr) const nothrow @trusted {
+	void drawIn(scope ref Renderer rdr) const scope nothrow @trusted {
 		if (active) {
 			SDL_SetRenderDrawColor(rdr._ptr, color.r, color.g, color.b, color.a);
 			drawFilledCircle(rdr._ptr, cast(int)pos.x, cast(int)pos.y, cast(int)rad);
@@ -134,7 +134,7 @@ struct Bullet {
 	Vel2 vel;
 	RGBA color;
 	bool active;
-	void drawIn(scope ref Renderer rdr) const nothrow @trusted {
+	void drawIn(scope ref Renderer rdr) const scope nothrow @trusted {
 		if (!active)
 			return;
 		SDL_SetRenderDrawColor(rdr._ptr, color);
