@@ -32,16 +32,14 @@ void main(string[] args) @trusted {
 	if (args.canFindAmong(["-h", "--help"]))
 		ewriteln("Help");
 
+	// initialize SDL
 	static immutable SCREEN_WIDTH = 1920;
 	static immutable SCREEN_HEIGHT = 1200;
-
 	auto ssz = ScreenSize(SCREEN_WIDTH, SCREEN_HEIGHT);
-
 	if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO)) {
 		warningf("SDL could not initialize! SDL_Error: %s", SDL_GetError().fromStringz());
 		return;
 	}
-
 	scope(exit) { SDL_Quit(); }
 
 	auto game = Game(ssz);
