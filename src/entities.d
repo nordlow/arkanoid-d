@@ -16,22 +16,6 @@ alias RGBA = ColorRGBA;
 
 @safe:
 
-version(none) // TODO: move to renderer
-struct Circle {
-	Cir shape;
-	RGBA color;
-	// TODO: move these to `Renderer` for all objects in scene which
-	// may require each entity to reference an immutable set of
-	auto tesselate(uint vertexCount = 32) scope pure nothrow
-		=> _vertices = new SDL_Vertex[vertexCount];
-	void drawIn(scope ref Renderer rdr) const scope nothrow @trusted {
-		SDL_SetRenderDrawColor(rdr._ptr, color);
-		version(none) SDL_RenderGeometry(renderer, NULL, vertices, 3, NULL, 0);
-	}
-private:
-	SDL_Vertex[] _vertices;
-}
-
 struct Paddle {
 	Rect shape;
 	alias this = shape;
