@@ -86,15 +86,9 @@ void SDL_DestroyTexture(SDL_Texture* texture);
 SDL_Surface* SDL_LoadBMP(const char* file);
 void SDL_DestroySurface(SDL_Surface* surface);
 
-// Event functions
 bool SDL_PollEvent(SDL_Event* event);
 
-// Input functions
 const(ubyte)* SDL_GetKeyboardState(int* numkeys);
-
-// Audio types and constants
-alias SDL_AudioDeviceID = uint;
-struct SDL_AudioStream;
 
 struct SDL_AudioSpec {
 	int freq;
