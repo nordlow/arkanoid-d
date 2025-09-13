@@ -42,9 +42,7 @@ void main(string[] args) @trusted {
 		return;
 	}
 
-	scope(exit) {
-		SDL_Quit();
-	}
+	scope(exit) { SDL_Quit(); }
 
 	auto game = Game(ssz);
 
