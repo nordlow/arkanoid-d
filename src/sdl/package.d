@@ -79,7 +79,6 @@ int SDL_RenderRect(SDL_Renderer* renderer, const SDL_FRect* rect);
 bool SDL_RenderPresent(SDL_Renderer* renderer); // Returns bool in SDL3
 bool SDL_SetRenderVSync(SDL_Renderer* renderer, int vsync);
 
-// Texture and surface functions
 bool SDL_RenderTexture(SDL_Renderer* renderer, SDL_Texture* texture, const SDL_FRect* srcrect, const SDL_FRect* dstrect);
 SDL_Texture* SDL_CreateTextureFromSurface(SDL_Renderer* renderer, SDL_Surface* surface);
 void SDL_DestroyTexture(SDL_Texture* texture);
