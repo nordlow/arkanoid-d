@@ -4,6 +4,7 @@ import core.stdc.math : fabs, sqrtf;
 
 import std.random : uniform, Random, unpredictableSeed;
 import std.math : abs, sqrt;
+import std.string : fromStringz;
 
 import nxt.algorithm.searching;
 import nxt.logger;
@@ -37,7 +38,7 @@ void main(string[] args) @trusted {
 	auto ssz = ScreenSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO)) {
-		stderr.fprintf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
+		warningf("SDL could not initialize! SDL_Error: %s", SDL_GetError().fromStringz());
 		return;
 	}
 

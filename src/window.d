@@ -1,6 +1,8 @@
 module window;
 
 import core.stdc.stdio;
+import std.string : fromStringz;
+import nxt.logger;
 import sdl;
 import renderer;
 
@@ -18,7 +20,7 @@ nothrow struct Window {
 			SDL_SetWindowFullscreen(_ptr, true);
 
 		if (_ptr is null) {
-			stderr.fprintf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
+			warningf("Window could not be created! SDL_Error: %s", SDL_GetError().fromStringz);
 			SDL_Quit();
 			return;
 		}
