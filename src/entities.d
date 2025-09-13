@@ -104,8 +104,7 @@ struct Bullet {
 			return;
 		rdr.setDrawColor(color);
 		const d = 2*rad;
-		const frect = SDL_FRect(x: pos.x-rad, y: pos.y-rad, w: d, h: d);
-		SDL_RenderFillRect(rdr._ptr, &frect);
+		rdr.fillRect(SDL_FRect(x: pos.x - rad, y: pos.y - rad, w: d, h: d));
 	}
 }
 
