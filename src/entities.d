@@ -33,12 +33,12 @@ struct Ball {
 	RGBA color;
 	bool active;
 	void drawIn(scope ref Renderer rdr) const scope nothrow @trusted {
-		if (active) {
-			rdr.setDrawColor(color);
-			const d = 2* rad;
-			const frect = SDL_FRect(x: pos.x - rad, y: pos.y - rad, w: d, h: d);
-			SDL_RenderFillRect(rdr._ptr, &frect);
-		}
+		if (!active)
+			return;
+		rdr.setDrawColor(color);
+		const d = 2* rad;
+		const frect = SDL_FRect(x: pos.x - rad, y: pos.y - rad, w: d, h: d);
+		SDL_RenderFillRect(rdr._ptr, &frect);
 	}
 }
 
