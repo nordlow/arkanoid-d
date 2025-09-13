@@ -16,8 +16,6 @@ Just type `dub` to run.
 + Längre paddel och flera paddlar
 + Göra paddeln rundad som i riktiga Arkanoid
 + Två brickor
-+ Fler bollar
-+ Fler färger
 + Brickor spricker i bitar
 
 <!-- Local Variables: -->
