@@ -36,7 +36,7 @@ struct Ball {
 		if (active) {
 			rdr.setDrawColor(color);
 			const d = 2* rad;
-			immutable frect = SDL_FRect(x: pos.x - rad, y: pos.y - rad, w: d, h: d);
+			const frect = SDL_FRect(x: pos.x - rad, y: pos.y - rad, w: d, h: d);
 			SDL_RenderFillRect(rdr._ptr, &frect);
 		}
 	}
@@ -105,7 +105,7 @@ struct Bullet {
 			return;
 		rdr.setDrawColor(color);
 		const d = 2*rad;
-		auto frect = SDL_FRect(x: pos.x-rad, y: pos.y-rad, w: d, h: d);
+		const frect = SDL_FRect(x: pos.x-rad, y: pos.y-rad, w: d, h: d);
 		SDL_RenderFillRect(rdr._ptr, &frect);
 	}
 }
