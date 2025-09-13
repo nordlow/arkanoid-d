@@ -3,6 +3,7 @@ module entities;
 import nxt.geometry;
 import nxt.color;
 import nxt.colors;
+import nxt.logger;
 
 import std.random : Random, uniform;
 import nxt.sampling : sample;
@@ -49,18 +50,7 @@ struct Ball {
 	void drawIn(scope ref Renderer rdr) const scope nothrow @trusted {
 		if (active) {
 			SDL_SetRenderDrawColor(rdr._ptr, color.r, color.g, color.b, color.a);
-			drawFilledCircle(rdr._ptr, cast(int)pos.x, cast(int)pos.y, cast(int)rad);
-		}
-	}
-}
-
-void drawFilledCircle(SDL_Renderer* rdr, int centerX, int centerY, int radius) nothrow @trusted {
-	for (auto y = -radius; y <= radius; y++) {
-		for (auto x = -radius; x <= radius; x++) {
-			if (x*x + y*y <= radius*radius) {
-				const rect = SDL_FRect(centerX + x, centerY + y, 1, 1);
-				SDL_RenderFillRect(rdr, &rect);
-			}
+			rdr.drawFilledCircle(cast(int)pos.x, cast(int)pos.y, cast(int)rad);
 		}
 	}
 }
