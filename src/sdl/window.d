@@ -20,9 +20,8 @@ nothrow struct Window {
 		}
 		rdr = Renderer(this);
 	}
-	~this() nothrow @nogc @trusted {
-		SDL_DestroyWindow(_ptr);
-	}
+	~this() nothrow @nogc @trusted
+		=> SDL_DestroyWindow(_ptr);
 	ScreenSize size() @property @trusted {
 		typeof(return) ssz;
 		SDL_GetWindowSize(_ptr, &ssz.width, &ssz.height);
