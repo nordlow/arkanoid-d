@@ -39,6 +39,9 @@ struct Ball {
 		const d = 2* rad;
 		rdr.fillRect(SDL_FRect(x: pos.x - rad, y: pos.y - rad, w: d, h: d));
 	}
+private:
+	enum vertexCount = 32;
+	SDL_Vertex[vertexCount] vertices;
 }
 
 Ball[] makeBalls(uint count, Vel velocity, uint screenWidth, uint screenHeight) {
