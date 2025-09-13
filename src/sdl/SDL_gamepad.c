@@ -1,0 +1,1 @@
+../../../../.local/sdl-snapshot/include/SDL3/SDL_gamepad.h
