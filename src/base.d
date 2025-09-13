@@ -1,11 +1,17 @@
 module base;
 
+public import core.stdc.stdio;
+public import std.math;
+public import std.string : fromStringz;
+public import std.random : Random, uniform;
+public import std.algorithm.searching : maxElement;
+public import std.algorithm.iteration : map;
+public import std.algorithm.comparison : min, max, clamp;
+
 public import nxt.geometry;
 public import nxt.color;
 public import nxt.colors;
 public import nxt.logger;
-
-public import std.random : Random, uniform;
 public import nxt.sampling : sample;
 
 public import sdl;

@@ -1,10 +1,6 @@
 module window;
 
-import core.stdc.stdio;
-import std.string : fromStringz;
-import nxt.logger;
-import sdl;
-import renderer;
+import base;
 
 @safe:
 
