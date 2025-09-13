@@ -2,6 +2,7 @@ module renderer;
 
 import core.stdc.stdio;
 import std.string : fromStringz;
+import nxt.lut;
 import nxt.logger;
 import nxt.effects;
 import window;
@@ -19,6 +20,7 @@ nothrow struct Renderer {
 		}
 		if (!SDL_SetRenderVSync(_ptr, 1))
 			warning("VSync not supported");
+		_sincosLUT.fill();
 	}
 	~this() @nogc @trusted {
 		SDL_DestroyRenderer(_ptr);
@@ -28,6 +30,7 @@ nothrow struct Renderer {
 	int fillRect(in SDL_FRect frect) nothrow @trusted @il
 		=> SDL_RenderFillRect(_ptr, &frect);
 	SDL_Renderer* _ptr;
+	SinCosLUT!(float, 64) _sincosLUT;
 	invariant(_ptr);
 }
 
