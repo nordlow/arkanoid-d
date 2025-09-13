@@ -15,6 +15,7 @@ alias RGBA = ColorRGBA;
 
 @safe:
 
+version(none) // TODO: move to renderer
 struct Circle {
 	Cir shape;
 	RGBA color;
@@ -28,15 +29,6 @@ struct Circle {
 	}
 private:
 	SDL_Vertex[] _vertices;
-}
-
-struct Box {
-	Rect shape;
-	RGBA color;
-	void drawIn(scope ref Renderer rdr) const scope nothrow @trusted {
-		SDL_SetRenderDrawColor(rdr._ptr, color);
-		SDL_RenderFillRect(rdr._ptr, cast(SDL_FRect*)&shape);
-	}
 }
 
 struct Paddle {
