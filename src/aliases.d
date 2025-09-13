@@ -8,7 +8,7 @@ import nxt.geometry;
 alias Pos = Point!(float, 2);
 
 /++ Vector. +/
-alias Vec2 = Vector!(float, 2, false);
+alias Vec = Vector!(float, 2, false);
 
 /++ Direction. +/
 alias Dir2 = Vector!(float, 2, true);

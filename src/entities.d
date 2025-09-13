@@ -101,7 +101,7 @@ void bounceAll(ref Ball[] balls) pure nothrow @nogc {
 				ballA.pos -= normal * (overlap / 2.0f);
 				ballB.pos += normal * (overlap / 2.0f);
 
-				const tangent = Vec2(-normal.y, normal.x);
+				const tangent = Vec(-normal.y, normal.x);
 
 				const v1n = dot(ballA.vel, normal);
 				const v1t = dot(ballA.vel, tangent);
@@ -139,7 +139,7 @@ Bullet makeBullet() {
 	ret.active = false;
 	ret.rad = 3; // radie, 2*radie == diameter
 	ret.color = Colors.YELLOW;
-	ret.vel = Vec2(0, -333);
+	ret.vel = Vec(0, -333);
 	return ret;
 }
 
