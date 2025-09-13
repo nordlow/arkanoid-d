@@ -54,7 +54,6 @@ struct Ball {
 	}
 }
 
-// Helper function to drawIn filled circle using SDL rectangles
 void drawFilledCircle(SDL_Renderer* rdr, int centerX, int centerY, int radius) nothrow @trusted {
 	for (int y = -radius; y <= radius; y++) {
 		for (int x = -radius; x <= radius; x++) {
