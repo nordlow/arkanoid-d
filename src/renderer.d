@@ -10,8 +10,8 @@ import sdl;
 
 nothrow struct Renderer {
 	@disable this(this);
-	this(scope ref Window win, immutable char* name = null) @trusted {
-		_ptr = SDL_CreateRenderer(win._ptr, name);
+	this(scope ref Window win, immutable char[] name = null) @trusted {
+		_ptr = SDL_CreateRenderer(win._ptr, name.ptr);
 		if (_ptr is null) {
 			warningf("Renderer could not be created! SDL_Error: %s", SDL_GetError.fromStringz());
 			SDL_Quit();

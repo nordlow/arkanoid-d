@@ -10,11 +10,11 @@ import renderer;
 
 nothrow struct Window {
 	@disable this(this);
-	this(in ScreenSize ssz, in char* title, bool fullscreen = false) @trusted {
+	this(in ScreenSize ssz, in char[] title, bool fullscreen = false) @trusted {
 		uint flags = SDL_WINDOW_RESIZABLE;
 		/+ if (fullscreen) +/
 		/+	flags |= SDL_WINDOW_FULLSCREEN_DESKTOP; +/
-		_ptr = SDL_CreateWindow(title, ssz.width, ssz.height, flags);
+		_ptr = SDL_CreateWindow(title.ptr, ssz.width, ssz.height, flags);
 		if (fullscreen)
 			SDL_SetWindowFullscreen(_ptr, true);
 		if (_ptr is null) {
