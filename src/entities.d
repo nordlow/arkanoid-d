@@ -35,7 +35,8 @@ struct Ball {
 	void drawIn(scope ref Renderer rdr) const scope nothrow @trusted {
 		if (active) {
 			rdr.setDrawColor(color);
-			immutable frect = SDL_FRect(x: pos.x - rad, y: pos.y - rad, w: 2*rad, h:2*rad);
+			const d = 2* rad;
+			immutable frect = SDL_FRect(x: pos.x - rad, y: pos.y - rad, w: d, h: d);
 			SDL_RenderFillRect(rdr._ptr, &frect);
 		}
 	}
