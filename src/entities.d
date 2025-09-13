@@ -41,7 +41,7 @@ struct Paddle {
 }
 
 struct Ball {
-	Pos2 pos;
+	Pos pos;
 	float rad;
 	Vel2 vel;
 	RGBA color;
@@ -72,7 +72,7 @@ Ball[] makeBalls(uint count, Vel2 velocity, uint screenWidth, uint screenHeight)
 	typeof(return) ret;
 	ret.length = count;
 	foreach (const i, ref ball; ret)
-		ball = Ball(pos: Pos2(screenWidth / 2 + i,
+		ball = Ball(pos: Pos(screenWidth / 2 + i,
 							  screenHeight / 16 + i),
 					vel: velocity,
 					rad: 15,
@@ -120,7 +120,7 @@ void bounceAll(ref Ball[] balls) pure nothrow @nogc {
 
 struct Bullet {
 	// TODO: Use Rect
-	Pos2 pos;
+	Pos pos;
 	float rad;
 	Vel2 vel;
 	RGBA color;
@@ -180,7 +180,7 @@ struct RectGrid(Ent) {
 				const finalColor = t_row.lerp(top_lerp, bottom_lerp);
 
 				// set the entity's position, dimensions, and color
-				ents[index] = Ent(shape: Rect(pos: Pos2(cast(int)(col * entWidth ),
+				ents[index] = Ent(shape: Rect(pos: Pos(cast(int)(col * entWidth ),
 														screenHeight/8 + cast(int)(row * entHeight)),
 											  size: Dim2(cast(int)(entWidth - 2), cast(int)(entHeight - 2))),
 								  color: finalColor, true);

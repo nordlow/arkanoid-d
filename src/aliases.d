@@ -5,7 +5,7 @@ module aliases;
 import nxt.geometry;
 
 /++ Position. +/
-alias Pos2 = Point!(float, 2);
+alias Pos = Point!(float, 2);
 
 /++ Vector. +/
 alias Vec2 = Vector!(float, 2, false);
@@ -24,7 +24,7 @@ alias Rect = Rectangle!(float);
 
 /++ Triangle. +/
 struct Triangle {
-	Pos2[3] vertices;
+	Pos[3] vertices;
 }
 alias Tri = Triangle;
 
@@ -32,6 +32,6 @@ alias Cir = Circle!(float);
 
 /++ Quadangle. +/
 struct Quadangle {
-	Pos2[4] vertices;
+	Pos[4] vertices;
 }
 alias Quad = Quadangle;

@@ -96,7 +96,7 @@ void main(string[] args) @trusted {
 				foreach (ref bullet; game.scene.bullets) {
 					if (bullet.active)
 						continue;
-					bullet.pos = Pos2(game.scene.paddle.shape.pos.x + game.scene.paddle.shape.size.x / 2,
+					bullet.pos = Pos(game.scene.paddle.shape.pos.x + game.scene.paddle.shape.size.x / 2,
 									  game.scene.paddle.shape.pos.y);
 					bullet.active = true;
 					// game.shootSound.PlaySound(); // Audio removed
@@ -203,11 +203,11 @@ void main(string[] args) @trusted {
 
 		if ((game.over || game.won) && game.rPressed) {
 			foreach (ref ball; game.scene.balls) {
-				ball.pos = Pos2(ssz.width / 2 + (game.scene.balls.length - 1) * 20 - 20, ssz.height - 150);
+				ball.pos = Pos(ssz.width / 2 + (game.scene.balls.length - 1) * 20 - 20, ssz.height - 150);
 				ball.vel = game.ballVelocity;
 				ball.active = true;
 			}
-			game.scene.paddle.shape.pos = Pos2(ssz.width / 2 - 60, ssz.height - 30);
+			game.scene.paddle.shape.pos = Pos(ssz.width / 2 - 60, ssz.height - 30);
 			foreach (ref brick; game.scene.brickGrid[]) {
 				brick.active = true;
 				brick.isFlashing = false;
