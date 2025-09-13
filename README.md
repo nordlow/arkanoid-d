@@ -3,6 +3,7 @@
 Just type `dub` to run.
 
 ## TODO
+- Use `SDL_Joystick` API
 - Adjust moves of balls so they don't go outside the border.
 - Record sound effects sounds and play upon events such as bounce
 - Add rotation property
