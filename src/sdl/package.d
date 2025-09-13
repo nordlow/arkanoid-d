@@ -1,8 +1,9 @@
 module sdl;
 
 public import sdl.log;
+public import nxt.color;
 
-public import nxt.color : RGBA = ColorRGBA, ColorHSV;
+alias RGBA = ColorRGBA;
 alias HSV = ColorHSV;
 
 nothrow @nogc:
