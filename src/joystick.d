@@ -2,7 +2,6 @@ module joystick;
 
 import base;
 
-import core.sys.posix.fcntl;
 import core.sys.posix.unistd;
 import core.sys.posix.stdio;
 import core.stdc.errno;
@@ -45,6 +44,7 @@ nothrow:
 	}
 
 	this(in char[] devicePath) @trusted {
+		import core.sys.posix.fcntl : O_RDONLY, O_NONBLOCK, open, fcntl, F_GETFL, F_SETFL;
 		import std.string : toStringz;
 		this._fd = open(devicePath.toStringz, O_RDONLY | O_NONBLOCK);
 		if (_fd == -1) {
