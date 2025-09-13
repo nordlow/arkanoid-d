@@ -6,8 +6,7 @@ Just type `dub` to run.
 - Use `SDL_Joystick` API
 - Adjust moves of balls so they don't go outside the border.
 - Record sound effects sounds and play upon events such as bounce
-- Add rotation property
-- Represent velocity as vector
+- Add rotation property to entities. Check how SDL represents rotation.
 - Use static introspection to
   - update `Game` `Scene` graph
   - draw `Game` `Scene` graph
