@@ -12,6 +12,7 @@ import sdl;
 
 nothrow struct Renderer {
 	@disable this(this);
+
 	this(scope ref Window win, immutable char[] name = null) @trusted {
 		_ptr = SDL_CreateRenderer(win._ptr, name.ptr);
 		if (_ptr is null) {
@@ -22,13 +23,16 @@ nothrow struct Renderer {
 			warning("VSync not supported");
 		_sincosLUT.fill();
 	}
-	~this() @nogc @trusted {
-		SDL_DestroyRenderer(_ptr);
-	}
+
+	~this() @nogc @trusted
+		=> SDL_DestroyRenderer(_ptr);
+
 	int setDrawColor(in RGBA color) nothrow @trusted @il
 		=> SDL_SetRenderDrawColor(_ptr, color.r, color.g, color.b, color.a);
+
 	int fillRect(in SDL_FRect frect) nothrow @trusted @il
 		=> SDL_RenderFillRect(_ptr, &frect);
+
 	SDL_Renderer* _ptr;
 	SinCosLUT!(float, 64) _sincosLUT;
 	invariant(_ptr);
