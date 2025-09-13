@@ -5,7 +5,7 @@ Just type `dub` to run.
 ## TODO
 - Use RRect in entities.
 - Add tesselation of shapes and store result vertices in `Renderer`.
-- Use `SDL_Joystick` API
+- Use `SDL_gamepad` API
 - Adjust moves of balls so they don't go outside the border.
 - Record sound effects sounds and play upon events such as bounce
 - Add rotation property to entities. Check how SDL represents rotation.
