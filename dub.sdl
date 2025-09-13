@@ -5,9 +5,9 @@ copyright "Copyright © 2025, Per Nordlöw"
 
 dependency "phobos-next" path="../phobos-next"
 
-libs "SDL3" "c"
-dflags "-I/home/per/.local/sdl-snapshot/include"
+dflags "-I/home/per/.local/sdl-snapshot/include" "-I/home/per/.local/sdl-snapshot/include" "-P=-I/home/per/.local/sdl-snapshot/include"
 lflags "-L/home/per/.local/sdl-snapshot/lib"
+libs "SDL3" "c"
 
 #dependency "raylib-d" version="5.5.1" # path="../raylib-d"
 #libs "raylib"

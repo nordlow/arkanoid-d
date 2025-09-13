@@ -3,6 +3,8 @@ module sdl;
 public import sdl.log;
 public import nxt.color;
 
+/+ TODO: public import sdl.SDL; +/
+
 alias RGBA = ColorRGBA;
 alias HSV = ColorHSV;
 
