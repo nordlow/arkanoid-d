@@ -110,9 +110,8 @@ void bounceAll(ref Ball[] balls) pure nothrow @nogc {
 }
 
 struct Bullet {
-	// TODO: Use Rect
-	Pos pos;
-	float rad;
+	Cir shape;
+	alias this = shape;
 	Vel vel;
 	RGBA color;
 	bool active;
