@@ -1,6 +1,7 @@
 module renderer;
 
 import core.stdc.stdio;
+import std.string : fromStringz;
 import nxt.logger;
 import window;
 import sdl;
@@ -12,13 +13,11 @@ nothrow struct Renderer {
 	this(scope ref Window win, immutable char* name = null) @trusted {
 		_ptr = SDL_CreateRenderer(win._ptr, name);
 		if (_ptr is null) {
-			stderr.fprintf("Renderer could not be created! SDL_Error: %s\n", SDL_GetError());
-			SDL_DestroyWindow(win._ptr);
+			warningf("Renderer could not be created! SDL_Error: %s", SDL_GetError.fromStringz());
 			SDL_Quit();
-			return;
 		}
 		if (!SDL_SetRenderVSync(_ptr, 1))
-			stderr.fprintf("Warning: VSync not supported\n");
+			warningf("VSync not supported\n");
 	}
 	~this() @nogc @trusted {
 		SDL_DestroyRenderer(_ptr);
