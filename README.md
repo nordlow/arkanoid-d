@@ -3,7 +3,7 @@
 Just type `dub` to run.
 
 ## TODO
-- Use RRect in entities.
+- Use SDL function that does combined create window and renderer.
 - Add tesselation of shapes and store result vertices in `Renderer`.
 - Use `SDL_gamepad` API
 - Adjust moves of balls so they don't go outside the border.
