@@ -2,7 +2,7 @@ module base;
 
 public import core.stdc.stdio;
 public import std.math;
-public import std.string : fromStringz;
+public import std.string : fromStringz, toStringz;
 public import std.random : Random, uniform;
 public import std.algorithm.searching : maxElement;
 public import std.algorithm.iteration : map;

@@ -45,7 +45,6 @@ nothrow:
 
 	this(in char[] devicePath) @trusted {
 		import core.sys.posix.fcntl : O_RDONLY, O_NONBLOCK, open, fcntl, F_GETFL, F_SETFL;
-		import std.string : toStringz;
 		this._fd = open(devicePath.toStringz, O_RDONLY | O_NONBLOCK);
 		if (_fd == -1) {
 			perror(("Could not open joystick " ~ devicePath).ptr);
