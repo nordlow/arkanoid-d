@@ -64,12 +64,12 @@ void main(string[] args) @trusted {
 
 		if (!game.over && !game.won) {
 			void moveLeft() {
-				if (game.scene.paddle.shape.pos.x > 0)
-					game.scene.paddle.shape.pos.x -= 800 * deltaTime;
+				if (game.scene.paddle.pos.x > 0)
+					game.scene.paddle.pos.x -= 800 * deltaTime;
 			}
 			void moveRight() {
-				if (game.scene.paddle.shape.pos.x < ssz.width - game.scene.paddle.shape.size.x)
-					game.scene.paddle.shape.pos.x += 800 * deltaTime;
+				if (game.scene.paddle.pos.x < ssz.width - game.scene.paddle.size.x)
+					game.scene.paddle.pos.x += 800 * deltaTime;
 			}
 			if (game.joystick.isValid) {
 				while (const ev = game.joystick.tryNextEvent()) {
@@ -86,16 +86,16 @@ void main(string[] args) @trusted {
 					}
 				}
 			}
-			if (leftHeld && game.scene.paddle.shape.pos.x > 0)
+			if (leftHeld && game.scene.paddle.pos.x > 0)
 				moveLeft();
-			if (rightHeld && game.scene.paddle.shape.pos.x < ssz.width - game.scene.paddle.shape.size.x)
+			if (rightHeld && game.scene.paddle.pos.x < ssz.width - game.scene.paddle.size.x)
 				moveRight();
 			if (game.spacePressed) {
 				foreach (ref bullet; game.scene.bullets) {
 					if (bullet.active)
 						continue;
-					bullet.pos = Pos(game.scene.paddle.shape.pos.x + game.scene.paddle.shape.size.x / 2,
-									  game.scene.paddle.shape.pos.y);
+					bullet.pos = Pos(game.scene.paddle.pos.x + game.scene.paddle.size.x / 2,
+									  game.scene.paddle.pos.y);
 					bullet.active = true;
 					// game.shootSound.PlaySound(); // Audio removed
 					break;
@@ -136,13 +136,13 @@ void main(string[] args) @trusted {
 				}
 
 				// ball bounce against paddle
-				if (ball.pos.y + ball.rad >= game.scene.paddle.shape.pos.y
+				if (ball.pos.y + ball.rad >= game.scene.paddle.pos.y
 					&& ball.pos.y - ball.rad
-					<= game.scene.paddle.shape.pos.y + game.scene.paddle.shape.size.y
-					&& ball.pos.x >= game.scene.paddle.shape.pos.x
-					&& ball.pos.x <= game.scene.paddle.shape.pos.x + game.scene.paddle.shape.size.x) {
+					<= game.scene.paddle.pos.y + game.scene.paddle.size.y
+					&& ball.pos.x >= game.scene.paddle.pos.x
+					&& ball.pos.x <= game.scene.paddle.pos.x + game.scene.paddle.size.x) {
 					ball.vel.y = -abs(ball.vel.y); // TODO: bounce sound
-					const float hitPos = (ball.pos.x - game.scene.paddle.shape.pos.x) / game.scene.paddle.shape.size.x;
+					const float hitPos = (ball.pos.x - game.scene.paddle.pos.x) / game.scene.paddle.size.x;
 					ball.vel.x = 200 * (hitPos - 0.5f) * 2;
 				}
 
@@ -205,7 +205,7 @@ void main(string[] args) @trusted {
 				ball.vel = game.ballVelocity;
 				ball.active = true;
 			}
-			game.scene.paddle.shape.pos = Pos(ssz.width / 2 - 60, ssz.height - 30);
+			game.scene.paddle.pos = Pos(ssz.width / 2 - 60, ssz.height - 30);
 			foreach (ref brick; game.scene.brickGrid[]) {
 				brick.active = true;
 				brick.isFlashing = false;
