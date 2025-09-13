@@ -2,7 +2,7 @@ module sdl;
 
 public import sdl.log;
 
-public import nxt.color : Color = ColorRGBA, ColorHSV;
+public import nxt.color : RGBA = ColorRGBA, ColorHSV;
 alias HSV = ColorHSV;
 
 nothrow @nogc:
@@ -21,7 +21,7 @@ struct SDL_Vertex {
 	SDL_FPoint tex_coord; /**< Normalized texture coordinates, if needed */
 }
 
-int SDL_SetRenderDrawColor(SDL_Renderer* renderer, in Color color) {
+int SDL_SetRenderDrawColor(SDL_Renderer* renderer, in RGBA color) {
 	version(D_Coverage) {} else pragma(inline, true);
 	return SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
 }

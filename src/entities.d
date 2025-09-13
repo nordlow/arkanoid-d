@@ -2,7 +2,7 @@ module entities;
 
 import nxt.geometry;
 import nxt.color;
-alias Color = ColorRGBA;
+alias RGBA = ColorRGBA;
 import nxt.colors;
 
 import std.random : Random, uniform;
@@ -18,7 +18,8 @@ struct Circle {
 	enum vertexCount = 32;
 	Pos2 center;
 	float radius;
-	Color color;
+	RGBA color;
+	// TODO: move these to `Renderer` for all objects in scene
 	private SDL_Vertex[vertexCount] _vertices;
 	void tesselate() {
 	}
@@ -30,7 +31,7 @@ struct Circle {
 
 struct Box {
 	Rect shape;
-	Color color;
+	RGBA color;
 	void drawIn(scope ref Renderer rdr) const nothrow @trusted {
 		SDL_SetRenderDrawColor(rdr._ptr, color);
 		SDL_RenderFillRect(rdr._ptr, cast(SDL_FRect*)&shape);
@@ -39,7 +40,7 @@ struct Box {
 
 struct Paddle {
 	Rect shape;
-	Color color;
+	RGBA color;
 	void drawIn(scope ref Renderer rdr) const nothrow @trusted {
 		SDL_SetRenderDrawColor(rdr._ptr, color);
 		SDL_RenderFillRect(rdr._ptr, cast(SDL_FRect*)&shape);
@@ -50,7 +51,7 @@ struct Ball {
 	Pos2 pos;
 	float rad;
 	Vel2 vel;
-	Color color;
+	RGBA color;
 	bool active;
 	void drawIn(scope ref Renderer rdr) const nothrow @trusted {
 		if (active) {
@@ -129,7 +130,7 @@ struct Bullet {
 	Pos2 pos;
 	float rad;
 	Vel2 vel;
-	Color color;
+	RGBA color;
 	bool active;
 	void drawIn(scope ref Renderer rdr) const nothrow @trusted {
 		if (!active)
@@ -167,7 +168,7 @@ struct RectGrid(Ent) {
 	}
 
 	/// Lays out the entities in a rectangular grid with a 2D color gradient.
-	void layout(in int screenWidth, in int screenHeight, in Color topLeft, in Color topRight, in Color bottomLeft, in Color bottomRight) scope pure nothrow @safe @nogc {
+	void layout(in int screenWidth, in int screenHeight, in RGBA topLeft, in RGBA topRight, in RGBA bottomLeft, in RGBA bottomRight) scope pure nothrow @safe @nogc {
 		const entWidth = cast(float)screenWidth / nCols;
 		const entHeight = cast(float)screenHeight / nRows / 2;
 		foreach (const row; 0 .. nRows) {
@@ -209,7 +210,7 @@ alias BrickGrid = RectGrid!Brick;
 struct Brick {
 	static immutable float FLASH_DURATION = 0.3f;
 	Rect shape;
-	Color color;
+	RGBA color;
 	bool active;
 	bool isFlashing = false;
 	float flashTimer = 0.0f;
@@ -220,7 +221,7 @@ nothrow:
 	}
 	void drawIn(scope ref Renderer rdr) const @trusted {
 		if (active || isFlashing) {
-			Color drawColor = color;
+			RGBA drawColor = color;
 			if (isFlashing) {
 				// Alternate between the original color and a bright white/yellow
 				// to create the flashing effect.
