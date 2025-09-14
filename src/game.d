@@ -36,7 +36,6 @@ nothrow struct Game {
 		brickStream = AudioStream(brickSound.spec);
 		adev.bind(brickStream);
 		brickStream.put(brickSound);
-		/+ TODO: streams ~= str; +/
 	}
 	void loadSounds() {
 		import nxt.path : FilePath;
