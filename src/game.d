@@ -29,8 +29,11 @@ nothrow struct Game {
 					  bullets: makeBullets(30),
 					  brickGrid: BrickGrid(nRows: 20, nCols: 30));
 		scene.brickGrid.layout(ssz.width, ssz.height, Colors.DARKGREEN, Colors.DARKRED, Colors.DARKBLUE, Colors.DARKYELLOW);
+
 		loadSounds();
 		adev = AudioDevice(brickSound.spec);
+		auto str = AudioStream(brickSound.spec);
+		adev.bind(str);
 	}
 	void loadSounds() {
 		import nxt.path : FilePath;

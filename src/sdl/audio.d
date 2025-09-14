@@ -34,10 +34,16 @@ private:
 }
 
 struct AudioStream {
+/+ nothrow: +/
 	@disable this(this);
 	this(in AudioSpec spec) @trusted {
 		// TODO: this cast shouldn' be needed. Add extern(C) to override.
 		_ptr = SDL_CreateAudioStream(cast(SDL_AudioSpec*)(&spec._spec), null);
+		infof("Successfully created audio stream at %s", _ptr);
+	}
+	~this() @trusted {
+		infof("Destroying audio stream at %s", _ptr);
+		SDL_DestroyAudioStream(_ptr);
 	}
 	private SDL_AudioStream* _ptr;
 	invariant(_ptr);
