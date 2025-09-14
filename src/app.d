@@ -141,9 +141,10 @@ void main(string[] args) @trusted {
 					<= game.scene.paddle.pos.y + game.scene.paddle.size.y
 					&& ball.pos.x >= game.scene.paddle.pos.x
 					&& ball.pos.x <= game.scene.paddle.pos.x + game.scene.paddle.size.x) {
-					ball.vel.y = -abs(ball.vel.y); // TODO: bounce sound
+					ball.vel.y = -abs(ball.vel.y);
 					const float hitPos = (ball.pos.x - game.scene.paddle.pos.x) / game.scene.paddle.size.x;
 					ball.vel.x = 200 * (hitPos - 0.5f) * 2;
+					game.paddleBounceFx.reput();
 				}
 
 				foreach (ref brick; game.scene.brickGrid[]) {
@@ -163,7 +164,6 @@ void main(string[] args) @trusted {
 				}
 				if (ball.pos.y > ssz.height) {
 					ball.active = false;
-					game.paddleBounceFx.reput();
 				}
 			}
 			tracef("Active: %s/%s", nBallsActive, game.scene.balls.length);
