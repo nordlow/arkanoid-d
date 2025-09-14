@@ -25,11 +25,14 @@ nothrow:
 struct AudioDevice {
 	/+ nothrow: +/
 	@disable this(this);
-	void open(const(char)* device = cast(const(char)*)SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK) @trusted {
-		AudioSpec desired;
+	void open(const(char)* device = cast(const(char)*)SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, in AudioSpec* desiredSpec = null) @trusted {
 		AudioSpec obtained;
 		int allowed_changes;
-		SDL_AudioDeviceID dev = SDL_OpenAudioDevice(device: device, null, null, allowed_changes);
+		const desiredSpecPtr = (desiredSpec ? &desiredSpec._spec : null);
+		SDL_AudioDeviceID dev = SDL_OpenAudioDevice(device: device,
+													desired: desiredSpecPtr,
+													obtained: null,
+													allowed_changes: allowed_changes);
 		if (dev == 0)
 			return criticalf("Failed to open audio: %s", SDL_GetError());
 		infof("Successfully opened audio device id %s", dev);
