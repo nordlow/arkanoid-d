@@ -46,8 +46,8 @@ struct AudioStream {
 		infof("Destroying audio stream at %s", _ptr);
 		SDL_DestroyAudioStream(_ptr);
 	}
-	void put(in AudioBuffer abuf) @trusted {
-		if (!SDL_PutAudioStreamData(_ptr, abuf._ptr, cast(int)abuf._length)) {
+	void put(in AudioBuffer buf) @trusted {
+		if (!SDL_PutAudioStreamData(_ptr, buf._ptr, cast(int)buf._length)) {
 			errorf("Failed to queue audio data: %s", SDL_GetError().fromStringz);
 			return;
 		}
