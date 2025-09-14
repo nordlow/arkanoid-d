@@ -1,5 +1,6 @@
 module sdl;
 
+public import std.string : fromStringz, toStringz;
 public import nxt.color;
 public import nxt.effects;
 public import nxt.logger;
@@ -92,33 +93,3 @@ void SDL_DestroySurface(SDL_Surface* surface);
 bool SDL_PollEvent(SDL_Event* event);
 
 const(ubyte)* SDL_GetKeyboardState(int* numkeys);
-
-struct SDL_AudioSpec {
-	int freq;
-	uint format;
-	ubyte channels;
-	ubyte padding;
-	uint samples;
-	uint silence;
-	uint size;
-	void function(void* userdata, ubyte* stream, int len) callback;
-	void* userdata;
-}
-
-enum SDL_AUDIO_DEVICE_ALLOW_ANY_CHANGE = 0x00000001 | 0x00000002 | 0x00000004 | 0x00000008;
-
-// Audio functions - Note: SDL3 audio API has significant changes
-SDL_AudioDeviceID SDL_OpenAudioDevice(
-	const(char)* device,
-									  const(SDL_AudioSpec)* desired,
-	SDL_AudioSpec* obtained,
-	int allowed_changes
-);
-SDL_AudioStream* SDL_CreateAudioStream(
-	uint src_format, ubyte src_channels, int src_rate,
-	uint dst_format, ubyte dst_channels, int dst_rate
-);
-void SDL_DestroyAudioStream(SDL_AudioStream* stream);
-int SDL_BindAudioStreams(SDL_AudioDeviceID dev, SDL_AudioStream** streams, int num_streams);
-int SDL_QueueAudio(SDL_AudioDeviceID dev, const(void)* data, uint len);
-uint SDL_GetAudioDeviceQueueSize(SDL_AudioDeviceID dev);

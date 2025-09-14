@@ -10,9 +10,25 @@ import sdl;
 
 struct AudioSpec {
 nothrow:
-	@disable this(this);
 	SDL_AudioSpec _spec;
 	alias this = _spec; // for now
+}
+
+struct WAV {
+	@disable this(this);
+	AudioSpec spec;
+	Uint8* audio_buf;
+	Uint32 audio_len;
+	static WAV load(string path) @trusted {
+		typeof(return) w;
+		if (!SDL_LoadWAV(path.toStringz, &w.spec._spec, &w.audio_buf, &w.audio_len))
+			errorf("Failed to load WAV: %s", SDL_GetError().fromStringz);
+		return w;
+	}
+	~this() @trusted {
+		/+ if (audio_buf !is null) +/
+		/+	SDL_FreeWAV(audio_buf); +/
+	}
 }
 
 struct AudioStream {
@@ -25,14 +41,10 @@ nothrow:
 struct AudioDevice {
 	/+ nothrow: +/
 	@disable this(this);
-	void open(const(char)* device = cast(const(char)*)SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, in AudioSpec* desiredSpec = null) @trusted {
-		AudioSpec obtained;
+	void open(in AudioSpec desiredSpec, uint devid = SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK) @trusted {
 		int allowed_changes;
-		const desiredSpecPtr = (desiredSpec ? &desiredSpec._spec : null);
-		SDL_AudioDeviceID dev = SDL_OpenAudioDevice(device: device,
-													desired: desiredSpecPtr,
-													obtained: null,
-													allowed_changes: allowed_changes);
+		auto spec = cast()desiredSpec; // TODO: Does `SDL_OpenAudioDevice` mutate spec?
+		SDL_AudioDeviceID dev = SDL_OpenAudioDevice(devid, &spec._spec);
 		if (dev == 0)
 			return criticalf("Failed to open audio: %s", SDL_GetError());
 		infof("Successfully opened audio device id %s", dev);
