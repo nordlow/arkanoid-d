@@ -163,7 +163,7 @@ void main(string[] args) @trusted {
 				}
 				if (ball.pos.y > ssz.height) {
 					ball.active = false;
-					game.ballGoneFx.reput();
+					game.paddleBounceFx.reput();
 				}
 			}
 			tracef("Active: %s/%s", nBallsActive, game.scene.balls.length);

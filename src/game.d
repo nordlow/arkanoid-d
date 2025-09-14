@@ -18,7 +18,7 @@ import joystick;
 nothrow struct Game {
 	import std.random : Random, unpredictableSeed;
 	@disable this(this);
-	this(in ScreenSize ssz, const uint ballCount = 1) @trusted {
+	this(in ScreenSize ssz, const uint ballCount = 10) @trusted {
 		this.ssz = ssz;
 		this.win = Window(ssz, "Arkanoid Clone", fullscreen: true);
 		joystick = openDefaultJoystick();
@@ -34,14 +34,14 @@ nothrow struct Game {
 		import nxt.path : FilePath;
 
 		brickFx.buffer = AudioBuffer(FilePath("sound/brick_hit.wav"));
-		ballGoneFx.buffer = AudioBuffer(FilePath("sound/ball_gone.wav"));
+		paddleBounceFx.buffer = AudioBuffer(FilePath("sound/ball_gone.wav"));
 
 		brickFx.stream = AudioStream(brickFx.buffer.spec);
-		ballGoneFx.stream = AudioStream(ballGoneFx.buffer.spec);
+		paddleBounceFx.stream = AudioStream(paddleBounceFx.buffer.spec);
 
 		adev = AudioDevice(brickFx.buffer.spec);
 		adev.bind(brickFx.stream);
-		adev.bind(ballGoneFx.stream);
+		adev.bind(paddleBounceFx.stream);
 	}
 	~this() => adev.unbind(brickFx.stream);
 	void processEvents() @trusted {
@@ -112,7 +112,7 @@ nothrow struct Game {
 	private Random _rng;
 	version(none) static immutable soundSampleRate = 44100;
 
-	AudioFx brickFx, ballGoneFx;
+	AudioFx brickFx, paddleBounceFx;
 }
 
 struct Scene {
