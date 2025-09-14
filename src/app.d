@@ -97,7 +97,7 @@ void main(string[] args) @trusted {
 					bullet.pos = Pos(game.scene.paddle.pos.x + game.scene.paddle.size.x / 2,
 									  game.scene.paddle.pos.y);
 					bullet.active = true;
-					// game.shootSound.PlaySound(); // Audio removed
+					game.bulletShotFx.reput();
 					break;
 				}
 			}
