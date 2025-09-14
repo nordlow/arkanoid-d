@@ -120,4 +120,7 @@ struct AudioFx {
 	@disable this(this);
 	AudioStream stream;
 	AudioBuffer buffer;
+	void reput() {
+		stream.clearAndPut(buffer);
+	}
 }

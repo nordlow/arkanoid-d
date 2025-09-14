@@ -150,7 +150,7 @@ void animateBullets(scope ref Game game, float deltaTime) @trusted {
 							&& bullet.pos.y - bullet.rad
 							<= brick.shape.pos.y + brick.shape.size.y) {
 								brick.restartFlashing();
-								game.brickFx.stream.clearAndPut(game.brickFx.buffer);
+								game.brickFx.reput();
 								bullet.active = false;
 								break;
 							}
