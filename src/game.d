@@ -32,14 +32,14 @@ nothrow struct Game {
 
 		loadSounds();
 
-		adev = AudioDevice(brickSound.spec);
-		brickStream = AudioStream(brickSound.spec);
-		adev.bind(brickStream);
-		brickStream.put(brickSound);
+		adev = AudioDevice(brickFx.buffer.spec);
+		brickFx.stream = AudioStream(brickFx.buffer.spec);
+		adev.bind(brickFx.stream);
+		brickFx.stream.put(brickFx.buffer);
 	}
 	void loadSounds() {
 		import nxt.path : FilePath;
-		brickSound = AudioBuffer(FilePath("sound/brick_hit.wav"));
+		brickFx.buffer = AudioBuffer(FilePath("sound/brick_hit.wav"));
 	}
 	void processEvents() @trusted {
 		SDL_Event e;
@@ -109,8 +109,7 @@ nothrow struct Game {
 	private Random _rng;
 	version(none) static immutable soundSampleRate = 44100;
 
-	AudioStream brickStream;
-	AudioBuffer brickSound;
+	AudioFx brickFx;
 }
 
 struct Scene {
@@ -148,9 +147,8 @@ void animateBullets(scope ref Game game, float deltaTime) @trusted {
 							&& bullet.pos.y - bullet.rad
 							<= brick.shape.pos.y + brick.shape.size.y) {
 								brick.restartFlashing();
-								game.brickStream.clearAndPut(game.brickSound);
+								game.brickFx.stream.clearAndPut(game.brickFx.buffer);
 								bullet.active = false;
-								// PlaySound(game.brickSound); // Audio removed
 								break;
 							}
 		}

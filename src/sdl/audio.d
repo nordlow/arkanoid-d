@@ -14,24 +14,44 @@ nothrow:
 	alias this = _spec; // for now
 }
 
-struct AudioBuffer {
-	import nxt.path : FilePath;
+struct AudioDevice {
+	/+ nothrow: +/
 	@disable this(this);
-	this(in FilePath pathWAV) @trusted {
-		// TODO: Generalize to any sound file.
-		if (!SDL_LoadWAV(pathWAV.str.toStringz, &_spec._spec, cast(ubyte**)&_ptr, &_length))
-			errorf("Failed to load WAV: %s", SDL_GetError().fromStringz);
+	this(in AudioSpec desiredSpec, uint devid = SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK) @trusted {
+		int allowed_changes;
+		// TODO: this cast shouldn' be needed. Add extern(C) to override.
+		_id = SDL_OpenAudioDevice(devid, cast(SDL_AudioSpec*)(&desiredSpec._spec));
+		if (_id == 0) {
+			criticalf("Failed to open audio: %s", SDL_GetError().fromStringz);
+			return;
+		}
+		tracef("Successfully opened audio device id %s", _id);
 	}
-	~this() @trusted {
-		 if (_ptr)
-			 SDL_free(_ptr);
+	~this() {
+		if (_id != 0)
+			close();
 	}
-@property:
-	AudioSpec spec() const scope pure nothrow => _spec;
-private:
-	AudioSpec _spec;
-	void* _ptr;
-	Uint32 _length;
+	/++ Bind `stream` to `this`. +/
+	void bind(ref AudioStream stream) @trusted {
+		if (!SDL_BindAudioStream(_id, stream._ptr))
+			errorf("Failed to bind to device: %s", SDL_GetError().fromStringz);
+	}
+	/++ Unbind `stream` to `this`. +/
+	void unbind(ref AudioStream stream) @trusted {
+		infof("Unbinding audio stream %s at ...", stream._ptr);
+		return SDL_UnbindAudioStream(stream._ptr);
+	}
+	/// Close `this`.
+	void close() @trusted {
+		tracef("Closing audio device %s", _id);
+		SDL_CloseAudioDevice(_id);
+	}
+	/// Start audio playback.
+	void start() @trusted @il { SDL_ResumeAudioDevice(_id); }
+	/// Stop audio playback.
+	void stop() @trusted @il { SDL_PauseAudioDevice(_id); }
+	SDL_AudioDeviceID _id;
+	invariant(_id);
 }
 
 struct AudioStream {
@@ -77,42 +97,29 @@ struct AudioStream {
 	invariant(_ptr);
 }
 
-struct AudioDevice {
-	/+ nothrow: +/
+struct AudioBuffer {
+	import nxt.path : FilePath;
 	@disable this(this);
-	this(in AudioSpec desiredSpec, uint devid = SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK) @trusted {
-		int allowed_changes;
-		// TODO: this cast shouldn' be needed. Add extern(C) to override.
-		_id = SDL_OpenAudioDevice(devid, cast(SDL_AudioSpec*)(&desiredSpec._spec));
-		if (_id == 0) {
-			criticalf("Failed to open audio: %s", SDL_GetError().fromStringz);
-			return;
-		}
-		tracef("Successfully opened audio device id %s", _id);
+	this(in FilePath pathWAV) @trusted {
+		// TODO: Generalize to any sound file.
+		if (!SDL_LoadWAV(pathWAV.str.toStringz, &_spec._spec, cast(ubyte**)&_ptr, &_length))
+			errorf("Failed to load WAV: %s", SDL_GetError().fromStringz);
 	}
-	~this() {
-		if (_id != 0)
-			close();
+	~this() @trusted {
+		 if (_ptr)
+			 SDL_free(_ptr);
 	}
-	/++ Bind `stream` to `this`. +/
-	void bind(ref AudioStream stream) @trusted {
-		if (!SDL_BindAudioStream(_id, stream._ptr))
-			errorf("Failed to bind to device: %s", SDL_GetError().fromStringz);
-	}
-	/++ Unbind `stream` to `this`. +/
-	void unbind(ref AudioStream stream) @trusted {
-		infof("Unbinding audio stream %s at ...", stream._ptr);
-		return SDL_UnbindAudioStream(stream._ptr);
-	}
-	/// Close `this`.
-	void close() @trusted {
-		tracef("Closing audio device %s", _id);
-		SDL_CloseAudioDevice(_id);
-	}
-	/// Start audio playback.
-	void start() @trusted @il { SDL_ResumeAudioDevice(_id); }
-	/// Stop audio playback.
-	void stop() @trusted @il { SDL_PauseAudioDevice(_id); }
-	SDL_AudioDeviceID _id;
-	invariant(_id);
+@property:
+	AudioSpec spec() const scope pure nothrow => _spec;
+private:
+	AudioSpec _spec;
+	void* _ptr;
+	Uint32 _length;
+}
+
+/++ Audio effect. +/
+struct AudioFx {
+	@disable this(this);
+	AudioStream stream;
+	AudioBuffer buffer;
 }
