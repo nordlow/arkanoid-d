@@ -31,9 +31,8 @@ struct AudioDevice {
 		int allowed_changes;
 		SDL_AudioDeviceID dev = SDL_OpenAudioDevice(device: device, null, null, allowed_changes);
 		if (dev == 0)
-			criticalf("Failed to open audio: %s", SDL_GetError());
-		else
-			infof("Successfully opened audio device id %s", dev);
+			return criticalf("Failed to open audio: %s", SDL_GetError());
+		infof("Successfully opened audio device id %s", dev);
 	}
 	~this() {
 		if (_id != 0)
