@@ -17,7 +17,7 @@ nothrow:
 struct WAV {
 	import nxt.path : FilePath;
 	@disable this(this);
-	this(FilePath path) @trusted {
+	this(in FilePath path) @trusted {
 		if (!SDL_LoadWAV(path.str.toStringz, &_spec._spec, &audio_buf, &audio_len))
 			errorf("Failed to load WAV: %s", SDL_GetError().fromStringz);
 	}
