@@ -34,10 +34,10 @@ private:
 }
 
 struct AudioStream {
-nothrow:
 	@disable this(this);
-	void queue(in WAV wav) {
-		// TODO:
+	this(in AudioSpec spec) @trusted {
+		// TODO: this cast shouldn' be needed. Add extern(C) to override.
+		_ptr = SDL_CreateAudioStream(cast(SDL_AudioSpec*)(&spec._spec), null);
 	}
 	private SDL_AudioStream* _ptr;
 	invariant(_ptr);
@@ -48,7 +48,7 @@ struct AudioDevice {
 	@disable this(this);
 	this(in AudioSpec desiredSpec, uint devid = SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK) @trusted {
 		int allowed_changes;
-		// TODO: cast here shouldn't be needed as second parameter is const `SDL_OpenAudioDevice`.
+		// TODO: this cast shouldn' be needed. Add extern(C) to override.
 		_id = SDL_OpenAudioDevice(devid, cast(SDL_AudioSpec*)(&desiredSpec._spec));
 		if (_id == 0) {
 			criticalf("Failed to open audio: %s", SDL_GetError());
