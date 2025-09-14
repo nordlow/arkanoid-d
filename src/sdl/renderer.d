@@ -5,7 +5,11 @@ import std.string : fromStringz;
 import nxt.lut;
 import nxt.logger;
 import nxt.effects;
+import nxt.color;
 import sdl;
+
+alias RGBA = ColorRGBA;
+alias HSV = ColorHSV;
 
 @safe:
 

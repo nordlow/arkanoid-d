@@ -1,17 +1,11 @@
 module sdl;
 
+public import sdl.SDL;
 public import sdl.log;
 public import sdl.window;
 public import sdl.renderer;
 
-public import nxt.color;
-
-public import sdl.SDL;
-
 struct ScreenSize { int width; int height; }
-
-alias RGBA = ColorRGBA;
-alias HSV = ColorHSV;
 
 nothrow @nogc:
 
