@@ -36,12 +36,12 @@ nothrow struct Game {
 		brickFx.buffer = AudioBuffer(FilePath("sound/brick_hit.wav"));
 		ballGoneFx.buffer = AudioBuffer(FilePath("sound/ball_gone.wav"));
 
-		const spec = brickFx.buffer.spec;
-
 		brickFx.stream = AudioStream(brickFx.buffer.spec);
+		ballGoneFx.stream = AudioStream(ballGoneFx.buffer.spec);
 
-		adev = AudioDevice(spec);
+		adev = AudioDevice(brickFx.buffer.spec);
 		adev.bind(brickFx.stream);
+		adev.bind(ballGoneFx.stream);
 	}
 	~this() => adev.unbind(brickFx.stream);
 	void processEvents() @trusted {
