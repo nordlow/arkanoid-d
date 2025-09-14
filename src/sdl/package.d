@@ -1,10 +1,13 @@
 module sdl;
 
 public import nxt.color;
+public import nxt.effects;
+public import nxt.logger;
 public import sdl.SDL;
 public import sdl.log;
 public import sdl.window;
 public import sdl.renderer;
+public import sdl.audio;
 
 struct ScreenSize { int width; int height; }
 alias RGBA = ColorRGBA;
@@ -30,6 +33,7 @@ version(linux) {
 	enum uint SDLK_LEFT = 1073741904;
 	enum uint SDLK_RIGHT = 1073741903;
 	enum uint SDLK_F11 = 68;
+	enum uint SDLK_p = 19;
 	enum uint SDLK_q = 20;
 	enum uint SDLK_r = 114;
 }
@@ -101,17 +105,15 @@ struct SDL_AudioSpec {
 	void* userdata;
 }
 
-enum SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK = 0;
 enum SDL_AUDIO_DEVICE_ALLOW_ANY_CHANGE = 0x00000001 | 0x00000002 | 0x00000004 | 0x00000008;
 
 // Audio functions - Note: SDL3 audio API has significant changes
 SDL_AudioDeviceID SDL_OpenAudioDevice(
 	const(char)* device,
-	const(SDL_AudioSpec)* desired,
+									  const(SDL_AudioSpec)* desired,
 	SDL_AudioSpec* obtained,
 	int allowed_changes
 );
-void SDL_CloseAudioDevice(SDL_AudioDeviceID dev);
 SDL_AudioStream* SDL_CreateAudioStream(
 	uint src_format, ubyte src_channels, int src_rate,
 	uint dst_format, ubyte dst_channels, int dst_rate
@@ -120,5 +122,3 @@ void SDL_DestroyAudioStream(SDL_AudioStream* stream);
 int SDL_BindAudioStreams(SDL_AudioDeviceID dev, SDL_AudioStream** streams, int num_streams);
 int SDL_QueueAudio(SDL_AudioDeviceID dev, const(void)* data, uint len);
 uint SDL_GetAudioDeviceQueueSize(SDL_AudioDeviceID dev);
-void SDL_PauseAudioDevice(SDL_AudioDeviceID dev);
-void SDL_ResumeAudioDevice(SDL_AudioDeviceID dev);

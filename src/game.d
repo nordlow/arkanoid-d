@@ -33,6 +33,7 @@ nothrow struct Game {
 	void processEvents() @trusted {
 		SDL_Event e;
 		while (SDL_PollEvent(&e)) {
+			/+ e.key.key.dbg; +/
 			switch (e.type) {
 			case SDL_EVENT_QUIT:
 				quit = true;
@@ -60,6 +61,9 @@ nothrow struct Game {
 						warning("Could not enter fullscreen! SDL_Error: %s", SDL_GetError());
 					SDL_GetWindowSize(win._ptr, &ssz.width, &ssz.height);
 					break;
+				case SDLK_p:
+					togglePause();
+					break;
 				case SDLK_r:
 					rPressed = true;
 					break;
@@ -72,11 +76,19 @@ nothrow struct Game {
 			}
 		}
 	}
+	void togglePause() {
+		paused = !paused;
+		if (paused)
+			adev.stop();
+		else if (!paused)
+			adev.start();
+	}
 	ScreenSize ssz;
 	Window win;
 	static immutable ballCount = 30; // boll antal
 	Scene scene;
 	static immutable ballVelocity = Vel(200, -200);
+	AudioDevice adev;
 	static immutable soundSampleRate = 44100;
 	bool leftPressed, rightPressed, spacePressed, rPressed;
 	bool quit;
@@ -84,7 +96,7 @@ nothrow struct Game {
 	Random rng;
 	bool playMusic;
 	bool inFullscreen;
-	bool won, over;
+	bool won, over, paused;
 }
 
 struct Scene {

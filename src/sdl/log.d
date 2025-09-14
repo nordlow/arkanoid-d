@@ -57,7 +57,6 @@ void SDL_LogDebug(SDL_LogCategory category, const(char)* fmt, ...);
 void SDL_LogInfo(SDL_LogCategory category, const(char)* fmt, ...);
 void SDL_LogWarn(SDL_LogCategory category, const(char)* fmt, ...);
 void SDL_LogError(SDL_LogCategory category, const(char)* fmt, ...);
-void SDL_LogCritical(SDL_LogCategory category, const(char)* fmt, ...);
 void SDL_LogMessage(SDL_LogCategory category, SDL_LogPriority priority, const(char)* fmt, ...);
 void SDL_LogMessageV(SDL_LogCategory category, SDL_LogPriority priority, const(char)* fmt, va_list ap);
 void SDL_GetLogOutputFunction(SDL_LogOutputFunction* callback, void** userdata);
