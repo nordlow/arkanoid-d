@@ -37,6 +37,9 @@ nothrow struct Game {
 		adev.bind(brickFx.stream);
 		brickFx.stream.put(brickFx.buffer);
 	}
+	~this() {
+		adev.unbind(brickFx.stream);
+	}
 	void loadAudioFxs() {
 		import nxt.path : FilePath;
 		brickFx.buffer = AudioBuffer(FilePath("sound/brick_hit.wav"));
@@ -90,9 +93,9 @@ nothrow struct Game {
 	void togglePause() {
 		paused = !paused;
 		if (paused)
-			adev.stop();
+			adev.pause();
 		else if (!paused)
-			adev.start();
+			adev.resume();
 	}
 	ScreenSize ssz;
 	Window win;

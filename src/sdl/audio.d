@@ -38,7 +38,7 @@ struct AudioDevice {
 	}
 	/++ Unbind `stream` to `this`. +/
 	void unbind(ref AudioStream stream) @trusted {
-		infof("Unbinding audio stream %s at ...", stream._ptr);
+		tracef("Unbinding audio stream %s at ...", stream._ptr);
 		return SDL_UnbindAudioStream(stream._ptr);
 	}
 	void close() @trusted {
