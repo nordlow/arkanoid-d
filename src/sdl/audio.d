@@ -52,18 +52,24 @@ struct AudioStream {
 			return;
 		}
 	}
-	void reput(in AudioBuffer buf) scope @trusted {
-		flush();
+	void clearAndPut(in AudioBuffer buf) scope @trusted {
+		clear();
 		return put(buf);
 	}
+	/++ Tell the stream that you're done sending data, and anything being
+		buffered should be converted/resampled and made available
+		immediately. +/
 	void flush() scope @trusted {
 		if (!SDL_FlushAudioStream(_ptr))
 			return errorf("Failed to flush audio stream %s: %s", _ptr, SDL_GetError().fromStringz);
 	}
+	/++ Clear|Drop any queued|pending data in the stream..+/
+	void clear() scope @trusted {
+		if (!SDL_ClearAudioStream(_ptr))
+			return errorf("Failed to clear audio stream %s: %s", _ptr, SDL_GetError().fromStringz);
+	}
 	// TODO:
 	// SDL_GetAudioStreamData(): Retrieves converted audio data from the stream.
-	/+ SDL_FlushAudioStream(): Flushes (discards) all queued data in the stream's buffer. +/
-	/+ SDL_ClearAudioStream(): Clears the entire stream, including internal buffers and queued data. +/
 	/+ SDL_DrainAudioStream(): Waits for all queued data to be consumed before returning. +/
 	/+ SDL_GetAudioStreamAvailable(): Returns the amount of converted audio data, in bytes, currently available to be retrieved from the stream. +/
 	/+ SDL_GetAudioStreamQueued(): Returns the amount of raw, unconverted audio data, in bytes, currently queued in the stream. +/
