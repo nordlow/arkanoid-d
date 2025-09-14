@@ -34,12 +34,13 @@ nothrow struct Game {
 
 		adev = AudioDevice(brickSound.spec);
 		brickStream = AudioStream(brickSound.spec);
+		brickStream.put(brickSound);
 		/+ TODO: streams ~= str; +/
 		adev.bind(brickStream);
 	}
 	void loadSounds() {
 		import nxt.path : FilePath;
-		brickSound = WAV(FilePath("sound/brick_hit.wav"));
+		brickSound = AudioBuffer(FilePath("sound/brick_hit.wav"));
 	}
 	void processEvents() @trusted {
 		SDL_Event e;
@@ -110,7 +111,7 @@ nothrow struct Game {
 	version(none) static immutable soundSampleRate = 44100;
 
 	AudioStream brickStream;
-	WAV brickSound;
+	AudioBuffer brickSound;
 }
 
 struct Scene {

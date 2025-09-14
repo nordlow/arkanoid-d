@@ -14,23 +14,24 @@ nothrow:
 	alias this = _spec; // for now
 }
 
-struct WAV {
+struct AudioBuffer {
 	import nxt.path : FilePath;
 	@disable this(this);
-	this(in FilePath path) @trusted {
-		if (!SDL_LoadWAV(path.str.toStringz, &_spec._spec, &audio_buf, &audio_len))
+	this(in FilePath pathWAV) @trusted {
+		// TODO: Generalize to any sound file.
+		if (!SDL_LoadWAV(pathWAV.str.toStringz, &_spec._spec, cast(ubyte**)&_ptr, &_length))
 			errorf("Failed to load WAV: %s", SDL_GetError().fromStringz);
 	}
 	~this() @trusted {
-		 if (audio_buf)
-			 SDL_free(audio_buf);
+		 if (_ptr)
+			 SDL_free(_ptr);
 	}
 @property:
 	AudioSpec spec() const scope pure nothrow => _spec;
 private:
 	AudioSpec _spec;
-	Uint8* audio_buf;
-	Uint32 audio_len;
+	void* _ptr;
+	Uint32 _length;
 }
 
 struct AudioStream {
@@ -44,6 +45,12 @@ struct AudioStream {
 	~this() @trusted {
 		infof("Destroying audio stream at %s", _ptr);
 		SDL_DestroyAudioStream(_ptr);
+	}
+	void put(in AudioBuffer abuf) @trusted {
+		if (!SDL_PutAudioStreamData(_ptr, abuf._ptr, cast(int)abuf._length)) {
+			errorf("Failed to queue audio data: %s", SDL_GetError().fromStringz);
+			return;
+		}
 	}
 	private SDL_AudioStream* _ptr;
 	invariant(_ptr);
