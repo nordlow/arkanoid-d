@@ -26,8 +26,8 @@ struct AudioDevice {
 	/+ nothrow: +/
 	@disable this(this);
 	void open(const(char)* device = cast(const(char)*)SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK) @trusted {
-		SDL_AudioSpec desired;
-		SDL_AudioSpec obtained;
+		AudioSpec desired;
+		AudioSpec obtained;
 		int allowed_changes;
 		SDL_AudioDeviceID dev = SDL_OpenAudioDevice(device: device, null, null, allowed_changes);
 		if (dev == 0)
