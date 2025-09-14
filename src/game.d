@@ -31,9 +31,11 @@ nothrow struct Game {
 		scene.brickGrid.layout(ssz.width, ssz.height, Colors.DARKGREEN, Colors.DARKRED, Colors.DARKBLUE, Colors.DARKYELLOW);
 
 		loadSounds();
+
 		adev = AudioDevice(brickSound.spec);
-		auto str = AudioStream(brickSound.spec);
-		adev.bind(str);
+		brickStream = AudioStream(brickSound.spec);
+		/+ TODO: streams ~= str; +/
+		adev.bind(brickStream);
 	}
 	void loadSounds() {
 		import nxt.path : FilePath;
@@ -107,6 +109,7 @@ nothrow struct Game {
 	private Random _rng;
 	version(none) static immutable soundSampleRate = 44100;
 
+	AudioStream brickStream;
 	WAV brickSound;
 }
 
