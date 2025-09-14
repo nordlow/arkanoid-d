@@ -22,7 +22,7 @@ nothrow struct Game {
 		this.ssz = ssz;
 		this.win = Window(ssz, "Arkanoid Clone", fullscreen: true);
 		joystick = openDefaultJoystick();
-		rng = Random(unpredictableSeed());
+		_rng = Random(unpredictableSeed());
 		scene = Scene(paddle: Paddle(shape: Rect(pos: Pos(ssz.width / 2 - 60, ssz.height - 30), size: Dim(150, 20)),
 									 color: Colors.BLUE),
 					  balls: makeBalls(ballCount, ballVelocity, ssz.width, ssz.height),
@@ -94,7 +94,7 @@ nothrow struct Game {
 	bool leftPressed, rightPressed, spacePressed, rPressed;
 	bool quit;
 	Joystick joystick;
-	Random rng;
+	private Random _rng;
 	bool playMusic;
 	bool inFullscreen;
 	bool won, over, paused;
