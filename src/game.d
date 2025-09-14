@@ -34,7 +34,7 @@ nothrow struct Game {
 	void processEvents() @trusted {
 		SDL_Event e;
 		while (SDL_PollEvent(&e)) {
-			/+ e.key.key.dbg; +/
+			version(none) e.key.dbg;
 			switch (e.type) {
 			case SDL_EVENT_QUIT:
 				quit = true;
