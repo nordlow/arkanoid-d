@@ -18,7 +18,7 @@ import joystick;
 nothrow struct Game {
 	import std.random : Random, unpredictableSeed;
 	@disable this(this);
-	this(in ScreenSize ssz, const uint ballCount = 1) @trusted {
+	this(in ScreenSize ssz, const uint ballCount = 3) @trusted {
 		this.ssz = ssz;
 		this.win = Window(ssz, "Arkanoid Clone", fullscreen: true);
 		joystick = openDefaultJoystick();
