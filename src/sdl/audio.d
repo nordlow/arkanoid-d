@@ -33,7 +33,7 @@ struct AudioDevice {
 		if (dev == 0)
 			criticalf("Failed to open audio: %s", SDL_GetError());
 		else
-			infof("Successfully opened audio device id %u", dev);
+			infof("Successfully opened audio device id %s", dev);
 	}
 	~this() {
 		if (_id != 0)

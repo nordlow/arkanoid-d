@@ -29,6 +29,7 @@ nothrow struct Game {
 					  bullets: makeBullets(30),
 					  brickGrid: BrickGrid(nRows: 20, nCols: 30));
 		scene.brickGrid.layout(ssz.width, ssz.height, Colors.DARKGREEN, Colors.DARKRED, Colors.DARKBLUE, Colors.DARKYELLOW);
+		adev.open();
 	}
 	void processEvents() @trusted {
 		SDL_Event e;
