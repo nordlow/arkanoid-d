@@ -1,6 +1,5 @@
 module sdl.renderer;
 
-import core.stdc.stdio;
 import std.math : sin, cos, PI;
 import std.string : fromStringz;
 import nxt.lut;
