@@ -40,10 +40,11 @@ Ball[] makeBalls(uint count, Vel velocity, uint screenWidth, uint screenHeight) 
 	auto rnd = Random();
 	typeof(return) ret;
 	ret.length = count;
+	const rad = 16;
 	foreach (const i, ref ball; ret)
 		ball = Ball(shape: Cir(pos: Pos(screenWidth / 2 + i,
-										screenHeight / 16 + i),
-							   rad: 15),
+										(screenHeight - screenHeight / 8) + i),
+							   rad: rad),
 					vel: velocity,
 					color: HSV(uniform(0.0f, 1.0f, rnd), 0.5f, 0.8f).toRGBA,
 					active: true);
