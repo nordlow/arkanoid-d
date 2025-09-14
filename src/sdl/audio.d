@@ -43,8 +43,8 @@ struct AudioDevice {
 	@disable this(this);
 	void open(in AudioSpec desiredSpec, uint devid = SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK) @trusted {
 		int allowed_changes;
-		auto spec = cast()desiredSpec; // TODO: Does `SDL_OpenAudioDevice` mutate spec?
-		SDL_AudioDeviceID dev = SDL_OpenAudioDevice(devid, &spec._spec);
+		// TODO: cast here shouldn't be needed as second parameter is const `SDL_OpenAudioDevice`.
+		SDL_AudioDeviceID dev = SDL_OpenAudioDevice(devid, cast(SDL_AudioSpec*)(&desiredSpec._spec));
 		if (dev == 0)
 			return criticalf("Failed to open audio: %s", SDL_GetError());
 		infof("Successfully opened audio device id %s", dev);
