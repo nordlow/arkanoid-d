@@ -30,7 +30,7 @@ nothrow struct Game {
 					  brickGrid: BrickGrid(nRows: 20, nCols: 30));
 		scene.brickGrid.layout(ssz.width, ssz.height, Colors.DARKGREEN, Colors.DARKRED, Colors.DARKBLUE, Colors.DARKYELLOW);
 		loadSounds();
-		adev.open(brickSound.spec);
+		adev = AudioDevice(brickSound.spec);
 	}
 	void loadSounds() {
 		import nxt.path : FilePath;

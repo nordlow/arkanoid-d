@@ -46,12 +46,14 @@ nothrow:
 struct AudioDevice {
 	/+ nothrow: +/
 	@disable this(this);
-	void open(in AudioSpec desiredSpec, uint devid = SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK) @trusted {
+	this(in AudioSpec desiredSpec, uint devid = SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK) @trusted {
 		int allowed_changes;
 		// TODO: cast here shouldn't be needed as second parameter is const `SDL_OpenAudioDevice`.
 		_id = SDL_OpenAudioDevice(devid, cast(SDL_AudioSpec*)(&desiredSpec._spec));
-		if (_id == 0)
-			return criticalf("Failed to open audio: %s", SDL_GetError());
+		if (_id == 0) {
+			criticalf("Failed to open audio: %s", SDL_GetError());
+			return;
+		}
 		infof("Successfully opened audio device id %s", _id);
 	}
 	~this() {
@@ -65,4 +67,5 @@ struct AudioDevice {
 	/// Stop audio playback.
 	void stop() @trusted @il { SDL_PauseAudioDevice(_id); }
 	SDL_AudioDeviceID _id;
+	invariant(_id);
 }
