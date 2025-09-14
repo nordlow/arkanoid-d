@@ -24,7 +24,7 @@ nothrow struct Renderer {
 		_sincos.fill();
 	}
 
-	~this() @nogc @trusted
+	~this() @nogc @trusted @il
 		=> SDL_DestroyRenderer(_ptr);
 
 	int setDrawColor(in RGBA color) nothrow @trusted @il
@@ -35,7 +35,7 @@ nothrow struct Renderer {
 
 	SDL_Renderer* _ptr;
 	enum vertexCount = 32;
-	alias SinCos = LuT!(float, vertexCount, sin, cos);
+	alias SinCos = CyclicLookupTable!(float, vertexCount, sin, cos);
 	SinCos _sincos;
 	invariant(_ptr);
 }
