@@ -6,10 +6,9 @@ public import sdl.log;
 public import sdl.window;
 public import sdl.renderer;
 
+struct ScreenSize { int width; int height; }
 alias RGBA = ColorRGBA;
 alias HSV = ColorHSV;
-
-struct ScreenSize { int width; int height; }
 
 nothrow @nogc:
 
