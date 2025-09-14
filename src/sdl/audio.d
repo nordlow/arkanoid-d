@@ -43,7 +43,7 @@ struct AudioStream {
 		infof("Successfully created audio stream at %s", _ptr);
 	}
 	~this() @trusted {
-		infof("Destroying audio stream at %s", _ptr);
+		tracef("Destroying audio stream at %s", _ptr);
 		SDL_DestroyAudioStream(_ptr);
 	}
 	void put(in AudioBuffer buf) scope @trusted {

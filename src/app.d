@@ -156,7 +156,7 @@ void main(string[] args) @trusted {
 						&& ball.pos.y - ball.rad
 						<= brick.shape.pos.y + brick.shape.size.y) {
 						brick.restartFlashing();
-						game.brickStream.reput(game.brickSound);
+						game.brickStream.clearAndPut(game.brickSound);
 						ball.vel.y *= -1;
 						break;
 					}
