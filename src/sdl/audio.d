@@ -68,11 +68,15 @@ struct AudioDevice {
 			close();
 	}
 	void bind(ref AudioStream stream) @trusted {
+
 		if (!SDL_BindAudioStream(_id, stream._ptr))
 			errorf("Failed to bind to device: %s", SDL_GetError().fromStringz);
 	}
 	/// Close `this`.
-	void close() @trusted => SDL_CloseAudioDevice(_id);
+	void close() @trusted {
+		infof("Closing audio device %s", _id);
+		SDL_CloseAudioDevice(_id);
+	}
 	/// Start audio playback.
 	void start() @trusted @il { SDL_ResumeAudioDevice(_id); }
 	/// Stop audio playback.
