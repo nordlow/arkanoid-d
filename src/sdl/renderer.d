@@ -2,11 +2,9 @@ module sdl.renderer;
 
 import std.math : sin, cos, PI;
 import std.string : fromStringz;
-
 import nxt.lut;
 import nxt.logger;
 import nxt.effects;
-
 import sdl;
 
 @safe:
