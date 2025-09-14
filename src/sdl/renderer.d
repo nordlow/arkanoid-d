@@ -1,6 +1,7 @@
 module sdl.renderer;
 
 import core.stdc.stdio;
+import std.math : sin, cos, PI;
 import std.string : fromStringz;
 import nxt.lut;
 import nxt.logger;
@@ -20,7 +21,8 @@ nothrow struct Renderer {
 		}
 		if (!SDL_SetRenderVSync(_ptr, 1))
 			warning("VSync not supported");
-		_sincosLUT.fill();
+		_sincos = SinCos(0, 2*PI);
+		_sincos.fill();
 	}
 
 	~this() @nogc @trusted
@@ -34,7 +36,8 @@ nothrow struct Renderer {
 
 	SDL_Renderer* _ptr;
 	enum vertexCount = 32;
-	SinCosLUT!(float, vertexCount) _sincosLUT;
+	alias SinCos = LuT!(float, vertexCount, sin, cos);
+	SinCos _sincos;
 	invariant(_ptr);
 }
 
