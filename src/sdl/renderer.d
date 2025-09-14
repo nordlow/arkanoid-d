@@ -1,6 +1,5 @@
 module sdl.renderer;
 
-import std.math : sin, cos, PI;
 import std.string : fromStringz;
 import nxt.lut;
 import nxt.logger;
@@ -10,6 +9,8 @@ import sdl;
 @safe:
 
 nothrow struct Renderer {
+	import std.math : sin, cos, PI;
+
 	@disable this(this);
 
 	this(scope ref Window win, immutable char[] name = null) @trusted {
