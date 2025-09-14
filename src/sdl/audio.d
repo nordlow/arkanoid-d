@@ -46,12 +46,13 @@ struct AudioStream {
 struct AudioDevice {
 	/+ nothrow: +/
 	@disable this(this);
-	this(in AudioSpec desiredSpec, uint devid = SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK) @trusted {
+	this(in AudioSpec desiredSpec,
+	  uint devid = SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK) @trusted {
 		int allowed_changes;
 		// TODO: this cast shouldn' be needed. Add extern(C) to override.
 		_id = SDL_OpenAudioDevice(devid, cast(SDL_AudioSpec*)(&desiredSpec._spec));
 		if (_id == 0) {
-			criticalf("Failed to open audio: %s", SDL_GetError());
+			criticalf("Failed to open audio: %s", SDL_GetError().fromStringz);
 			return;
 		}
 		infof("Successfully opened audio device id %s", _id);
@@ -59,6 +60,10 @@ struct AudioDevice {
 	~this() {
 		if (_id != 0)
 			close();
+	}
+	void bind(ref AudioStream stream) @trusted {
+		if (!SDL_BindAudioStream(_id, stream._ptr))
+			errorf("Failed to bind to device: %s", SDL_GetError().fromStringz);
 	}
 	/// Close `this`.
 	void close() @trusted => SDL_CloseAudioDevice(_id);
