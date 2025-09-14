@@ -35,13 +35,16 @@ nothrow struct Game {
 
 		brickFx.buffer = AudioBuffer(FilePath("sound/brick_hit.wav"));
 		paddleBounceFx.buffer = AudioBuffer(FilePath("sound/ball_gone.wav"));
+		bulletShotFx.buffer = AudioBuffer(FilePath("sound/bullet_shot.wav"));
 
 		brickFx.stream = AudioStream(brickFx.buffer.spec);
 		paddleBounceFx.stream = AudioStream(paddleBounceFx.buffer.spec);
+		bulletShotFx.stream = AudioStream(bulletShotFx.buffer.spec);
 
 		adev = AudioDevice(brickFx.buffer.spec);
 		adev.bind(brickFx.stream);
 		adev.bind(paddleBounceFx.stream);
+		adev.bind(bulletShotFx.stream);
 	}
 	~this() => adev.unbind(brickFx.stream);
 	void processEvents() @trusted {
@@ -112,7 +115,7 @@ nothrow struct Game {
 	private Random _rng;
 	version(none) static immutable soundSampleRate = 44100;
 
-	AudioFx brickFx, paddleBounceFx;
+	AudioFx brickFx, paddleBounceFx, bulletShotFx;
 }
 
 struct Scene {
