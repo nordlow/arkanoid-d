@@ -114,10 +114,10 @@ struct AudioBuffer {
 private:
 	AudioSpec _spec;
 	void* _ptr;
-	Uint32 _length;
+	uint _length;
 }
 
-/++ Audio effect. +/
+/++ Audio (Sound) Effect. +/
 struct AudioFx {
 	@disable this(this);
 	AudioStream stream;
