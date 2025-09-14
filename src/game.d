@@ -84,6 +84,7 @@ nothrow struct Game {
 		else if (!paused)
 			adev.start();
 	}
+private:
 	ScreenSize ssz;
 	Window win;
 	static immutable ballCount = 30; // boll antal
