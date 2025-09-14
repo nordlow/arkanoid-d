@@ -79,6 +79,11 @@ struct AudioDevice {
 		if (!SDL_BindAudioStream(_id, stream._ptr))
 			errorf("Failed to bind to device: %s", SDL_GetError().fromStringz);
 	}
+	/++ Unbind `stream` to `this`. +/
+	void unbind(ref AudioStream stream) @trusted {
+		infof("Unbinding audio stream %s at ...", stream._ptr);
+		return SDL_UnbindAudioStream(stream._ptr);
+	}
 	/// Close `this`.
 	void close() @trusted {
 		infof("Closing audio device %s", _id);
