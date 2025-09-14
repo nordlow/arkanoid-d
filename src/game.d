@@ -18,7 +18,7 @@ import joystick;
 nothrow struct Game {
 	import std.random : Random, unpredictableSeed;
 	@disable this(this);
-	this(in ScreenSize ssz) @trusted {
+	this(in ScreenSize ssz, const uint ballCount = 30) @trusted {
 		this.ssz = ssz;
 		this.win = Window(ssz, "Arkanoid Clone", fullscreen: true);
 		joystick = openDefaultJoystick();
@@ -86,7 +86,6 @@ nothrow struct Game {
 	}
 	ScreenSize ssz;
 	Window win;
-	static immutable ballCount = 30; // boll antal
 	Scene scene;
 	static immutable ballVelocity = Vel(200, -200);
 	bool leftPressed, rightPressed, spacePressed, rPressed;
