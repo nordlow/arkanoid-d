@@ -93,7 +93,6 @@ struct AudioStream {
 	/+ SDL_GetAudioStreamAvailable(): Returns the amount of converted audio data, in bytes, currently available to be retrieved from the stream. +/
 	/+ SDL_GetAudioStreamQueued(): Returns the amount of raw, unconverted audio data, in bytes, currently queued in the stream. +/
 	private SDL_AudioStream* _ptr;
-	invariant(_ptr);
 }
 
 struct AudioBuffer {

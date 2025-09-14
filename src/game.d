@@ -30,21 +30,20 @@ nothrow struct Game {
 					  brickGrid: BrickGrid(nRows: 20, nCols: 30));
 		scene.brickGrid.layout(ssz.width, ssz.height, Colors.DARKGREEN, Colors.DARKRED, Colors.DARKBLUE, Colors.DARKYELLOW);
 
-		loadAudioBuffers();
+		// load audio
+		import nxt.path : FilePath;
 
-		adev = AudioDevice(brickFx.buffer.spec);
+		brickFx.buffer = AudioBuffer(FilePath("sound/brick_hit.wav"));
+		ballGoneFx.buffer = AudioBuffer(FilePath("sound/ball_gone.wav"));
+
+		const spec = brickFx.buffer.spec;
 
 		brickFx.stream = AudioStream(brickFx.buffer.spec);
+
+		adev = AudioDevice(spec);
 		adev.bind(brickFx.stream);
-		brickFx.stream.put(brickFx.buffer);
 	}
-	~this() {
-		adev.unbind(brickFx.stream);
-	}
-	void loadAudioBuffers() {
-		import nxt.path : FilePath;
-		brickFx.buffer = AudioBuffer(FilePath("sound/brick_hit.wav"));
-	}
+	~this() => adev.unbind(brickFx.stream);
 	void processEvents() @trusted {
 		SDL_Event e;
 		while (SDL_PollEvent(&e)) {
@@ -113,7 +112,7 @@ nothrow struct Game {
 	private Random _rng;
 	version(none) static immutable soundSampleRate = 44100;
 
-	AudioFx brickFx;
+	AudioFx brickFx, ballGoneFx;
 }
 
 struct Scene {
