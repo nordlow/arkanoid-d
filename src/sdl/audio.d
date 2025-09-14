@@ -15,20 +15,22 @@ nothrow:
 }
 
 struct WAV {
+	import nxt.path : FilePath;
 	@disable this(this);
-	AudioSpec spec;
-	Uint8* audio_buf;
-	Uint32 audio_len;
-	static WAV load(string path) @trusted {
-		typeof(return) w;
-		if (!SDL_LoadWAV(path.toStringz, &w.spec._spec, &w.audio_buf, &w.audio_len))
+	this(FilePath path) @trusted {
+		if (!SDL_LoadWAV(path.str.toStringz, &_spec._spec, &audio_buf, &audio_len))
 			errorf("Failed to load WAV: %s", SDL_GetError().fromStringz);
-		return w;
 	}
 	~this() @trusted {
-		/+ if (audio_buf !is null) +/
-		/+	SDL_FreeWAV(audio_buf); +/
+		 if (audio_buf)
+			 SDL_free(audio_buf);
 	}
+@property:
+	AudioSpec spec() const scope pure nothrow => _spec;
+private:
+	AudioSpec _spec;
+	Uint8* audio_buf;
+	Uint32 audio_len;
 }
 
 struct AudioStream {

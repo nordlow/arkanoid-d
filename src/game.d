@@ -29,7 +29,12 @@ nothrow struct Game {
 					  bullets: makeBullets(30),
 					  brickGrid: BrickGrid(nRows: 20, nCols: 30));
 		scene.brickGrid.layout(ssz.width, ssz.height, Colors.DARKGREEN, Colors.DARKRED, Colors.DARKBLUE, Colors.DARKYELLOW);
-		version(none) adev.open();
+		loadSounds();
+		adev.open(brickSound.spec);
+	}
+	void loadSounds() {
+		import nxt.path : FilePath;
+		brickSound = WAV(FilePath("sound/brick_hit.wav"));
 	}
 	void processEvents() @trusted {
 		SDL_Event e;
@@ -98,6 +103,8 @@ nothrow struct Game {
 	private AudioDevice adev;
 	private Random _rng;
 	version(none) static immutable soundSampleRate = 44100;
+
+	WAV brickSound;
 }
 
 struct Scene {
