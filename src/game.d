@@ -89,15 +89,14 @@ nothrow struct Game {
 	static immutable ballCount = 30; // boll antal
 	Scene scene;
 	static immutable ballVelocity = Vel(200, -200);
-	AudioDevice adev;
-	static immutable soundSampleRate = 44100;
+	private AudioDevice adev;
 	bool leftPressed, rightPressed, spacePressed, rPressed;
 	bool quit;
 	Joystick joystick;
 	private Random _rng;
-	bool playMusic;
-	bool inFullscreen;
+	private bool inFullscreen;
 	bool won, over, paused;
+	version(none) static immutable soundSampleRate = 44100;
 }
 
 struct Scene {
