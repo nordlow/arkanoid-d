@@ -41,15 +41,14 @@ struct AudioDevice {
 		infof("Unbinding audio stream %s at ...", stream._ptr);
 		return SDL_UnbindAudioStream(stream._ptr);
 	}
-	/// Close `this`.
 	void close() @trusted {
 		tracef("Closing audio device %s", _id);
 		SDL_CloseAudioDevice(_id);
 	}
-	/// Start audio playback.
-	void start() @trusted @il { SDL_ResumeAudioDevice(_id); }
-	/// Stop audio playback.
-	void stop() @trusted @il { SDL_PauseAudioDevice(_id); }
+	/// Resume all audio playback associated with `this` device.
+	void resume() @trusted @il { SDL_ResumeAudioDevice(_id); }
+	/// Pause all audio playback associated with `this` device.
+	void pause() @trusted @il { SDL_PauseAudioDevice(_id); }
 	SDL_AudioDeviceID _id;
 	invariant(_id);
 }
