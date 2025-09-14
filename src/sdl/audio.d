@@ -36,7 +36,10 @@ private:
 struct AudioStream {
 nothrow:
 	@disable this(this);
-	SDL_AudioStream* _ptr;
+	void queue(in WAV wav) {
+		// TODO:
+	}
+	private SDL_AudioStream* _ptr;
 	invariant(_ptr);
 }
 
@@ -46,10 +49,10 @@ struct AudioDevice {
 	void open(in AudioSpec desiredSpec, uint devid = SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK) @trusted {
 		int allowed_changes;
 		// TODO: cast here shouldn't be needed as second parameter is const `SDL_OpenAudioDevice`.
-		SDL_AudioDeviceID dev = SDL_OpenAudioDevice(devid, cast(SDL_AudioSpec*)(&desiredSpec._spec));
-		if (dev == 0)
+		_id = SDL_OpenAudioDevice(devid, cast(SDL_AudioSpec*)(&desiredSpec._spec));
+		if (_id == 0)
 			return criticalf("Failed to open audio: %s", SDL_GetError());
-		infof("Successfully opened audio device id %s", dev);
+		infof("Successfully opened audio device id %s", _id);
 	}
 	~this() {
 		if (_id != 0)
@@ -61,6 +64,5 @@ struct AudioDevice {
 	void start() @trusted @il { SDL_ResumeAudioDevice(_id); }
 	/// Stop audio playback.
 	void stop() @trusted @il { SDL_PauseAudioDevice(_id); }
-
 	SDL_AudioDeviceID _id;
 }
