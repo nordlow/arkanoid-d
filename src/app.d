@@ -158,7 +158,6 @@ void main(string[] args) @trusted {
 						brick.restartFlashing();
 						game.brickStream.put(game.brickSound);
 						ball.vel.y *= -1;
-						// PlaySound(game.brickSound); // Audio removed
 						break;
 					}
 				}
