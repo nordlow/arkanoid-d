@@ -18,7 +18,7 @@ import joystick;
 nothrow struct Game {
 	import std.random : Random, unpredictableSeed;
 	@disable this(this);
-	this(in ScreenSize ssz, const uint ballCount = 3) @trusted {
+	this(in ScreenSize ssz, const uint ballCount = 30) @trusted {
 		this.ssz = ssz;
 		this.win = Window(ssz, "Arkanoid Clone", fullscreen: true);
 		joystick = openDefaultJoystick();
@@ -131,14 +131,14 @@ struct Scene {
 	}
 }
 
-void animateBullets(scope ref Scene scene, float deltaTime) @trusted {
-	foreach (ref bullet; scene.bullets) {
+void animateBullets(scope ref Game game, float deltaTime) @trusted {
+	foreach (ref bullet; game.scene.bullets) {
 		if (!bullet.active)
 			continue;
 		bullet.pos += bullet.vel * deltaTime;
 		if (bullet.pos.y < 0)
 			bullet.active = false;
-		foreach (ref brick; scene.brickGrid[]) {
+		foreach (ref brick; game.scene.brickGrid[]) {
 			if (!brick.active || brick.isFlashing)
 				continue;
 			if (bullet.pos.x + bullet.rad >= brick.shape.pos.x
@@ -148,6 +148,7 @@ void animateBullets(scope ref Scene scene, float deltaTime) @trusted {
 							&& bullet.pos.y - bullet.rad
 							<= brick.shape.pos.y + brick.shape.size.y) {
 								brick.restartFlashing();
+								game.brickStream.clearAndPut(game.brickSound);
 								bullet.active = false;
 								// PlaySound(game.brickSound); // Audio removed
 								break;

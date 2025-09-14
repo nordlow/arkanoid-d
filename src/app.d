@@ -166,8 +166,7 @@ void main(string[] args) @trusted {
 			}
 			tracef("Active: %s/%s", nBallsActive, game.scene.balls.length);
 
-			// update bullets
-			game.scene.animateBullets(deltaTime);
+			game.animateBullets(deltaTime);
 
 			// update logic for flashing bricks. TODO: Move to generic entity color animator
 			foreach (ref brick; game.scene.brickGrid[]) {
