@@ -86,6 +86,7 @@ struct AudioStream {
 			return;
 		}
 	}
+	alias opCall = put;
 	void clearAndPut(in AudioBuffer buf) scope @trusted @il {
 		clear();
 		return put(buf);
