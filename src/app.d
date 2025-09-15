@@ -67,8 +67,7 @@ void main(string[] args) @trusted {
 				game.scene.paddle.moveLeft(deltaTime);
 			}
 			void moveRight() {
-				if (game.scene.paddle.pos.x < ssz.width - game.scene.paddle.size.x)
-					game.scene.paddle.pos.x += 800 * deltaTime;
+				game.scene.paddle.moveRight(deltaTime, ssz);
 			}
 			if (game.joystick.isValid) {
 				while (const ev = game.joystick.tryNextEvent()) {
