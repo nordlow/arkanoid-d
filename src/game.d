@@ -92,9 +92,7 @@ nothrow struct Game {
 	Vel ballVelocity;
 	bool spacePressed, rPressed;
 	bool quit, won, over, paused;
-
 	Joystick joystick;
-
 	private AudioDevice adev;
 	private Random _rng;
 	version(none) static immutable soundSampleRate = 44100;
