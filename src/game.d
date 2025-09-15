@@ -33,8 +33,8 @@ nothrow struct Game {
 		scene.brickGrid.layout(ssz.width, ssz.height, Colors.DARKGREEN, Colors.DARKRED, Colors.DARKBLUE, Colors.DARKYELLOW);
 
 		// load audio
-		import nxt.path : FilePath;
-		alias FP = FilePath;
+		import nxt.path : FP = FilePath;
+
 		FP brickPath = FP("sound/brick_hit.wav");
 		brickFx.buffer = loadWAV(brickPath);
 		brickFx.stream = AudioStream(brickFx.buffer.spec);
