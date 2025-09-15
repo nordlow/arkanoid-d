@@ -28,10 +28,10 @@ nothrow struct Renderer {
 	~this() @nogc @trusted @il
 		=> SDL_DestroyRenderer(_ptr);
 
-	int setDrawColor(in RGBA color) nothrow @trusted @il
+	int setDrawColor(in RGBA color) nothrow @nogc @trusted @il
 		=> SDL_SetRenderDrawColor(_ptr, color.r, color.g, color.b, color.a);
 
-	int fillRect(in SDL_FRect frect) nothrow @trusted @il
+	int fillRect(in SDL_FRect frect) nothrow @nogc @trusted @il
 		=> SDL_RenderFillRect(_ptr, &frect);
 
 	SDL_Renderer* _ptr;
