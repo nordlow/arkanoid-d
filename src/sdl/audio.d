@@ -4,6 +4,7 @@
  +/
 module sdl.audio;
 
+import nxt.path : FilePath;
 import sdl;
 
 @safe:
@@ -107,13 +108,7 @@ struct AudioStream {
 }
 
 struct AudioBuffer {
-	import nxt.path : FilePath;
 	@disable this(this);
-	this(in FilePath pathWAV) @trusted {
-		// TODO: Generalize to any sound file.
-		if (!SDL_LoadWAV(pathWAV.str.toStringz, &_spec._spec, cast(ubyte**)&_ptr, &_length))
-			errorf("Failed to load WAV: %s", SDL_GetError().fromStringz);
-	}
 	~this() @trusted {
 		 if (_ptr)
 			 SDL_free(_ptr);
@@ -124,6 +119,13 @@ private:
 	AudioSpec _spec;
 	void* _ptr;
 	uint _length;
+}
+
+AudioBuffer readWAV(in FilePath path) @trusted {
+	typeof(return) ret;
+	if (!SDL_LoadWAV(path.str.toStringz, &ret._spec._spec, cast(ubyte**)&ret._ptr, &ret._length))
+		errorf("Failed to load WAV from %s: %s", path, SDL_GetError().fromStringz);
+	return ret;
 }
 
 /++ Audio (Sound) Effect. +/

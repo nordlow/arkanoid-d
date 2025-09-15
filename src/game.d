@@ -32,10 +32,10 @@ nothrow struct Game {
 
 		// load audio
 		import nxt.path : FilePath;
-
-		brickFx.buffer = AudioBuffer(FilePath("sound/brick_hit.wav"));
-		paddleBounceFx.buffer = AudioBuffer(FilePath("sound/ball_gone.wav"));
-		bulletShotFx.buffer = AudioBuffer(FilePath("sound/bullet_shot.wav"));
+		alias FP = FilePath;
+		brickFx.buffer = readWAV(FP("sound/brick_hit.wav"));
+		paddleBounceFx.buffer = readWAV(FP("sound/ball_gone.wav"));
+		bulletShotFx.buffer = readWAV(FP("sound/bullet_shot.wav"));
 
 		brickFx.stream = AudioStream(brickFx.buffer.spec);
 		paddleBounceFx.stream = AudioStream(paddleBounceFx.buffer.spec);
