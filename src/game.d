@@ -74,7 +74,7 @@ nothrow struct Game {
 					break;
 				case SDLK_F11:
 					inFullscreen ^= true; // toggle
-					win.setFullscreen(inFullscreen);
+					win.fullscreen = inFullscreen;
 					ssz = win.size;
 					break;
 				case SDLK_P:

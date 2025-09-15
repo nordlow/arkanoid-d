@@ -17,7 +17,7 @@ nothrow struct Window {
 		if (fullscreen)
 			SDL_SetWindowFullscreen(_ptr, true);
 		if (_ptr is null) {
-			warningf("Window could not be created! SDL_Error: %s", SDL_GetError().fromStringz);
+			warningf("Couldn't create window, %s", SDL_GetError().fromStringz);
 			SDL_Quit();
 			return;
 		}
@@ -29,9 +29,9 @@ nothrow struct Window {
 		SDL_GetWindowSize((cast()this)._ptr, &ssz.width, &ssz.height);
 		return ssz;
 	}
-	void setFullscreen(in bool fullscreen = true) scope @trusted	{
+	void fullscreen(in bool fullscreen = true) scope @property @trusted	{
 		if (!SDL_SetWindowFullscreen((cast()this)._ptr, fullscreen))
-			warning("Could set fullscreen state of %s, SDL_Error: %s", _ptr, SDL_GetError());
+			warning("Couldn't set fullscreen state of %s to %s, %s", _ptr, fullscreen, SDL_GetError());
 	}
 	DisplayMode* fullscreenMode() scope @property @trusted
 		=> SDL_GetWindowFullscreenMode((cast()this)._ptr);

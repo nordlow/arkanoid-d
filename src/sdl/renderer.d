@@ -16,7 +16,7 @@ nothrow struct Renderer {
 	this(scope ref Window win, immutable char[] name = null) @trusted {
 		_ptr = SDL_CreateRenderer(win._ptr, name.ptr);
 		if (_ptr is null) {
-			warningf("Renderer could not be created! SDL_Error: %s", SDL_GetError.fromStringz());
+			warningf("Couldn't create renderer, %s", SDL_GetError.fromStringz());
 			SDL_Quit();
 		}
 		if (!SDL_SetRenderVSync(_ptr, 1))
