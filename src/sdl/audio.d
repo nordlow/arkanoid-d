@@ -173,7 +173,15 @@ struct AudioFx {
 	@disable this(this);
 	AudioStream stream;
 	AudioBuffer buffer;
+	this(const FilePath path, in float gain = defaultGain) {
+		buffer = loadWAV(path);
+		stream = AudioStream(buffer.spec);
+		if (gain != defaultGain)
+			stream.gain = 0.15f;
+	}
 	void reput() {
 		stream.clearAndPut(buffer);
 	}
 }
+
+private enum defaultGain = 1.0f;

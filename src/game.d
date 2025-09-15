@@ -41,11 +41,8 @@ nothrow struct Game {
 		if (brickPath.str.endsWith("brick_hit.wav"))
 			brickFx.stream.gain = 0.15f;
 
-		paddleBounceFx.buffer = loadWAV(FP("sound/ball_gone.wav"));
-		paddleBounceFx.stream = AudioStream(paddleBounceFx.buffer.spec);
-
-		bulletShotFx.buffer = loadWAV(FP("sound/bullet_shot.wav"));
-		bulletShotFx.stream = AudioStream(bulletShotFx.buffer.spec);
+		paddleBounceFx = AudioFx(FP("sound/ball_gone.wav"));
+		bulletShotFx = AudioFx(FP("sound/bullet_shot.wav"));
 
 		adev = AudioDevice(brickFx.buffer.spec);
 		adev.bind(brickFx.stream);
