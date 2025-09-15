@@ -12,16 +12,16 @@ struct Window {
 	@disable this(this);
 
 	this(in ScreenSize ssz, in char[] title, Flags flags = 0) @trusted {
-		/+ if (fullscreen) +/
-		/+	flags |= SDL_WINDOW_FULLSCREEN_DESKTOP; +/
-		/+ TODO: Use SDL_CreateWindowAndRenderer +/
-		_ptr = SDL_CreateWindow(title.ptr, ssz.width, ssz.height, cast(uint)flags);
-		if (_ptr is null) {
-			warningf("Couldn't create window, %s", SDL_GetError().fromStringz);
+		SDL_Window *ptrW;
+		SDL_Renderer *ptrR;
+		if (!SDL_CreateWindowAndRenderer(title.ptr, ssz.width, ssz.height, cast(uint)flags,
+										&ptrW, &ptrR)) {
+			warningf("Couldn't create window and renderer, %s", SDL_GetError().fromStringz);
 			SDL_Quit();
 			return;
 		}
-		rdr = Renderer(this);
+		_ptr = ptrW;
+		rdr = Renderer(ptrR);
 		fullscreen = true;
 	}
 
