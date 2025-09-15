@@ -14,7 +14,7 @@ nothrow:
 		rdr.setDrawColor(color);
 		rdr.fillRect(*cast(SDL_FRect*)&shape);
 	}
-	void moveLeft(in float deltaTime) {
+	void moveLeft(in float deltaTime, in ScreenSize _ssz) {
 		if (pos.x > 0)
 			pos.x -= 800 * deltaTime;
 	}
