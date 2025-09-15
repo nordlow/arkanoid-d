@@ -135,6 +135,7 @@ struct AudioStream {
 	// SDL_GetAudioStreamData(): Retrieves converted audio data from the stream.
 	/+ SDL_DrainAudioStream(): Waits for all queued data to be consumed before returning. +/
 	/+ SDL_GetAudioStreamQueued(): Returns the amount of raw, unconverted audio data, in bytes, currently queued in the stream. +/
+
 	private SDL_AudioStream* _ptr;
 }
 
