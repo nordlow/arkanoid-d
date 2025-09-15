@@ -28,6 +28,7 @@ struct AudioDevice {
 		}
 		tracef("Successfully opened audio device id %s", _id);
 	}
+	/++ Destroy `this`. +/
 	~this() {
 		if (_id != 0)
 			close();
@@ -117,6 +118,7 @@ void unbind(scope AudioStream[] streams) @trusted {
 
 struct AudioBuffer {
 	@disable this(this);
+	/++ Destroy `this`. +/
 	~this() @trusted {
 		 if (_ptr)
 			 SDL_free(_ptr);
