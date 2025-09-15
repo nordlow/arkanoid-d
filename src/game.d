@@ -60,7 +60,7 @@ nothrow struct Game {
 					warning(e.key.key);
 				switch (e.key.key) {
 				case SDLK_ESCAPE:
-				case SDLK_q:
+				case SDLK_Q:
 					quit = true;
 					break;
 				case SDLK_LEFT:
@@ -78,10 +78,10 @@ nothrow struct Game {
 						warning("Could not enter fullscreen! SDL_Error: %s", SDL_GetError());
 					SDL_GetWindowSize(win._ptr, &ssz.width, &ssz.height);
 					break;
-				case SDLK_p:
+				case SDLK_P:
 					togglePause();
 					break;
-				case SDLK_r:
+				case SDLK_R:
 					rPressed = true;
 					break;
 				default:

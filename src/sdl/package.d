@@ -21,46 +21,6 @@ extern(C):
 
 // Window flags
 enum uint SDL_WINDOW_RESIZABLE = 0x00000020;
-enum uint SDL_WINDOW_FULLSCREEN_DESKTOP = 0x00001001;
-
-// Event types (these values may need verification against actual headers)
-enum uint SDL_EVENT_QUIT = 0x100;
-enum uint SDL_EVENT_KEY_DOWN = 0x300;
-enum uint SDL_EVENT_WINDOW_RESIZED = 0x203;
-
-// Key codes
-version(linux) {
-	enum uint SDLK_ESCAPE = 41;
-	enum uint SDLK_SPACE = 44;
-	enum uint SDLK_LEFT = 1073741904;
-	enum uint SDLK_RIGHT = 1073741903;
-	enum uint SDLK_F11 = 68;
-	enum uint SDLK_p = 19;
-	enum uint SDLK_q = 20;
-	enum uint SDLK_r = 114;
-}
-
-struct SDL_KeyboardEvent {
-	uint type;
-	uint reserved;
-	ulong timestamp;
-	uint windowID;
-	ubyte state;
-	ubyte repeat;
-	ubyte padding2;
-	ubyte padding3;
-	uint key;
-	uint mod;
-	ushort raw;
-	ushort unused;
-}
-
-union SDL_Event {
-	uint type;
-	SDL_KeyboardEvent key;
-	SDL_WindowEvent window;
-	ubyte[128] padding;
-}
 
 // Core SDL functions
 int SDL_Init(uint flags);
@@ -90,7 +50,5 @@ SDL_Texture* SDL_CreateTextureFromSurface(SDL_Renderer* renderer, SDL_Surface* s
 void SDL_DestroyTexture(SDL_Texture* texture);
 SDL_Surface* SDL_LoadBMP(const char* file);
 void SDL_DestroySurface(SDL_Surface* surface);
-
-bool SDL_PollEvent(SDL_Event* event);
 
 const(ubyte)* SDL_GetKeyboardState(int* numkeys);
