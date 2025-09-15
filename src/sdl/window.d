@@ -10,11 +10,11 @@ nothrow struct Window {
 	alias Flags = SDL_WindowFlags;
 	@disable this(this);
 	this(in ScreenSize ssz, in char[] title, Flags flags = 0) @trusted {
-		const fullscreen = true;
+		inFullscreen = true;
 		/+ if (fullscreen) +/
 		/+	flags |= SDL_WINDOW_FULLSCREEN_DESKTOP; +/
 		_ptr = SDL_CreateWindow(title.ptr, ssz.width, ssz.height, cast(uint)flags);
-		if (fullscreen)
+		if (inFullscreen)
 			SDL_SetWindowFullscreen(_ptr, true);
 		if (_ptr is null) {
 			warningf("Couldn't create window, %s", SDL_GetError().fromStringz);
@@ -39,4 +39,5 @@ nothrow struct Window {
 	Renderer rdr;
 	package SDL_Window* _ptr;
 	invariant(_ptr);
+	bool inFullscreen;
 }
