@@ -39,15 +39,18 @@ bool SDL_SetWindowFullscreen(SDL_Window* window, bool fullscreen);
 SDL_Renderer* SDL_CreateRenderer(SDL_Window* window, const char* name);
 void SDL_DestroyRenderer(SDL_Renderer* renderer);
 int SDL_SetRenderDrawColor(SDL_Renderer* renderer, ubyte r, ubyte g, ubyte b, ubyte a);
-bool SDL_RenderClear(SDL_Renderer *renderer);
 int SDL_RenderFillRect(SDL_Renderer* renderer, const SDL_FRect* rect);
 int SDL_RenderRect(SDL_Renderer* renderer, const SDL_FRect* rect);
-bool SDL_RenderPresent(SDL_Renderer* renderer); // Returns bool in SDL3
+
+bool SDL_RenderClear(SDL_Renderer *renderer);
+bool SDL_RenderPresent(SDL_Renderer* renderer);
 bool SDL_SetRenderVSync(SDL_Renderer* renderer, int vsync);
 
+// Texture
 bool SDL_RenderTexture(SDL_Renderer* renderer, SDL_Texture* texture, const SDL_FRect* srcrect, const SDL_FRect* dstrect);
 SDL_Texture* SDL_CreateTextureFromSurface(SDL_Renderer* renderer, SDL_Surface* surface);
 void SDL_DestroyTexture(SDL_Texture* texture);
+
 SDL_Surface* SDL_LoadBMP(const char* file);
 void SDL_DestroySurface(SDL_Surface* surface);
 
