@@ -3,7 +3,11 @@
 Just type `dub` to run.
 
 ## TODO
-- Use SDL function that does combined create window and renderer.
+- Add `Scene.update` that automatically animates using static introspection on
+  entity
+  - `SomeShape shape`
+  - `Ang rotation`
+  - these properties can depend on `FrameTime`.
 - Add tesselation of shapes and store all `SDL_Vertex[vertexCount]`
   plus associated colors in `Renderer` and draw these using
   `SDL_RenderGeometry`.
@@ -14,6 +18,7 @@ Just type `dub` to run.
 - Use static introspection to
   - update `Game` `Scene` graph
   - draw `Game` `Scene` graph
+- Use SDL function that does combined create window and renderer.
 + Sten brickor som inte går sönder
 + Längre paddel och flera paddlar
 + Göra paddeln rundad som i riktiga Arkanoid

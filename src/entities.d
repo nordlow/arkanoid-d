@@ -9,7 +9,7 @@ struct Paddle {
 	alias this = shape;
 	RGBA color;
 nothrow:
-	void update() {} // TODO shape and color
+	void update(float dt) {}
 	void drawIn(scope ref Renderer rdr) const scope @trusted {
 		rdr.setDrawColor(color);
 		rdr.fillRect(*cast(SDL_FRect*)&shape);
@@ -31,7 +31,7 @@ struct Ball {
 	RGBA color;
 	bool active;
 nothrow:
-	void update() {} // TODO shape and color
+	void update(float dt) {}
 	void drawIn(scope ref Renderer rdr) const scope @trusted {
 		if (!active)
 			return;
@@ -65,7 +65,7 @@ struct Bullet {
 	Vel vel;
 	RGBA color;
 	bool active;
-	void update() {} // TODO shape and color
+	void update(float dt) {}
 	void drawIn(scope ref Renderer rdr) const scope nothrow @trusted {
 		if (!active)
 			return;
@@ -191,7 +191,7 @@ nothrow:
 		isFlashing = true; // start
 		flashTimer = 0.0f; // restart
 	}
-	void update() {} // TODO shape and color
+	void update(float dt) {}
 	void drawIn(scope ref Renderer rdr) const @trusted {
 		if (active || isFlashing) {
 			RGBA drawColor = color;
