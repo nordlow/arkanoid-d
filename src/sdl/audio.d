@@ -127,6 +127,7 @@ AudioBuffer loadWAV(in FilePath path) @trusted {
 		errorf("Failed to load WAV from %s: %s", path, SDL_GetError().fromStringz);
 	return ret;
 }
+alias readWAV = loadWAV;
 
 /++ Audio (Sound) Effect. +/
 struct AudioFx {
