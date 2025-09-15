@@ -5,6 +5,7 @@ copyright "Copyright © 2025, Per Nordlöw"
 
 dependency "phobos-next" path="../phobos-next"
 
+# SDL
 dflags "-ISDL/include" "-P=-ISDL/include" # ImportC
 lflags "-LSDL/build" platform="posix"
 libs "SDL3" "c"

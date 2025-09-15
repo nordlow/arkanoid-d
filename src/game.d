@@ -109,7 +109,7 @@ struct Scene {
 	void drawIn(scope ref Renderer rdr) @trusted {
 		SDL_SetRenderDrawColor(rdr._ptr, Colors.BLACK.r, Colors.BLACK.g, Colors.BLACK.b,
 							   Colors.BLACK.a);
-		SDL_RenderClear(rdr._ptr);
+		rdr.clear();
 		brickGrid.drawIn(rdr);
 		paddle.drawIn(rdr);
 		balls.drawIn(rdr);

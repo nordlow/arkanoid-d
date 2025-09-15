@@ -39,7 +39,7 @@ bool SDL_SetWindowFullscreen(SDL_Window* window, bool fullscreen);
 SDL_Renderer* SDL_CreateRenderer(SDL_Window* window, const char* name);
 void SDL_DestroyRenderer(SDL_Renderer* renderer);
 int SDL_SetRenderDrawColor(SDL_Renderer* renderer, ubyte r, ubyte g, ubyte b, ubyte a);
-int SDL_RenderClear(SDL_Renderer* renderer);
+bool SDL_RenderClear(SDL_Renderer *renderer);
 int SDL_RenderFillRect(SDL_Renderer* renderer, const SDL_FRect* rect);
 int SDL_RenderRect(SDL_Renderer* renderer, const SDL_FRect* rect);
 bool SDL_RenderPresent(SDL_Renderer* renderer); // Returns bool in SDL3

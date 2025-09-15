@@ -49,6 +49,15 @@ struct Renderer { nothrow:
 	int fillRect(in SDL_FRect frect) nothrow @nogc @trusted
 		=> SDL_RenderFillRect(_ptr, &frect);
 
+	/++ Clear the current rendering target with the current drawing color set
+		with `setDrawColor`. +/
+	bool clear() @trusted {
+		const ret = SDL_RenderClear(_ptr);
+		if (!ret)
+			warningf("Couldn't clear, %s", SDL_GetError.fromStringz());
+		return ret;
+	}
+
 	SDL_Renderer* _ptr;
 	enum vertexCount = 32;
 	alias SinCos = CyclicLookupTable!(float, vertexCount, sin, cos);
