@@ -44,13 +44,11 @@ void main(string[] args) @trusted {
 
 	auto game = Game(ssz);
 
-	// Note: Audio generation removed for SDL3 conversion - would need SDL_mixer or similar
-	// Sound[] pianoSounds; // Audio system would need separate implementation
-
 	ulong lastFrameTime = SDL_GetTicks();
-	tracef("lastFrameTime: %s", lastFrameTime);
 
 	for (uint frameCounter = 0; !game.quit; ++frameCounter) {
+		tracef("lastFrameTime: %s", lastFrameTime);
+
 		const currentFrameTime = SDL_GetTicks();
 		const deltaTime = (currentFrameTime - lastFrameTime) / 1000.0f;
 		lastFrameTime = currentFrameTime;
