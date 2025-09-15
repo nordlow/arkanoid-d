@@ -1,5 +1,7 @@
 # Arkanoid Clone in D.
 
+See also https://github.com/vhspace/sdl3-rs.
+
 Just type `dub` to run.
 
 ## Core kinds of calculations in `update(float dt)`
