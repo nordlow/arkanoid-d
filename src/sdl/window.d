@@ -21,23 +21,23 @@ nothrow struct Window {
 		fullscreen = true;
 		rdr = Renderer(this);
 	}
-	~this() nothrow @nogc @trusted
+	~this() nothrow @nogc @trusted @il
 		=> SDL_DestroyWindow(_ptr);
-	ScreenSize size() const scope @property @trusted {
+	ScreenSize size() const scope @property @trusted @il  {
 		typeof(return) ssz;
 		SDL_GetWindowSize((cast()this)._ptr, &ssz.width, &ssz.height);
 		return ssz;
 	}
-	bool fullscreen() const scope nothrow @nogc @property
+	bool fullscreen() const scope nothrow @nogc @property @il
 		=> inFullscreen;
-	void fullscreen(in bool fullscreen_) scope @property @trusted	{
+	void fullscreen(in bool fullscreen_) scope @property @trusted @il {
 		if (!SDL_SetWindowFullscreen((cast()this)._ptr, fullscreen_))
 			warning("Couldn't set fullscreen state of %s to %s, %s", _ptr, fullscreen_, SDL_GetError());
 		inFullscreen = fullscreen_;
 	}
-	DisplayMode* fullscreenMode() scope @property @trusted
+	DisplayMode* fullscreenMode() scope @property @trusted @il
 		=> SDL_GetWindowFullscreenMode((cast()this)._ptr);
-	Flags flags() const scope @property @trusted
+	Flags flags() const scope @property @trusted @il
 		=> SDL_GetWindowFlags((cast()this)._ptr);
 	Renderer rdr;
 	package SDL_Window* _ptr;
