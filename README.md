@@ -49,6 +49,8 @@ Just type `dub` to run.
    - Update music transitions or dynamic effects tied to game state.
 
 ## TODO
+
+### Engine
 - Add tesselation of shapes and store all `SDL_Vertex[vertexCount]`
   plus associated colors in `Renderer` and draw these using
   `SDL_RenderGeometry`.
@@ -56,6 +58,8 @@ Just type `dub` to run.
 - Add `float rotation` and `float rotationVelocity` entity properties.
 - Add `Vec2 rot` and `Vec2 rotVelocity` entity properties.
 - Use SDL function that does combined create window and renderer.
+
+### Game
 + Sten brickor som inte går sönder
 + Längre paddel och flera paddlar
 + Göra paddeln rundad som i riktiga Arkanoid
