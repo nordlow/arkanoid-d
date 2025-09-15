@@ -47,6 +47,16 @@ struct AudioDevice {
 	void resume() @trusted @il { SDL_ResumeAudioDevice(_id); }
 	/// Pause all audio playback associated with `this` device.
 	void pause() @trusted @il { SDL_PauseAudioDevice(_id); }
+	/// Get gain.
+	float gain() const scope @property @trusted
+		=> SDL_GetAudioDeviceGain(_id);
+	/// Set gain.
+	void gain(in float f) const scope @property @trusted {
+		if (!SDL_SetAudioDeviceGain(_id, f))
+			errorf("Failed to set gain %s on device %s: %s", f, _id,
+				   SDL_GetError().fromStringz);
+
+	}
 	SDL_AudioDeviceID _id;
 	invariant(_id);
 }
@@ -101,6 +111,14 @@ struct AudioStream {
 	void unlock() scope @trusted {
 		if (!SDL_LockAudioStream(_ptr))
 			return errorf("Failed to unlock %s: %s", _ptr, SDL_GetError().fromStringz);
+	}
+	/++ Get gain (volume), defaulted to 1.0. +/
+	float gain() const scope @property @trusted @il {
+		const ret = SDL_GetAudioStreamGain((cast()this)._ptr);
+		if (ret == -1)
+			errorf("Failed to get gain on stream %s: %s", _ptr,
+				   SDL_GetError().fromStringz);
+		return ret;
 	}
 	// TODO:
 	// SDL_GetAudioStreamData(): Retrieves converted audio data from the stream.
