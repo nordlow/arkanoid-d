@@ -5,12 +5,11 @@ copyright "Copyright © 2025, Per Nordlöw"
 
 dependency "phobos-next" path="../phobos-next"
 
-dflags "-I/home/per/.local/sdl-snapshot/include" "-I/home/per/.local/sdl-snapshot/include" "-P=-I/home/per/.local/sdl-snapshot/include"
-lflags "-L/home/per/.local/sdl-snapshot/lib"
+dflags "-I/home/per/.local/sdl-snapshot/include" "-P=-I/home/per/.local/sdl-snapshot/include" # ImportC
+lflags "-LSDL/build" platform="posix"
 libs "SDL3" "c"
 
 #dependency "raylib-d" version="5.5.1" # path="../raylib-d"
 #libs "raylib"
-# lflags "-L." platform="posix"
 # lflags "-rpath" "@executable_path/" platform="osx"
 # lflags "-rpath=$$ORIGIN" platform="linux"
