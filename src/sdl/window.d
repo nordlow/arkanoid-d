@@ -30,10 +30,10 @@ nothrow struct Window {
 		return ssz;
 	}
 	bool fullscreen() const scope nothrow @nogc @property => inFullscreen;
-	void fullscreen(in bool fullscreen = true) scope @property @trusted	{
-		if (!SDL_SetWindowFullscreen((cast()this)._ptr, fullscreen))
-			warning("Couldn't set fullscreen state of %s to %s, %s", _ptr, fullscreen, SDL_GetError());
-		inFullscreen = fullscreen;
+	void fullscreen(in bool fullscreen_) scope @property @trusted	{
+		if (!SDL_SetWindowFullscreen((cast()this)._ptr, fullscreen_))
+			warning("Couldn't set fullscreen state of %s to %s, %s", _ptr, fullscreen_, SDL_GetError());
+		inFullscreen = fullscreen_;
 	}
 	DisplayMode* fullscreenMode() scope @property @trusted
 		=> SDL_GetWindowFullscreenMode((cast()this)._ptr);

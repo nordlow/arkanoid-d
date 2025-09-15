@@ -73,8 +73,7 @@ nothrow struct Game {
 					spacePressed = true;
 					break;
 				case SDLK_F11:
-					inFullscreen ^= true; // toggle
-					win.fullscreen = inFullscreen;
+					win.fullscreen = !win.fullscreen;
 					ssz = win.size;
 					break;
 				case SDLK_P:
@@ -105,8 +104,6 @@ nothrow struct Game {
 	static immutable ballVelocity = Vel(200, -200);
 	bool leftPressed, rightPressed, spacePressed, rPressed;
 	bool quit, won, over, paused;
-
-	private bool inFullscreen;
 
 	Joystick joystick;
 
