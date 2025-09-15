@@ -7,11 +7,11 @@ import base;
 nothrow struct Window {
 	alias Flags = SDL_WindowFlags;
 	@disable this(this);
-	this(in ScreenSize ssz, in char[] title, bool fullscreen = false) @trusted {
-		uint flags = SDL_WINDOW_RESIZABLE;
+	this(in ScreenSize ssz, in char[] title, Flags flags = 0) @trusted {
+		const fullscreen = true;
 		/+ if (fullscreen) +/
 		/+	flags |= SDL_WINDOW_FULLSCREEN_DESKTOP; +/
-		_ptr = SDL_CreateWindow(title.ptr, ssz.width, ssz.height, flags);
+		_ptr = SDL_CreateWindow(title.ptr, ssz.width, ssz.height, cast(uint)flags);
 		if (fullscreen)
 			SDL_SetWindowFullscreen(_ptr, true);
 		if (_ptr is null) {
@@ -23,12 +23,17 @@ nothrow struct Window {
 	}
 	~this() nothrow @nogc @trusted
 		=> SDL_DestroyWindow(_ptr);
-	ScreenSize size() @property @trusted {
+	ScreenSize size() const scope @property @trusted {
 		typeof(return) ssz;
-		SDL_GetWindowSize(_ptr, &ssz.width, &ssz.height);
+		SDL_GetWindowSize((cast()this)._ptr, &ssz.width, &ssz.height);
 		return ssz;
 	}
+	void setFullscreen(in bool fullscreen = true) @trusted  {
+		if (!SDL_SetWindowFullscreen((cast()this)._ptr, fullscreen))
+			warning("Could set fullscreen state of %s, SDL_Error: %s", _ptr, SDL_GetError());
+	}
+	Flags flags() const scope @property @trusted => SDL_GetWindowFlags((cast()this)._ptr);
 	Renderer rdr;
-	SDL_Window* _ptr;
+	package SDL_Window* _ptr;
 	invariant(_ptr);
 }

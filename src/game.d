@@ -20,7 +20,7 @@ nothrow struct Game {
 	@disable this(this);
 	this(in ScreenSize ssz, const uint ballCount = 10) @trusted {
 		this.ssz = ssz;
-		this.win = Window(ssz, "Arkanoid Clone", fullscreen: true);
+		this.win = Window(ssz, "Arkanoid Clone");
 		joystick = openDefaultJoystick();
 		_rng = Random(unpredictableSeed());
 		scene = Scene(paddle: Paddle(shape: Rect(pos: Pos(ssz.width / 2 - 60, ssz.height - 30), size: Dim(150, 20)),
@@ -74,9 +74,8 @@ nothrow struct Game {
 					break;
 				case SDLK_F11:
 					inFullscreen ^= true; // toggle
-					if (!SDL_SetWindowFullscreen(win._ptr, inFullscreen))
-						warning("Could not enter fullscreen! SDL_Error: %s", SDL_GetError());
-					SDL_GetWindowSize(win._ptr, &ssz.width, &ssz.height);
+					win.setFullscreen(inFullscreen);
+					ssz = win.size;
 					break;
 				case SDLK_P:
 					togglePause();
