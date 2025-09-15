@@ -80,12 +80,22 @@ struct AudioStream {
 		immediately. +/
 	void flush() scope @trusted {
 		if (!SDL_FlushAudioStream(_ptr))
-			return errorf("Failed to flush audio stream %s: %s", _ptr, SDL_GetError().fromStringz);
+			return errorf("Failed to flush %s: %s", _ptr, SDL_GetError().fromStringz);
 	}
-	/++ Clear|Drop any queued|pending data in the stream..+/
+	/++ Clear|Drop any queued|pending data in the stream. +/
 	void clear() scope @trusted {
 		if (!SDL_ClearAudioStream(_ptr))
-			return errorf("Failed to clear audio stream %s: %s", _ptr, SDL_GetError().fromStringz);
+			return errorf("Failed to clear %s: %s", _ptr, SDL_GetError().fromStringz);
+	}
+	/++ Lock `this` for serialized access. +/
+	void lock() scope @trusted {
+		if (!SDL_LockAudioStream(_ptr))
+			return errorf("Failed to lock %s: %s", _ptr, SDL_GetError().fromStringz);
+	}
+	/++ Unlock `this` for serialized access. +/
+	void unlock() scope @trusted {
+		if (!SDL_LockAudioStream(_ptr))
+			return errorf("Failed to unlock %s: %s", _ptr, SDL_GetError().fromStringz);
 	}
 	// TODO:
 	// SDL_GetAudioStreamData(): Retrieves converted audio data from the stream.
