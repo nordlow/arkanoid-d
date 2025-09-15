@@ -96,7 +96,6 @@ nothrow struct Game {
 	private AudioDevice adev;
 	private Random _rng;
 	version(none) static immutable soundSampleRate = 44100;
-
 	AudioFx brickFx, paddleBounceFx, bulletShotFx;
 }
 
