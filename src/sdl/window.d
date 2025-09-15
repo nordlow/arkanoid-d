@@ -5,6 +5,7 @@ import base;
 @safe:
 
 nothrow struct Window {
+	alias Flags = SDL_WindowFlags;
 	@disable this(this);
 	this(in ScreenSize ssz, in char[] title, bool fullscreen = false) @trusted {
 		uint flags = SDL_WINDOW_RESIZABLE;
