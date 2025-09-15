@@ -49,18 +49,12 @@ Just type `dub` to run.
    - Update music transitions or dynamic effects tied to game state.
 
 ## TODO
-- Add `Scene.update` that automatically animates using static introspection on
-  entity
-  - `SomeShape shape`
-  - `Ang rotation`
-  - these properties can depend on `FrameTime`.
 - Add tesselation of shapes and store all `SDL_Vertex[vertexCount]`
   plus associated colors in `Renderer` and draw these using
   `SDL_RenderGeometry`.
-- Add `float angle` and `float angleVelocity` entity properties.
+- Represent rotations using `Ang rotation`.
+- Add `float rotation` and `float rotationVelocity` entity properties.
 - Add `Vec2 rot` and `Vec2 rotVelocity` entity properties.
-- Record sound effects sounds and play upon events such as bounce
-- Add rotation property to entities. Check how SDL represents rotation.
 - Use static introspection to
   - update `Game` `Scene` graph
   - draw `Game` `Scene` graph
