@@ -58,7 +58,9 @@ struct AudioStream {
 		_ptr = SDL_CreateAudioStream(cast(SDL_AudioSpec*)(&spec._spec), null);
 		tracef("Successfully created audio stream at %s", _ptr);
 	}
+	/++ Destroy `this`. +/
 	~this() @trusted {
+		unbind();
 		tracef("Destroying %s ...", _ptr);
 		SDL_DestroyAudioStream(_ptr);
 	}
@@ -105,6 +107,12 @@ struct AudioStream {
 	/+ SDL_GetAudioStreamAvailable(): Returns the amount of converted audio data, in bytes, currently available to be retrieved from the stream. +/
 	/+ SDL_GetAudioStreamQueued(): Returns the amount of raw, unconverted audio data, in bytes, currently queued in the stream. +/
 	private SDL_AudioStream* _ptr;
+}
+
+/++ Unbind `streams`. +/
+void unbind(scope AudioStream[] streams) @trusted {
+	tracef("Unbinding %s ...", streams);
+	SDL_UnbindAudioStreams(&(streams[0]._ptr), cast(uint)streams.length);
 }
 
 struct AudioBuffer {
