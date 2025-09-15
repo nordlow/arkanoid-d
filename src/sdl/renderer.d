@@ -21,6 +21,15 @@ struct Renderer { nothrow:
 		}
 		if (!SDL_SetRenderVSync(_ptr, 1))
 			warning("VSync not supported");
+		initTabs();
+	}
+
+	package this(scope ref SDL_Renderer* ptr) @trusted {
+		_ptr = ptr;
+		initTabs();
+	}
+
+	private void initTabs() scope pure nothrow @nogc @il {
 		_sincos = SinCos(0, 2*PI);
 		_sincos.fill();
 	}
