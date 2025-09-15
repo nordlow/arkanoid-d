@@ -19,14 +19,14 @@ import joystick;
 nothrow struct Game {
 	import std.random : Random, unpredictableSeed;
 	@disable this(this);
-	this(in ScreenSize ssz, const uint ballCount = 10, const Vel ballVelocity_ = Vel(200, -200)) @trusted {
+	this(in ScreenSize ssz, const uint ballCount = 10) @trusted {
 		this.win = Window(ssz, "Arkanoid Clone");
 		joystick = openDefaultJoystick();
 		_rng = Random(unpredictableSeed());
-		ballVelocity = ballVelocity_;
+		ballVelocity = Vel(200, 200);
 		scene = Scene(paddle: Paddle(shape: Rect(pos: Pos(ssz.width / 2 - 60, ssz.height - 30), size: Dim(150, 20)),
 									 color: Colors.BLUE),
-					  balls: makeBalls(ballCount, ballVelocity_, ssz.width, ssz.height),
+					  balls: makeBalls(ballCount, ballVelocity, ssz.width, ssz.height),
 					  bullets: makeBullets(30),
 					  brickGrid: BrickGrid(nRows: 20, nCols: 30));
 		scene.brickGrid.layout(ssz.width, ssz.height, Colors.DARKGREEN, Colors.DARKRED, Colors.DARKBLUE, Colors.DARKYELLOW);
