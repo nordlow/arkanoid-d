@@ -33,7 +33,7 @@ nothrow struct Window {
 		if (!SDL_SetWindowFullscreen((cast()this)._ptr, fullscreen))
 			warning("Could set fullscreen state of %s, SDL_Error: %s", _ptr, SDL_GetError());
 	}
-	DisplayMode* getFullscreenMode() scope @trusted
+	DisplayMode* fullscreenMode() scope @property @trusted
 		=> SDL_GetWindowFullscreenMode((cast()this)._ptr);
 	Flags flags() const scope @property @trusted => SDL_GetWindowFlags((cast()this)._ptr);
 	Renderer rdr;
