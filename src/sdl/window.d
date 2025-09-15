@@ -4,6 +4,8 @@ import base;
 
 @safe:
 
+alias DisplayMode = SDL_DisplayMode;
+
 nothrow struct Window {
 	alias Flags = SDL_WindowFlags;
 	@disable this(this);
@@ -31,6 +33,8 @@ nothrow struct Window {
 		if (!SDL_SetWindowFullscreen((cast()this)._ptr, fullscreen))
 			warning("Could set fullscreen state of %s, SDL_Error: %s", _ptr, SDL_GetError());
 	}
+	DisplayMode* getFullscreenMode() scope @trusted
+		=> SDL_GetWindowFullscreenMode((cast()this)._ptr);
 	Flags flags() const scope @property @trusted => SDL_GetWindowFlags((cast()this)._ptr);
 	Renderer rdr;
 	package SDL_Window* _ptr;
