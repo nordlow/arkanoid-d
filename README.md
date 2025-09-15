@@ -9,7 +9,6 @@ Just type `dub` to run.
   `SDL_RenderGeometry`.
 - Add `float angle` and `float angleVelocity` entity properties.
 - Add `Vec2 rot` and `Vec2 rotVelocity` entity properties.
-- Use `SDL_gamepad` API
 - Record sound effects sounds and play upon events such as bounce
 - Add rotation property to entities. Check how SDL represents rotation.
 - Use static introspection to
