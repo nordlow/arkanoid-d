@@ -34,7 +34,8 @@ struct AudioDevice {
 	/++ Bind `stream` to `this`. +/
 	void bind(ref AudioStream stream) @trusted {
 		if (!SDL_BindAudioStream(_id, stream._ptr))
-			errorf("Failed to bind to device: %s", SDL_GetError().fromStringz);
+			errorf("Failed to bind %s to device %s: %s", stream._ptr, _id,
+				   SDL_GetError().fromStringz);
 	}
 	/++ Unbind `stream` to `this`. +/
 	void unbind(ref AudioStream stream) @trusted {
