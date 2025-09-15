@@ -1,6 +1,6 @@
 module sdl.window;
 
-import base;
+import sdl;
 
 @safe:
 
