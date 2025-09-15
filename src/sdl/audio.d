@@ -123,7 +123,8 @@ private:
 
 AudioBuffer loadWAV(in FilePath path) @trusted {
 	typeof(return) ret;
-	if (!SDL_LoadWAV(path.str.toStringz, &ret._spec._spec, cast(ubyte**)&ret._ptr, &ret._length))
+	if (!SDL_LoadWAV(path.str.toStringz, &ret._spec._spec,
+					cast(ubyte**)&ret._ptr, &ret._length))
 		errorf("Failed to load WAV from %s: %s", path, SDL_GetError().fromStringz);
 	return ret;
 }
