@@ -55,7 +55,6 @@ void main(string[] args) @trusted {
 
 		game.processEvents();
 
-		// Get continuous key states
 		const keyStates = SDL_GetKeyboardState(null);
 		const bool leftHeld = keyStates[SDL_SCANCODE_LEFT] != 0;
 		const bool rightHeld = keyStates[SDL_SCANCODE_RIGHT] != 0;
@@ -96,7 +95,6 @@ void main(string[] args) @trusted {
 				}
 			}
 
-			// update balls
 			game.scene.balls[].bounceAll();
 
 			uint nBallsActive; // number of active balls
