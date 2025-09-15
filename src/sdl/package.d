@@ -31,7 +31,6 @@ ulong SDL_GetTicks();
 
 // Window functions
 SDL_Window* SDL_CreateWindow(const char* title, int w, int h, uint flags);
-void SDL_DestroyWindow(SDL_Window* window);
 void SDL_GetWindowSize(SDL_Window* window, int* w, int* h);
 bool SDL_SetWindowFullscreen(SDL_Window* window, bool fullscreen);
 

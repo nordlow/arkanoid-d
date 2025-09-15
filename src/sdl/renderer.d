@@ -8,7 +8,7 @@ import sdl;
 
 @safe:
 
-nothrow struct Renderer {
+struct Renderer { nothrow:
 	import std.math : sin, cos, PI;
 
 	@disable this(this);

@@ -6,7 +6,7 @@ import sdl;
 
 alias DisplayMode = SDL_DisplayMode;
 
-nothrow struct Window {
+struct Window {
 	alias Flags = SDL_WindowFlags;
 
 	@disable this(this);
@@ -24,10 +24,10 @@ nothrow struct Window {
 		rdr = Renderer(this);
 	}
 
-	~this() nothrow @nogc @trusted @il
+	~this() @trusted @il
 		=> SDL_DestroyWindow(_ptr);
 
-	ScreenSize size() const scope @property @trusted @il  {
+	ScreenSize size() const scope nothrow @nogc @property @trusted @il  {
 		typeof(return) ssz;
 		SDL_GetWindowSize((cast()this)._ptr, &ssz.width, &ssz.height);
 		return ssz;
