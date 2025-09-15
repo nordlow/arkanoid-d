@@ -39,7 +39,8 @@ nothrow struct Window {
 	}
 	DisplayMode* fullscreenMode() scope @property @trusted
 		=> SDL_GetWindowFullscreenMode((cast()this)._ptr);
-	Flags flags() const scope @property @trusted => SDL_GetWindowFlags((cast()this)._ptr);
+	Flags flags() const scope @property @trusted
+		=> SDL_GetWindowFlags((cast()this)._ptr);
 	Renderer rdr;
 	package SDL_Window* _ptr;
 	invariant(_ptr);
