@@ -9,7 +9,5 @@ dflags "-I/home/per/.local/sdl-snapshot/include" "-P=-I/home/per/.local/sdl-snap
 lflags "-LSDL/build" platform="posix"
 libs "SDL3" "c"
 
-#dependency "raylib-d" version="5.5.1" # path="../raylib-d"
-#libs "raylib"
 # lflags "-rpath" "@executable_path/" platform="osx"
 # lflags "-rpath=$$ORIGIN" platform="linux"
