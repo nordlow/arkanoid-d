@@ -12,11 +12,12 @@ pushd SDL
 mkdir -p build
 pushd build
 
-DST_PREFIX=${HOME}/.local
+DST_PREFIX="${HOME}/.local"
+INSTALL_PREFIX="${DST_PREFIX}/sdl-snapshot"
 
-cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="${DST_PREFIX}/sdl-snapshot" -DBUILD_SHARED_LIBS=ON -DBUILD_STATIC_LIBS=ON ..
+cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="${INSTALL_PREFIX}" -DBUILD_SHARED_LIBS=ON -DBUILD_STATIC_LIBS=ON ..
 cmake --build . --config Release --parallel
-cmake --install . --config Release
+# cmake --install . --config Release
 
 popd
 popd
