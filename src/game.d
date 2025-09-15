@@ -113,7 +113,7 @@ struct Scene {
 		paddle.drawIn(rdr);
 		balls.drawIn(rdr);
 		bullets.drawIn(rdr);
-		SDL_RenderPresent(rdr._ptr);
+		rdr.present();
 	}
 }
 

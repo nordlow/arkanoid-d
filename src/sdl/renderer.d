@@ -51,10 +51,17 @@ struct Renderer { nothrow:
 
 	/++ Clear the current rendering target with the current drawing color set
 		with `setDrawColor`. +/
-	bool clear() @trusted {
+	bool clear() nothrow @nogc @trusted {
 		const ret = SDL_RenderClear(_ptr);
 		if (!ret)
 			warningf("Couldn't clear, %s", SDL_GetError.fromStringz());
+		return ret;
+	}
+
+	bool present() nothrow @nogc @trusted {
+		const ret = SDL_RenderPresent(_ptr);
+		if (!ret)
+			warningf("Couldn't present, %s", SDL_GetError.fromStringz());
 		return ret;
 	}
 
