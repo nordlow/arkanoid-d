@@ -38,6 +38,7 @@ nothrow struct Game {
 		paddleBounceFx = AudioFx(FP("sound/ball_gone.wav"));
 		bulletShotFx = AudioFx(FP("sound/bullet_shot.wav"));
 		adev = AudioDevice(brickFx.buffer.spec);
+		// TODO: Remove then needed for this explicit call:
 		adev.bind(brickFx.stream);
 		adev.bind(paddleBounceFx.stream);
 		adev.bind(bulletShotFx.stream);
