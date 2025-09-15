@@ -43,7 +43,16 @@ struct Renderer { nothrow:
 	~this() @nogc @trusted
 		=> SDL_DestroyRenderer(_ptr);
 
-	int setDrawColor(in RGBA color) nothrow @nogc @trusted
+	/++ Get the drawing color. +/
+	RGBA getDrawColor() nothrow @nogc @trusted @property	{
+		typeof(return) ret;
+		if (!SDL_GetRenderDrawColor(_ptr, &ret.r, &ret.g, &ret.b, &ret.a))
+			warningf("Couldn't get current drawing, %s", SDL_GetError.fromStringz());
+		return ret;
+	}
+
+	/++ Set the drawing color. +/
+	int setDrawColor(in RGBA color) nothrow @nogc @trusted @property
 		=> SDL_SetRenderDrawColor(_ptr, color.r, color.g, color.b, color.a);
 
 	int fillRect(in SDL_FRect frect) nothrow @nogc @trusted

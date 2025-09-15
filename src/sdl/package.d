@@ -38,6 +38,8 @@ bool SDL_SetWindowFullscreen(SDL_Window* window, bool fullscreen);
 // Renderer functions - CORRECTED based on SDL3 documentation
 SDL_Renderer* SDL_CreateRenderer(SDL_Window* window, const char* name);
 void SDL_DestroyRenderer(SDL_Renderer* renderer);
+
+bool SDL_GetRenderDrawColor(SDL_Renderer *renderer, Uint8 *r, Uint8 *g, Uint8 *b, Uint8 *a);
 int SDL_SetRenderDrawColor(SDL_Renderer* renderer, ubyte r, ubyte g, ubyte b, ubyte a);
 int SDL_RenderFillRect(SDL_Renderer* renderer, const SDL_FRect* rect);
 int SDL_RenderRect(SDL_Renderer* renderer, const SDL_FRect* rect);
