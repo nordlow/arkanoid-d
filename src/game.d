@@ -5,6 +5,7 @@ import nxt.geometry;
 import nxt.interpolation;
 import nxt.color;
 import nxt.colors;
+import nxt.algorithm.searching : endsWith;
 
 import sdl;
 import base;
@@ -34,13 +35,16 @@ nothrow struct Game {
 		// load audio
 		import nxt.path : FilePath;
 		alias FP = FilePath;
-		brickFx.buffer = loadWAV(FP("sound/brick_hit.wav"));
-		paddleBounceFx.buffer = loadWAV(FP("sound/ball_gone.wav"));
-		bulletShotFx.buffer = loadWAV(FP("sound/bullet_shot.wav"));
-
+		FP brickPath = FP("sound/brick_hit.wav");
+		brickFx.buffer = loadWAV(brickPath);
 		brickFx.stream = AudioStream(brickFx.buffer.spec);
-		brickFx.stream.gain = 0.15f;
+		if (brickPath.str.endsWith("brick_hit.wav"))
+			brickFx.stream.gain = 0.15f;
+
+		paddleBounceFx.buffer = loadWAV(FP("sound/ball_gone.wav"));
 		paddleBounceFx.stream = AudioStream(paddleBounceFx.buffer.spec);
+
+		bulletShotFx.buffer = loadWAV(FP("sound/bullet_shot.wav"));
 		bulletShotFx.stream = AudioStream(bulletShotFx.buffer.spec);
 
 		adev = AudioDevice(brickFx.buffer.spec);
