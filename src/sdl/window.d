@@ -41,5 +41,6 @@ nothrow struct Window {
 	Renderer rdr;
 	package SDL_Window* _ptr;
 	invariant(_ptr);
+	// TODO: Remove in favor of state handling via `SDL_SetWindowFullscreenMode` and `SDL_GetWindowFullscreenMode`:
 	bool inFullscreen;
 }
