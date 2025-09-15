@@ -55,9 +55,6 @@ Just type `dub` to run.
 - Represent rotations using `Ang rotation`.
 - Add `float rotation` and `float rotationVelocity` entity properties.
 - Add `Vec2 rot` and `Vec2 rotVelocity` entity properties.
-- Use static introspection to
-  - update `Game` `Scene` graph
-  - draw `Game` `Scene` graph
 - Use SDL function that does combined create window and renderer.
 + Sten brickor som inte går sönder
 + Längre paddel och flera paddlar
