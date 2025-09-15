@@ -20,7 +20,6 @@ nothrow struct Game {
 	import std.random : Random, unpredictableSeed;
 	@disable this(this);
 	this(in ScreenSize ssz, const uint ballCount = 10, const Vel ballVelocity_ = Vel(200, -200)) @trusted {
-		this.ssz = ssz;
 		this.win = Window(ssz, "Arkanoid Clone");
 		joystick = openDefaultJoystick();
 		_rng = Random(unpredictableSeed());
@@ -65,7 +64,6 @@ nothrow struct Game {
 					break;
 				case SDLK_F11:
 					win.fullscreen = !win.fullscreen;
-					ssz = win.size;
 					break;
 				case SDLK_P:
 					togglePause();
@@ -89,7 +87,6 @@ nothrow struct Game {
 		else if (!paused)
 			adev.resume();
 	}
-	ScreenSize ssz;
 	Window win;
 	Scene scene;
 	Vel ballVelocity;
