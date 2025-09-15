@@ -31,16 +31,11 @@ struct AudioDevice {
 		if (_id != 0)
 			close();
 	}
-	/++ Bind `stream` to `this`. +/
+	/++ Bind `stream`. +/
 	void bind(ref AudioStream stream) @trusted {
 		if (!SDL_BindAudioStream(_id, stream._ptr))
 			errorf("Failed to bind %s to device %s: %s", stream._ptr, _id,
 				   SDL_GetError().fromStringz);
-	}
-	/++ Unbind `stream` to `this`. +/
-	void unbind(ref AudioStream stream) @trusted {
-		tracef("Unbinding audio stream %s at ...", stream._ptr);
-		return SDL_UnbindAudioStream(stream._ptr);
 	}
 	void close() @trusted {
 		tracef("Closing audio device %s", _id);
@@ -63,8 +58,13 @@ struct AudioStream {
 		tracef("Successfully created audio stream at %s", _ptr);
 	}
 	~this() @trusted {
-		tracef("Destroying audio stream at %s", _ptr);
+		tracef("Destroying %s ...", _ptr);
 		SDL_DestroyAudioStream(_ptr);
+	}
+	/++ Unbind `this`. +/
+	void unbind() @trusted {
+		tracef("Unbinding %s ...", _ptr);
+		return SDL_UnbindAudioStream(_ptr);
 	}
 	void put(in AudioBuffer buf) scope @trusted {
 		if (!SDL_PutAudioStreamData(_ptr, buf._ptr, cast(int)buf._length)) {

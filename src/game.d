@@ -46,7 +46,7 @@ nothrow struct Game {
 		adev.bind(paddleBounceFx.stream);
 		adev.bind(bulletShotFx.stream);
 	}
-	~this() => adev.unbind(brickFx.stream);
+	~this() => brickFx.stream.unbind();
 	void processEvents() @trusted {
 		SDL_Event e;
 		while (SDL_PollEvent(&e)) {
