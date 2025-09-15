@@ -19,10 +19,11 @@ import joystick;
 nothrow struct Game {
 	import std.random : Random, unpredictableSeed;
 	@disable this(this);
-	this(in ScreenSize ssz, const uint ballCount = 10) @trusted {
+	this(in ScreenSize ssz) @trusted {
 		this.win = Window(ssz, "Arkanoid Clone");
 		joystick = openDefaultJoystick();
 		_rng = Random(unpredictableSeed());
+		const ballCount = 10;
 		ballVelocity = Vel(200, 200);
 		scene = Scene(paddle: Paddle(shape: Rect(pos: Pos(ssz.width / 2 - 60, ssz.height - 30), size: Dim(150, 20)),
 									 color: Colors.BLUE),
