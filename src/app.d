@@ -64,8 +64,7 @@ void main(string[] args) @trusted {
 
 		if (!game.over && !game.won) {
 			void moveLeft() {
-				if (game.scene.paddle.pos.x > 0)
-					game.scene.paddle.pos.x -= 800 * deltaTime;
+				game.scene.paddle.moveLeft(deltaTime);
 			}
 			void moveRight() {
 				if (game.scene.paddle.pos.x < ssz.width - game.scene.paddle.size.x)

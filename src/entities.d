@@ -14,6 +14,14 @@ nothrow:
 		rdr.setDrawColor(color);
 		rdr.fillRect(*cast(SDL_FRect*)&shape);
 	}
+	void moveLeft(in float deltaTime) {
+		if (pos.x > 0)
+			pos.x -= 800 * deltaTime;
+	}
+	void moveRight(in float deltaTime, in ScreenSize ssz) {
+		if (pos.x < ssz.width - size.x)
+			pos.x += 800 * deltaTime;
+	}
 }
 
 struct Ball {
