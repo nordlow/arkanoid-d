@@ -76,49 +76,56 @@ struct AudioStream {
 		SDL_DestroyAudioStream(_ptr);
 	}
 	/++ Unbind `this`. +/
-	void unbind() @trusted {
+	void unbind() @trusted @il {
 		tracef("Unbinding %s ...", _ptr);
 		return SDL_UnbindAudioStream(_ptr);
 	}
-	void put(in AudioBuffer buf) scope @trusted {
+	void put(in AudioBuffer buf) scope @trusted @il {
 		if (!SDL_PutAudioStreamData(_ptr, buf._ptr, cast(int)buf._length)) {
 			errorf("Failed to queue audio data: %s", SDL_GetError().fromStringz);
 			return;
 		}
 	}
-	void clearAndPut(in AudioBuffer buf) scope @trusted {
+	void clearAndPut(in AudioBuffer buf) scope @trusted @il {
 		clear();
 		return put(buf);
 	}
 	/++ Tell the stream that you're done sending data, and anything being
 		buffered should be converted/resampled and made available
 		immediately. +/
-	void flush() scope @trusted {
+	void flush() scope @trusted @il {
 		if (!SDL_FlushAudioStream(_ptr))
 			return errorf("Failed to flush %s: %s", _ptr, SDL_GetError().fromStringz);
 	}
 	/++ Clear|Drop any queued|pending data in the stream. +/
-	void clear() scope @trusted {
+	void clear() scope @trusted @il {
 		if (!SDL_ClearAudioStream(_ptr))
 			return errorf("Failed to clear %s: %s", _ptr, SDL_GetError().fromStringz);
 	}
 	/++ Lock `this` for serialized access. +/
-	void lock() scope @trusted {
+	void lock() scope @trusted @il {
 		if (!SDL_LockAudioStream(_ptr))
 			return errorf("Failed to lock %s: %s", _ptr, SDL_GetError().fromStringz);
 	}
 	/++ Unlock `this` for serialized access. +/
-	void unlock() scope @trusted {
+	void unlock() scope @trusted @il {
 		if (!SDL_LockAudioStream(_ptr))
 			return errorf("Failed to unlock %s: %s", _ptr, SDL_GetError().fromStringz);
 	}
+@property:
 	/++ Get gain (volume), defaulted to 1.0. +/
-	float gain() const scope @property @trusted @il {
+	float gain() const scope @trusted @il {
 		const ret = SDL_GetAudioStreamGain((cast()this)._ptr);
 		if (ret == -1)
 			errorf("Failed to get gain on stream %s: %s", _ptr,
 				   SDL_GetError().fromStringz);
 		return ret;
+	}
+	/++ Set gain (volume) to `f` in range 0.0 to 1.0. +/
+	void gain(float f) scope @trusted @il {
+		if (!SDL_SetAudioStreamGain((cast()this)._ptr, f))
+			errorf("Failed to set gain %s on device %s: %s", f, _ptr,
+				   SDL_GetError().fromStringz);
 	}
 	// TODO:
 	// SDL_GetAudioStreamData(): Retrieves converted audio data from the stream.
