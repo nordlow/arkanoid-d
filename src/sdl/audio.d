@@ -128,13 +128,15 @@ struct AudioStream {
 				   SDL_GetError().fromStringz);
 	}
 	/++	Returns: amount of converted audio data, in bytes, currently available to be retrieved from the stream.	+/
-	int available() const scope @trusted @il
+	int availableByteCount() const scope @trusted @il
 		=> SDL_GetAudioStreamAvailable((cast()this)._ptr);
+	/++	Returns: amount of raw, unconverted audio data, in bytes, currently queued in the stream. +/
+	int queuedByteCount() const scope @trusted @il
+		=> SDL_GetAudioStreamQueued((cast()this)._ptr);
 
 	// TODO:
 	// SDL_GetAudioStreamData(): Retrieves converted audio data from the stream.
 	/+ SDL_DrainAudioStream(): Waits for all queued data to be consumed before returning. +/
-	/+ SDL_GetAudioStreamQueued(): Returns the amount of raw, unconverted audio data, in bytes, currently queued in the stream. +/
 
 	private SDL_AudioStream* _ptr;
 }
