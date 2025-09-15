@@ -124,8 +124,10 @@ struct AudioBuffer {
 			 SDL_free(_ptr);
 	}
 pure nothrow @property:
-	AudioSpec spec() const scope => _spec;
-	const(void)[] opSlice() const return scope @trusted => _ptr[0 .. _length];
+	AudioSpec spec() const scope
+		=> _spec;
+	const(void)[] opSlice() const return scope @trusted
+		=> _ptr[0 .. _length];
 private:
 	AudioSpec _spec;
 	void* _ptr;
