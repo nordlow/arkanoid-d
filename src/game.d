@@ -39,6 +39,7 @@ nothrow struct Game {
 		bulletShotFx.buffer = loadWAV(FP("sound/bullet_shot.wav"));
 
 		brickFx.stream = AudioStream(brickFx.buffer.spec);
+		brickFx.stream.gain = 0.15f;
 		paddleBounceFx.stream = AudioStream(paddleBounceFx.buffer.spec);
 		bulletShotFx.stream = AudioStream(bulletShotFx.buffer.spec);
 
