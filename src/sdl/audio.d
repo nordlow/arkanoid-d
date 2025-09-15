@@ -134,10 +134,6 @@ struct AudioStream {
 	int queuedByteCount() const scope @trusted @il
 		=> SDL_GetAudioStreamQueued((cast()this)._ptr);
 
-	// TODO:
-	// SDL_GetAudioStreamData(): Retrieves converted audio data from the stream.
-	/+ SDL_DrainAudioStream(): Waits for all queued data to be consumed before returning. +/
-
 	private SDL_AudioStream* _ptr;
 }
 
