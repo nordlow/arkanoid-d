@@ -60,12 +60,6 @@ nothrow struct Game {
 				case SDLK_Q:
 					quit = true;
 					break;
-				case SDLK_LEFT:
-					leftPressed = true;
-					break;
-				case SDLK_RIGHT:
-					rightPressed = true;
-					break;
 				case SDLK_SPACE:
 					spacePressed = true;
 					break;
@@ -99,7 +93,7 @@ nothrow struct Game {
 	Window win;
 	Scene scene;
 	Vel ballVelocity;
-	bool leftPressed, rightPressed, spacePressed, rPressed;
+	bool spacePressed, rPressed;
 	bool quit, won, over, paused;
 
 	Joystick joystick;
