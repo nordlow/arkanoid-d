@@ -1,6 +1,7 @@
 # Arkanoid Clone in D.
 
-See also https://github.com/vhspace/sdl3-rs.
+See also https://github.com/vhspace/sdl3-rs specifically
+https://github.com/vhspace/sdl3-rs/tree/master/examples.
 
 Just type `dub` to run.
 
