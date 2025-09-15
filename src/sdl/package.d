@@ -9,6 +9,7 @@ public import sdl.log;
 public import sdl.window;
 public import sdl.renderer;
 public import sdl.audio;
+public import sdl.joystick;
 
 struct ScreenSize { int width; int height; }
 alias RGBA = ColorRGBA;
