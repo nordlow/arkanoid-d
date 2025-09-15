@@ -12,6 +12,7 @@ struct Renderer { nothrow:
 	import std.math : sin, cos, PI;
 @il:
 	@disable this(this);
+
 	this(scope ref Window win, immutable char[] name = null) @trusted {
 		auto ptr = SDL_CreateRenderer(win._ptr, name.ptr);
 		if (ptr is null) {
