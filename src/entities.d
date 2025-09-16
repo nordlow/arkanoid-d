@@ -37,9 +37,9 @@ nothrow:
 		this.vel = vel;
 		this.color = color;
 		this.active = active;
-		generate();
+		prepare();
 	}
-	void generate() {
+	void prepare() {
 		_fcolor = SDL_FColor(color.r * fColor,
 							 color.g * fColor,
 							 color.b * fColor,
@@ -80,8 +80,9 @@ private:
 	int[3 * Renderer.nSinCos] _indices; // TODO: make this `static immutable` and compute in `shared static this`
 }
 
-/+ shared static this { +/
-/+ } +/
+shared static this() {
+
+}
 
 static immutable float fColor = 1.0f/255.0f;
 
