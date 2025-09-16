@@ -55,9 +55,6 @@ Just type `dub` to run.
 
 ### Engine
 - Add `bake()` to all `Ent`-types in `entities.d`.
-- Add tesselation of shapes and store all `SDL_Vertex[vertexCount]`
-  plus associated colors in `Renderer` and draw these using
-  `SDL_RenderGeometry`.
 - Represent rotations using `Ang rotation`.
 - Add `float rotation` and `float rotationVelocity` entity properties.
 - Add `Vec2 rot` and `Vec2 rotVelocity` entity properties.
