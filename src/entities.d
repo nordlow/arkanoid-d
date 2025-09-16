@@ -41,8 +41,7 @@ nothrow:
 		bake();
 	}
 	void drawIn(scope ref Renderer rdr) const scope @trusted {
-		if (!active)
-			return;
+		if (!active) return;
 		if (!pos.equals(_verts[0].position)) // `_verts` still valid
 			rdr.tesselateCircle(shape, _fcolor, (cast()this)._verts);
 		rdr.renderGeometry(_verts, _circleIndices);
@@ -85,8 +84,7 @@ struct Bullet {
 	bool active;
 	void update(float dt) {}
 	void drawIn(scope ref Renderer rdr) const scope nothrow @trusted {
-		if (!active)
-			return;
+		if (!active) return;
 		rdr.drawColor = color;
 		const d = 2*rad;
 		rdr.fillRect(SDL_FRect(x: pos.x - rad, y: pos.y - rad, w: d, h: d));
