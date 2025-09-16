@@ -67,21 +67,6 @@ private:
 	SDL_Vertex[1 + Renderer.nSinCos] _verts; // computed from `shape`
 }
 
-shared static this() {
-	// bake
-	foreach (const int i; 0 .. Renderer.nSinCos) {
-		_circleIndices[3*i + 0] = 0; // center
-		_circleIndices[3*i + 1] = 1 + i; // first vertex of edge
-		_circleIndices[3*i + 2] = 1 + (i + 1) % Renderer.nSinCos; // next vertex
-	}
-}
-private static immutable int[3 * Renderer.nSinCos] _circleIndices; // TODO: make this `static immutable` and compute in `shared static this`
-
-SDL_FColor toFColor(in RGBA color) pure nothrow @nogc
-	=> typeof(return)(color.r * fColor, color.g * fColor, color.b * fColor, color.a * fColor);
-
-static immutable float fColor = 1.0f/255.0f;
-
 Ball[] makeBalls(uint count, Vel velocity, uint screenWidth, uint screenHeight) {
 	import nxt.io.dbg;
 	auto rnd = Random();
@@ -251,3 +236,19 @@ void drawIn(T)(in T[] ents, scope ref Renderer rdr) {
 	foreach (const ref ent; ents)
 		ent.drawIn(rdr);
 }
+
+shared static this() {
+	// bake
+	foreach (const int i; 0 .. Renderer.nSinCos) {
+		_circleIndices[3*i + 0] = 0; // center
+		_circleIndices[3*i + 1] = 1 + i; // first vertex of edge
+		_circleIndices[3*i + 2] = 1 + (i + 1) % Renderer.nSinCos; // next vertex
+	}
+}
+
+private static immutable int[3 * Renderer.nSinCos] _circleIndices; // TODO: make this `static immutable` and compute in `shared static this`
+
+private SDL_FColor toFColor(in RGBA color) pure nothrow @nogc
+	=> typeof(return)(color.r * fColor, color.g * fColor, color.b * fColor, color.a * fColor);
+
+static immutable float fColor = 1.0f/255.0f;
