@@ -40,21 +40,22 @@ nothrow:
 		this.velocity = velocity;
 		this.color = color;
 		this.active = active;
-		bake();
 	}
 	void drawIn(scope ref Renderer rdr) const scope @trusted {
 		if (!active) return;
+		bakeIn(rdr);
+		rdr.renderGeometry(_verts, indices);
+	}
+	private void bakeIn(scope ref Renderer rdr) const scope @trusted	 {
+		(cast()this)._fcolor = color.toFColor; // TODO: move to `color` @property setter
 		if (!pos.equals(_verts[0].position)) // `_verts` still in sync with `shape`
 			rdr.bakeCircleFan(shape, _fcolor, (cast()this)._verts);
-		rdr.renderGeometry(_verts, indicesCircleFan);
-	}
-	private void bake() {
-		_fcolor = color.toFColor; // TODO: move to `color` @property setter
 	}
 private:
 	// Cached values:
 	SDL_FColor _fcolor; // computed from `color`
 	SDL_Vertex[1 + Renderer.nSinCos] _verts; // computed from `shape`
+	alias indices = indicesCircleFan;
 }
 
 bool equals(in Pos pos, in SDL_FPoint a) pure nothrow @nogc {
