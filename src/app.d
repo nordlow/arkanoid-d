@@ -94,11 +94,9 @@ void main(string[] args) @trusted {
 
 			game.scene.balls[].bounceAll();
 
-			uint nBallsActive; // number of active balls
 			foreach (ref ball; game.scene.balls) {
 				if (!ball.active)
 					continue;
-				nBallsActive++;
 
 				ball.update(deltaTime);
 
@@ -155,7 +153,6 @@ void main(string[] args) @trusted {
 					ball.active = false;
 				}
 			}
-			tracef("Active: %s/%s", nBallsActive, game.scene.balls.length);
 
 			game.animateBullets(deltaTime);
 
