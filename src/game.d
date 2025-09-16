@@ -18,7 +18,9 @@ import joystick;
 
 nothrow struct Game {
 	import std.random : Random, unpredictableSeed;
+
 	@disable this(this);
+
 	this(in ScreenSize ssz) @trusted {
 		this.win = Window(ssz, "Arkanoid Clone");
 		joystick = openDefaultJoystick();
@@ -43,7 +45,9 @@ nothrow struct Game {
 		adev.bind(paddleBounceFx.stream);
 		adev.bind(bulletShotFx.stream);
 	}
+
 	~this() {}
+
 	void processEvents() @trusted {
 		SDL_Event e;
 		while (SDL_PollEvent(&e)) {
@@ -81,6 +85,7 @@ nothrow struct Game {
 			}
 		}
 	}
+
 	void togglePause() {
 		paused = !paused;
 		if (paused)
@@ -88,6 +93,7 @@ nothrow struct Game {
 		else if (!paused)
 			adev.resume();
 	}
+
 	Window win;
 	Scene scene;
 	Vel ballVelocity;
