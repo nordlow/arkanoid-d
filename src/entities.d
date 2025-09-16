@@ -28,16 +28,16 @@ nothrow:
 struct Ball {
 	Cir shape;
 	alias this = shape;
-	Vel vel;
+	Vel velocity;
 	RGBA color;
 	bool active;
 nothrow:
-	void update(in float dt) scope pure nothrow @nogc {
-		shape.center += vel * dt;
+	void update(in float dt) scope pure nothrow @nogc { // TODO: Move to generic updater for types that have both position and velocity
+		shape.center += velocity * dt;
 	}
-	this(Cir shape, Vel vel, RGBA color, bool active) nothrow {
+	this(Cir shape, Vel velocity, RGBA color, bool active) nothrow {
 		this.shape = shape;
-		this.vel = vel;
+		this.velocity = velocity;
 		this.color = color;
 		this.active = active;
 		bake();
@@ -71,7 +71,7 @@ Ball[] makeBalls(uint count, Vel velocity, uint screenWidth, uint screenHeight) 
 		ball = Ball(shape: Cir(pos: Pos(screenWidth / 2 + i,
 										(screenHeight - screenHeight / 8) + i),
 							   rad: rad),
-					vel: velocity,
+					velocity: velocity,
 					color: HSV(uniform(0.0f, 1.0f, rnd), 0.5f, 0.8f).toRGBA,
 					active: true);
 	return ret;
@@ -114,16 +114,16 @@ void bounceAll(ref Ball[] balls) pure nothrow @nogc {
 
 				const tangent = Vec(-normal.y, normal.x);
 
-				const v1n = dot(ballA.vel, normal);
-				const v1t = dot(ballA.vel, tangent);
-				const v2n = dot(ballB.vel, normal);
-				const v2t = dot(ballB.vel, tangent);
+				const v1n = dot(ballA.velocity, normal);
+				const v1t = dot(ballA.velocity, tangent);
+				const v2n = dot(ballB.velocity, normal);
+				const v2t = dot(ballB.velocity, tangent);
 
 				const v1n_prime = v2n;
 				const v2n_prime = v1n;
 
-				ballA.vel = (normal * v1n_prime) + (tangent * v1t);
-				ballB.vel = (normal * v2n_prime) + (tangent * v2t);
+				ballA.velocity = (normal * v1n_prime) + (tangent * v1t);
+				ballB.velocity = (normal * v2n_prime) + (tangent * v2t);
 			}
 		}
 	}

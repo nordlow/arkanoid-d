@@ -102,24 +102,24 @@ void main(string[] args) @trusted {
 
 				// handle bounce against left|right wall
 				if (ball.position.x <= ball.radius || ball.position.x >= ssz.width - ball.radius)
-					ball.vel.x *= -1; // flip x velocity. TODO: bounce sound
+					ball.velocity.x *= -1; // flip x velocity. TODO: bounce sound
 				// handle bounce against top wall
 				if (ball.position.y <= ball.radius)
-					ball.vel.y *= -1; // flip y velocity. TODO: bounce sound
+					ball.velocity.y *= -1; // flip y velocity. TODO: bounce sound
 
 				// snap ball inside region
 				enum EPS = 0.01f;
 				if (ball.position.x <= ball.radius) {
 					ball.position.x = ball.radius + EPS;
-					ball.vel.x = abs(ball.vel.x); // ensure moving right
+					ball.velocity.x = abs(ball.velocity.x); // ensure moving right
 				}
 				if (ball.position.x >= ssz.width - ball.radius) {
 					ball.position.x = (ssz.width - ball.radius) - EPS;
-					ball.vel.x = -abs(ball.vel.x); // ensure moving left
+					ball.velocity.x = -abs(ball.velocity.x); // ensure moving left
 				}
 				if (ball.position.y <= ball.radius) {
 					ball.position.y = ball.radius + EPS;
-					ball.vel.y = abs(ball.vel.y); // ensure moving down
+					ball.velocity.y = abs(ball.velocity.y); // ensure moving down
 				}
 
 				// ball bounce against paddle
@@ -128,9 +128,9 @@ void main(string[] args) @trusted {
 					<= game.scene.paddle.pos.y + game.scene.paddle.size.y
 					&& ball.position.x >= game.scene.paddle.pos.x
 					&& ball.position.x <= game.scene.paddle.pos.x + game.scene.paddle.size.x) {
-					ball.vel.y = -abs(ball.vel.y);
+					ball.velocity.y = -abs(ball.velocity.y);
 					const float hitPos = (ball.position.x - game.scene.paddle.pos.x) / game.scene.paddle.size.x;
-					ball.vel.x = 200 * (hitPos - 0.5f) * 2;
+					ball.velocity.x = 200 * (hitPos - 0.5f) * 2;
 					game.paddleBounceFx.reput();
 				}
 
@@ -145,7 +145,7 @@ void main(string[] args) @trusted {
 						<= brick.shape.pos.y + brick.shape.size.y) {
 						brick.restartFlashing();
 						game.brickFx.reput();
-						ball.vel.y *= -1;
+						ball.velocity.y *= -1;
 						break;
 					}
 				}
@@ -189,7 +189,7 @@ void main(string[] args) @trusted {
 		if ((game.over || game.won) && game.rPressed) {
 			foreach (ref ball; game.scene.balls) {
 				ball.position = Pos(ssz.width / 2 + (game.scene.balls.length - 1) * 20 - 20, ssz.height - 150);
-				ball.vel = game.ballVelocity;
+				ball.velocity = game.ballVelocity;
 				ball.active = true;
 			}
 			game.scene.paddle.pos = Pos(ssz.width / 2 - 60, ssz.height - 30);
