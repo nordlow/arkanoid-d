@@ -32,16 +32,58 @@ struct Ball {
 	bool active;
 nothrow:
 	void update(float dt) {}
+	this(Cir shape, Vel vel, RGBA color, bool active) nothrow {
+		this.shape = shape;
+		this.vel = vel;
+		this.color = color;
+		this.active = active;
+		generate();
+	}
+	void generate() {
+		_fcolor = SDL_FColor(color.r * fColor,
+							 color.g * fColor,
+							 color.b * fColor,
+							 color.a * fColor);
+		foreach (int i; 0 .. Renderer.nSinCos - 1) {
+			_indices[i * 3 + 0] = 0;
+			_indices[i * 3 + 1] = cast(ushort)(i + 1);
+			_indices[i * 3 + 2] = cast(ushort)((i + 1) % (Renderer.nSinCos - 1) + 1);
+		}
+	}
 	void drawIn(scope ref Renderer rdr) const scope @trusted {
 		if (!active)
 			return;
-		rdr.drawColor = color;
-		const d = 2* rad;
-		rdr.fillRect(SDL_FRect(x: pos.x - rad, y: pos.y - rad, w: d, h: d));
+
+		auto mthis = cast()this;
+
+		// center
+		mthis._verts[0].position.x = pos.x;
+		mthis._verts[0].position.y = pos.y;
+		mthis._verts[0].color = _fcolor;
+
+		// circumference
+		foreach (const int i; 0 .. Renderer.nSinCos) {
+			const auto te = rdr._sincos[i]; // table entry
+			const auto sin = te[0]; // sin
+			const auto cos = te[1]; // cos
+			mthis._verts[1 + i].position.x = pos.x + rad * cos;
+			mthis._verts[1 + i].position.y = pos.y + rad * sin;
+			mthis._verts[1 + i].color = _fcolor;
+		}
+
+		rdr.renderGeometry(_verts[], _indices[]);
 	}
 private:
-	SDL_Vertex[Renderer.vertexCount] vertices;
+	// Cached values:
+	SDL_FColor _fcolor; // computed from `color`
+	SDL_Vertex[1 + Renderer.nSinCos] _verts; // computed from `shape`
+	int[Renderer.nSinCos * 3] _indices; // TODO: make this `static immutable` and compute in `shared static this`
 }
+
+/+ shared static this { +/
+/+ } +/
+
+static immutable float fColor = 1.0f;
 
 Ball[] makeBalls(uint count, Vel velocity, uint screenWidth, uint screenHeight) {
 	import nxt.io.dbg;

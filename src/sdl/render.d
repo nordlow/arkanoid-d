@@ -69,15 +69,24 @@ nothrow @nogc:
 	int fillRect(in SDL_FRect frect) @trusted @il
 		=> SDL_RenderFillRect(_ptr, &frect);
 
-	bool renderGeometry(in Vertex *vertices, in int num_vertices) @trusted @il {
+	void renderGeometry(in Vertex[] vertices) @trusted @il
+		=> renderGeometry(vertices.ptr, cast(int)vertices.length);
+	/// ditto
+	package void renderGeometry(in Vertex *vertices, in int num_vertices) @trusted @il {
 		const ret = SDL_RenderGeometry(_ptr, texture: null, cast(SDL_Vertex*)vertices, num_vertices, indices: cast(int*)null, num_indices: 0);
 		if (!ret)
 			warningf("Couldn't render geometry, %s", SDL_GetError.fromStringz());
-		return ret;
 	}
 
-	bool renderGeometry(in Vertex[] vertices) @trusted @il
-		=> renderGeometry(vertices.ptr, cast(int)vertices.length);
+	void renderGeometry(in Vertex[] vertices, in int[] indices) @trusted @il
+		=> renderGeometry(vertices.ptr, cast(int)vertices.length,
+						  indices.ptr, cast(int)indices.length);
+	/// ditto
+	package void renderGeometry(in Vertex *vertices, in int num_vertices, in int *indices, int num_indices) @trusted @il {
+		const ret = SDL_RenderGeometry(_ptr, texture: null, cast(SDL_Vertex*)vertices, num_vertices, indices: indices, num_indices: num_indices);
+		if (!ret)
+			warningf("Couldn't render geometry, %s", SDL_GetError.fromStringz());
+	}
 
 	bool present() @trusted @il {
 		const ret = SDL_RenderPresent(_ptr);
@@ -87,8 +96,8 @@ nothrow @nogc:
 	}
 
 	SDL_Renderer* _ptr;
-	enum vertexCount = 32;
-	alias SinCos = CyclicLookupTable!(float, vertexCount, sin, cos);
+	enum nSinCos = 64;
+	alias SinCos = CyclicLookupTable!(float, nSinCos, sin, cos);
 	SinCos _sincos;
 	invariant(_ptr);
 }
