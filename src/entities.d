@@ -32,60 +32,47 @@ struct Ball {
 	RGBA color;
 	bool active;
 nothrow:
-	version(none) // TODO: this is not a flexible as I want it to be
-	auto ref opDispatch(string name)() if (__traits(hasMember, Cir, name)) {
-		// Invalidate verts on *write* access
-		// Read/write detection: return by ref allows assignment
-		static if (name == "pos") {
-			_vertsInvalid = true;
-		}
-		else static if (name == "rad") {
-			_vertsInvalid = true;
-		} else
-			static assert(0, "Handle ", name);
-		return __traits(getMember, shape, name);
-	}
 	void update(float dt) {}
 	this(Cir shape, Vel vel, RGBA color, bool active) nothrow {
 		this.shape = shape;
-		_vertsInvalid = true;
 		this.vel = vel;
 		this.color = color;
 		this.active = active;
 		bake();
 	}
+	void drawIn(scope ref Renderer rdr) const scope @trusted {
+		if (!active)
+			return;
+		if (!pos.equals(_verts[0].position)) // `_verts` still valid
+			(cast()this).tesselate(rdr); // TODO: move to `position` @property setter
+		rdr.renderGeometry(_verts, _circleIndices);
+	}
 	private void bake() {
 		_fcolor = color.toFColor; // TODO: move to `color` @property setter
 	}
 	private void tesselate(scope ref Renderer rdr) {
-		if (!_vertsInvalid)
-			return;
 		// center
 		_verts[0].position.x = pos.x;
 		_verts[0].position.y = pos.y;
 		_verts[0].color = _fcolor;
 		// circumference
 		foreach (const int i; 0 .. Renderer.nSinCos) {
-			const auto te = rdr._sincos[i]; // table entry
-			const auto sin = te[0]; // sin
-			const auto cos = te[1]; // cos
+			const te = rdr._sincos[i]; // table entry
+			const sin = te[0]; // sin
+			const cos = te[1]; // cos
 			_verts[1 + i].position.x = pos.x + rad * cos;
 			_verts[1 + i].position.y = pos.y + rad * sin;
 			_verts[1 + i].color = _fcolor;
 		}
-		version(none) _vertsInvalid = false;
-	}
-	void drawIn(scope ref Renderer rdr) const scope @trusted {
-		if (!active)
-			return;
-		(cast()this).tesselate(rdr); // TODO: move to `position` @property setter
-		rdr.renderGeometry(_verts, _circleIndices);
 	}
 private:
 	// Cached values:
 	SDL_FColor _fcolor; // computed from `color`
 	SDL_Vertex[1 + Renderer.nSinCos] _verts; // computed from `shape`
-	bool _vertsInvalid;
+}
+
+bool equals(in Pos pos, in SDL_FPoint a) pure nothrow @nogc {
+	return a.x == pos.x && a.y == pos.y;
 }
 
 Ball[] makeBalls(uint count, Vel velocity, uint screenWidth, uint screenHeight) {
