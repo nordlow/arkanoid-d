@@ -44,11 +44,6 @@ nothrow:
 							 color.g * fColor,
 							 color.b * fColor,
 							 color.a * fColor);
-		foreach (const int i; 0 .. Renderer.nSinCos) {
-			_indices[0 + 3 * i] = 0; // center
-			_indices[1 + 3 * i] = i;
-			_indices[2 + 3 * i] = (i + 1) % Renderer.nSinCos;
-		}
 	}
 	void drawIn(scope ref Renderer rdr) const scope @trusted {
 		if (!active)
@@ -71,18 +66,23 @@ nothrow:
 			mthis._verts[1 + i].color = _fcolor;
 		}
 
-		rdr.renderGeometry(_verts[], _indices[]);
+		rdr.renderGeometry(_verts[], _circleIndices[]);
 	}
 private:
 	// Cached values:
 	SDL_FColor _fcolor; // computed from `color`
 	SDL_Vertex[1 + Renderer.nSinCos] _verts; // computed from `shape`
-	int[3 * Renderer.nSinCos] _indices; // TODO: make this `static immutable` and compute in `shared static this`
 }
 
 shared static this() {
-
+	// bake
+	foreach (const int i; 0 .. Renderer.nSinCos) {
+		_circleIndices[0 + 3 * i] = 0; // center
+		_circleIndices[1 + 3 * i] = i;
+		_circleIndices[2 + 3 * i] = (i + 1) % Renderer.nSinCos;
+	}
 }
+private static immutable int[3 * Renderer.nSinCos] _circleIndices; // TODO: make this `static immutable` and compute in `shared static this`
 
 static immutable float fColor = 1.0f/255.0f;
 
