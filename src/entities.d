@@ -25,7 +25,7 @@ nothrow:
 }
 
 struct Ball {
-	Cir shape;
+	Cir shape; // TODO: make `private`
 	alias this = shape;
 	Vel vel;
 	RGBA color;
@@ -42,23 +42,25 @@ nothrow:
 	private void bake() {
 		_fcolor = color.toFColor;
 	}
-	void drawIn(scope ref Renderer rdr) const scope @trusted {
-		if (!active)
-			return;
-		scope ref mthis = cast()this;
+	private void tesselate(scope ref Renderer rdr) {
 		// center
-		mthis._verts[0].position.x = pos.x;
-		mthis._verts[0].position.y = pos.y;
-		mthis._verts[0].color = _fcolor;
+		_verts[0].position.x = pos.x;
+		_verts[0].position.y = pos.y;
+		_verts[0].color = _fcolor;
 		// circumference
 		foreach (const int i; 0 .. Renderer.nSinCos) {
 			const auto te = rdr._sincos[i]; // table entry
 			const auto sin = te[0]; // sin
 			const auto cos = te[1]; // cos
-			mthis._verts[1 + i].position.x = pos.x + rad * cos;
-			mthis._verts[1 + i].position.y = pos.y + rad * sin;
-			mthis._verts[1 + i].color = _fcolor;
+			_verts[1 + i].position.x = pos.x + rad * cos;
+			_verts[1 + i].position.y = pos.y + rad * sin;
+			_verts[1 + i].color = _fcolor;
 		}
+	}
+	void drawIn(scope ref Renderer rdr) const scope @trusted {
+		if (!active)
+			return;
+		(cast()this).tesselate(rdr);
 		rdr.renderGeometry(_verts, _circleIndices);
 	}
 private:
