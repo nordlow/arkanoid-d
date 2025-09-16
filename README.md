@@ -54,6 +54,7 @@ Just type `dub` to run.
 ## TODO
 
 ### Engine
+- Add `bake()` to all `Ent`-types in `entities.d`.
 - Add tesselation of shapes and store all `SDL_Vertex[vertexCount]`
   plus associated colors in `Renderer` and draw these using
   `SDL_RenderGeometry`.
