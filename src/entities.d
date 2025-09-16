@@ -37,9 +37,9 @@ nothrow:
 		this.vel = vel;
 		this.color = color;
 		this.active = active;
-		prepare();
+		bake();
 	}
-	void prepare() {
+	private void bake() {
 		_fcolor = SDL_FColor(color.r * fColor,
 							 color.g * fColor,
 							 color.b * fColor,
