@@ -56,13 +56,15 @@ nothrow @nogc:
 	RGBA drawColor() @trusted @property @il {
 		typeof(return) ret;
 		if (!SDL_GetRenderDrawColor(_ptr, &ret.r, &ret.g, &ret.b, &ret.a))
-			warningf("Couldn't get current drawing, %s", SDL_GetError.fromStringz());
+			warningf("Couldn't get the current drawing color, %s", SDL_GetError.fromStringz());
 		return ret;
 	}
 
 	/++ Set the drawing color. +/
-	int drawColor(in RGBA color) @trusted @property @il
-		=> SDL_SetRenderDrawColor(_ptr, color.r, color.g, color.b, color.a);
+	void drawColor(in RGBA color) @trusted @property @il {
+		if (!SDL_SetRenderDrawColor(_ptr, color.r, color.g, color.b, color.a))
+			warningf("Couldn't set the current drawing color, %s", SDL_GetError.fromStringz());
+	}
 
 	int fillRect(in SDL_FRect frect) @trusted @il
 		=> SDL_RenderFillRect(_ptr, &frect);
