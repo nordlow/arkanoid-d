@@ -101,35 +101,35 @@ void main(string[] args) @trusted {
 				ball.update(deltaTime);
 
 				// handle bounce against left|right wall
-				if (ball.pos.x <= ball.rad || ball.pos.x >= ssz.width - ball.rad)
+				if (ball.position.x <= ball.radius || ball.position.x >= ssz.width - ball.radius)
 					ball.vel.x *= -1; // flip x velocity. TODO: bounce sound
 				// handle bounce against top wall
-				if (ball.pos.y <= ball.rad)
+				if (ball.position.y <= ball.radius)
 					ball.vel.y *= -1; // flip y velocity. TODO: bounce sound
 
 				// snap ball inside region
 				enum EPS = 0.01f;
-				if (ball.pos.x <= ball.rad) {
-					ball.pos.x = ball.rad + EPS;
+				if (ball.position.x <= ball.radius) {
+					ball.position.x = ball.radius + EPS;
 					ball.vel.x = abs(ball.vel.x); // ensure moving right
 				}
-				if (ball.pos.x >= ssz.width - ball.rad) {
-					ball.pos.x = (ssz.width - ball.rad) - EPS;
+				if (ball.position.x >= ssz.width - ball.radius) {
+					ball.position.x = (ssz.width - ball.radius) - EPS;
 					ball.vel.x = -abs(ball.vel.x); // ensure moving left
 				}
-				if (ball.pos.y <= ball.rad) {
-					ball.pos.y = ball.rad + EPS;
+				if (ball.position.y <= ball.radius) {
+					ball.position.y = ball.radius + EPS;
 					ball.vel.y = abs(ball.vel.y); // ensure moving down
 				}
 
 				// ball bounce against paddle
-				if (ball.pos.y + ball.rad >= game.scene.paddle.pos.y
-					&& ball.pos.y - ball.rad
+				if (ball.position.y + ball.radius >= game.scene.paddle.pos.y
+					&& ball.position.y - ball.radius
 					<= game.scene.paddle.pos.y + game.scene.paddle.size.y
-					&& ball.pos.x >= game.scene.paddle.pos.x
-					&& ball.pos.x <= game.scene.paddle.pos.x + game.scene.paddle.size.x) {
+					&& ball.position.x >= game.scene.paddle.pos.x
+					&& ball.position.x <= game.scene.paddle.pos.x + game.scene.paddle.size.x) {
 					ball.vel.y = -abs(ball.vel.y);
-					const float hitPos = (ball.pos.x - game.scene.paddle.pos.x) / game.scene.paddle.size.x;
+					const float hitPos = (ball.position.x - game.scene.paddle.pos.x) / game.scene.paddle.size.x;
 					ball.vel.x = 200 * (hitPos - 0.5f) * 2;
 					game.paddleBounceFx.reput();
 				}
@@ -137,11 +137,11 @@ void main(string[] args) @trusted {
 				foreach (ref brick; game.scene.brickGrid[]) {
 					if (!brick.active || brick.isFlashing)
 						continue;
-					if (ball.pos.x + ball.rad >= brick.shape.pos.x
-						&& ball.pos.x - ball.rad
+					if (ball.position.x + ball.radius >= brick.shape.pos.x
+						&& ball.position.x - ball.radius
 						<= brick.shape.pos.x + brick.shape.size.x
-						&& ball.pos.y + ball.rad >= brick.shape.pos.y
-						&& ball.pos.y - ball.rad
+						&& ball.position.y + ball.radius >= brick.shape.pos.y
+						&& ball.position.y - ball.radius
 						<= brick.shape.pos.y + brick.shape.size.y) {
 						brick.restartFlashing();
 						game.brickFx.reput();
@@ -149,7 +149,7 @@ void main(string[] args) @trusted {
 						break;
 					}
 				}
-				if (ball.pos.y > ssz.height) {
+				if (ball.position.y > ssz.height) {
 					ball.active = false;
 				}
 			}
@@ -188,7 +188,7 @@ void main(string[] args) @trusted {
 
 		if ((game.over || game.won) && game.rPressed) {
 			foreach (ref ball; game.scene.balls) {
-				ball.pos = Pos(ssz.width / 2 + (game.scene.balls.length - 1) * 20 - 20, ssz.height - 150);
+				ball.position = Pos(ssz.width / 2 + (game.scene.balls.length - 1) * 20 - 20, ssz.height - 150);
 				ball.vel = game.ballVelocity;
 				ball.active = true;
 			}
