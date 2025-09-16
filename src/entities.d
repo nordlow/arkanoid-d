@@ -24,8 +24,9 @@ nothrow:
 	}
 }
 
+// TODO: Factor out circle + color rendering into `struct Circle` here
 struct Ball {
-	Cir shape; // TODO:
+	Cir shape;
 	/+ const(Cir) shape() const scope pure nothrow @property @nogc => _shape; +/
 	alias this = shape;
 	Vel vel;
@@ -42,14 +43,13 @@ nothrow:
 	}
 	void drawIn(scope ref Renderer rdr) const scope @trusted {
 		if (!active) return;
-		if (!pos.equals(_verts[0].position)) // `_verts` still valid
+		if (!pos.equals(_verts[0].position)) // `_verts` still in sync with `shape`
 			rdr.tesselateCircle(shape, _fcolor, (cast()this)._verts);
 		rdr.renderGeometry(_verts, _circleIndices);
 	}
 	private void bake() {
 		_fcolor = color.toFColor; // TODO: move to `color` @property setter
 	}
-
 private:
 	// Cached values:
 	SDL_FColor _fcolor; // computed from `color`
