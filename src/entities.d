@@ -40,10 +40,7 @@ nothrow:
 		bake();
 	}
 	private void bake() {
-		_fcolor = SDL_FColor(color.r * fColor,
-							 color.g * fColor,
-							 color.b * fColor,
-							 color.a * fColor);
+		_fcolor = color.toFColor;
 	}
 	void drawIn(scope ref Renderer rdr) const scope @trusted {
 		if (!active)
@@ -79,6 +76,9 @@ shared static this() {
 	}
 }
 private static immutable int[3 * Renderer.nSinCos] _circleIndices; // TODO: make this `static immutable` and compute in `shared static this`
+
+SDL_FColor toFColor(in RGBA color) pure nothrow @nogc
+	=> typeof(return)(color.r * fColor, color.g * fColor, color.b * fColor, color.a * fColor);
 
 static immutable float fColor = 1.0f/255.0f;
 
