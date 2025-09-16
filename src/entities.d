@@ -44,7 +44,7 @@ nothrow:
 	void drawIn(scope ref Renderer rdr) const scope @trusted {
 		if (!active) return;
 		bakeIn(rdr);
-		rdr.renderGeometry(_verts, indices);
+		rdr.renderGeometry(_verts, _indices);
 	}
 	private void bakeIn(scope ref Renderer rdr) const scope @trusted	 {
 		(cast()this)._fcolor = color.toFColor; // TODO: move to `color` @property setter
@@ -55,7 +55,7 @@ private:
 	// Cached values:
 	SDL_FColor _fcolor; // computed from `color`
 	SDL_Vertex[1 + Renderer.nSinCos] _verts; // computed from `shape`
-	alias indices = indicesCircleFan; // indices into `_verts`
+	alias _indices = indicesCircleFan; // _indices into `_verts`
 }
 
 bool equals(in Pos pos, in SDL_FPoint a) pure nothrow @nogc {
