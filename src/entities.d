@@ -32,7 +32,8 @@ struct Ball {
 	RGBA color;
 	bool active;
 nothrow:
-	void update(in float dt) scope pure nothrow @nogc { // TODO: Move to generic updater for types that have both position and velocity
+	void update(in float dt) scope pure nothrow @nogc {
+		// TODO: Move to generic update() for types that have both position and velocity
 		shape.center += velocity * dt;
 	}
 	this(Cir shape, Vel velocity, RGBA color, bool active) nothrow {
