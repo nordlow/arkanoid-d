@@ -58,7 +58,6 @@ Just type `dub` to run.
 - Represent rotations using `Ang rotation`.
 - Add `float rotation` and `float rotationVelocity` entity properties.
 - Add `Vec2 rot` and `Vec2 rotVelocity` entity properties.
-- Use SDL function that does combined create window and renderer.
 
 ### Game
 + Sten brickor som inte går sönder
