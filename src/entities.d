@@ -26,6 +26,7 @@ nothrow:
 
 struct Ball {
 	Cir shape; // TODO: make `private`
+	/+ const(Cir) shape() const scope pure nothrow @property @nogc => _shape; +/
 	alias this = shape;
 	Vel vel;
 	RGBA color;
@@ -38,11 +39,14 @@ nothrow:
 		this.color = color;
 		this.active = active;
 		bake();
+		_vertsInvalid = true;
 	}
 	private void bake() {
-		_fcolor = color.toFColor;
+		_fcolor = color.toFColor; // TODO: move to `color` @property setter
 	}
 	private void tesselate(scope ref Renderer rdr) {
+		if (!_vertsInvalid)
+			return;
 		// center
 		_verts[0].position.x = pos.x;
 		_verts[0].position.y = pos.y;
@@ -56,17 +60,19 @@ nothrow:
 			_verts[1 + i].position.y = pos.y + rad * sin;
 			_verts[1 + i].color = _fcolor;
 		}
+		version(none) _vertsInvalid = false;
 	}
 	void drawIn(scope ref Renderer rdr) const scope @trusted {
 		if (!active)
 			return;
-		(cast()this).tesselate(rdr);
+		(cast()this).tesselate(rdr); // TODO: move to `position` @property setter
 		rdr.renderGeometry(_verts, _circleIndices);
 	}
 private:
 	// Cached values:
 	SDL_FColor _fcolor; // computed from `color`
 	SDL_Vertex[1 + Renderer.nSinCos] _verts; // computed from `shape`
+	bool _vertsInvalid;
 }
 
 Ball[] makeBalls(uint count, Vel velocity, uint screenWidth, uint screenHeight) {
