@@ -26,17 +26,15 @@ nothrow:
 
 // TODO: Factor out circle + color rendering into `struct Circle` here
 struct Ball {
-	private Cir shape;
-	/+ const(Cir) shape() const scope pure nothrow @property @nogc => _shape; +/
+	Cir shape;
 	alias this = shape;
 	Vel vel;
 	RGBA color;
 	bool active;
-nothrow @nogc:
-	@property auto position() scope pure inout => shape.center;
-	@property void position(in Pos pos) scope pure { shape.center = pos; }
-	@property auto radius() scope pure inout => shape.radius;
-	void update(in float dt) scope pure nothrow { shape.center += vel * dt; }
+nothrow:
+	void update(in float dt) scope pure nothrow @nogc {
+		shape.center += vel * dt;
+	}
 	this(Cir shape, Vel vel, RGBA color, bool active) nothrow {
 		this.shape = shape;
 		this.vel = vel;
