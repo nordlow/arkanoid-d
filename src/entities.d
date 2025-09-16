@@ -35,11 +35,11 @@ nothrow:
 	void update(float dt) {}
 	this(Cir shape, Vel vel, RGBA color, bool active) nothrow {
 		this.shape = shape;
+		_vertsInvalid = true;
 		this.vel = vel;
 		this.color = color;
 		this.active = active;
 		bake();
-		_vertsInvalid = true;
 	}
 	private void bake() {
 		_fcolor = color.toFColor; // TODO: move to `color` @property setter
