@@ -62,8 +62,6 @@ nothrow:
 			mthis._verts[1 + i].position.y = pos.y + rad * sin;
 			mthis._verts[1 + i].color = _fcolor;
 		}
-		_verts.dbg();
-		_circleIndices.dbg();
 		rdr.renderGeometry(_verts, _circleIndices);
 	}
 private:
@@ -75,9 +73,9 @@ private:
 shared static this() {
 	// bake
 	foreach (const int i; 0 .. Renderer.nSinCos) {
-		_circleIndices[0 + 3 * i] = 0; // center
-		_circleIndices[1 + 3 * i] = i;
-		_circleIndices[2 + 3 * i] = (i + 1) % Renderer.nSinCos;
+		_circleIndices[3*i + 0] = 0; // center
+		_circleIndices[3*i + 1] = 1 + i; // first vertex of edge
+		_circleIndices[3*i + 2] = 1 + (i + 1) % Renderer.nSinCos; // next vertex
 	}
 }
 private static immutable int[3 * Renderer.nSinCos] _circleIndices; // TODO: make this `static immutable` and compute in `shared static this`
