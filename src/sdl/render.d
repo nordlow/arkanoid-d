@@ -1,6 +1,7 @@
 module sdl.render;
 
 import std.string : fromStringz;
+import base;
 import nxt.lut;
 import nxt.logger;
 import nxt.effects;
@@ -101,5 +102,36 @@ nothrow @nogc:
 	SinCos _sincos;
 	invariant(_ptr);
 }
+
+void tesselateCircle(scope ref Renderer rdr, in Cir cir, SDL_FColor fcolor, SDL_Vertex[] verts) pure nothrow @nogc {
+	// center
+	verts[0].position.x = cir.pos.x;
+	verts[0].position.y = cir.pos.y;
+	verts[0].color = fcolor;
+	// circumference
+	foreach (const int i; 0 .. Renderer.nSinCos) {
+		const te = rdr._sincos[i]; // table entry
+		const sin = te[0]; // sin
+		const cos = te[1]; // cos
+		verts[1 + i].position.x = cir.pos.x + cir.rad * cos;
+		verts[1 + i].position.y = cir.pos.y + cir.rad * sin;
+		verts[1 + i].color = fcolor;
+	}
+}
+
+shared static this() {
+	// bake
+	foreach (const int i; 0 .. Renderer.nSinCos) {
+		_circleIndices[3*i + 0] = 0; // center
+		_circleIndices[3*i + 1] = 1 + i; // first vertex of edge
+		_circleIndices[3*i + 2] = 1 + (i + 1) % Renderer.nSinCos; // next vertex
+	}
+}
+static immutable int[3 * Renderer.nSinCos] _circleIndices;
+
+SDL_FColor toFColor(in RGBA color) pure nothrow @nogc
+	=> typeof(return)(color.r * fColor, color.g * fColor, color.b * fColor, color.a * fColor);
+
+static immutable float fColor = 1.0f/255.0f;
 
 alias Vertex = SDL_Vertex;

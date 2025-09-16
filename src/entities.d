@@ -25,7 +25,7 @@ nothrow:
 }
 
 struct Ball {
-	Cir shape; // TODO: make `private`
+	Cir shape; // TODO:
 	/+ const(Cir) shape() const scope pure nothrow @property @nogc => _shape; +/
 	alias this = shape;
 	Vel vel;
@@ -44,27 +44,13 @@ nothrow:
 		if (!active)
 			return;
 		if (!pos.equals(_verts[0].position)) // `_verts` still valid
-			(cast()this).tesselate(rdr); // TODO: move to `position` @property setter
+			rdr.tesselateCircle(shape, _fcolor, (cast()this)._verts);
 		rdr.renderGeometry(_verts, _circleIndices);
 	}
 	private void bake() {
 		_fcolor = color.toFColor; // TODO: move to `color` @property setter
 	}
-	private void tesselate(scope ref Renderer rdr) {
-		// center
-		_verts[0].position.x = pos.x;
-		_verts[0].position.y = pos.y;
-		_verts[0].color = _fcolor;
-		// circumference
-		foreach (const int i; 0 .. Renderer.nSinCos) {
-			const te = rdr._sincos[i]; // table entry
-			const sin = te[0]; // sin
-			const cos = te[1]; // cos
-			_verts[1 + i].position.x = pos.x + rad * cos;
-			_verts[1 + i].position.y = pos.y + rad * sin;
-			_verts[1 + i].color = _fcolor;
-		}
-	}
+
 private:
 	// Cached values:
 	SDL_FColor _fcolor; // computed from `color`
@@ -244,18 +230,3 @@ void drawIn(T)(in T[] ents, scope ref Renderer rdr) {
 	foreach (const ref ent; ents)
 		ent.drawIn(rdr);
 }
-
-shared static this() {
-	// bake
-	foreach (const int i; 0 .. Renderer.nSinCos) {
-		_circleIndices[3*i + 0] = 0; // center
-		_circleIndices[3*i + 1] = 1 + i; // first vertex of edge
-		_circleIndices[3*i + 2] = 1 + (i + 1) % Renderer.nSinCos; // next vertex
-	}
-}
-private static immutable int[3 * Renderer.nSinCos] _circleIndices;
-
-private SDL_FColor toFColor(in RGBA color) pure nothrow @nogc
-	=> typeof(return)(color.r * fColor, color.g * fColor, color.b * fColor, color.a * fColor);
-
-static immutable float fColor = 1.0f/255.0f;
