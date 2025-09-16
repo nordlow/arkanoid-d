@@ -33,7 +33,9 @@ struct Ball {
 	RGBA color;
 	bool active;
 nothrow:
-	void update(float dt) {}
+	void update(in float dt) scope pure nothrow @nogc {
+		shape.center += vel * dt;
+	}
 	this(Cir shape, Vel vel, RGBA color, bool active) nothrow {
 		this.shape = shape;
 		this.vel = vel;

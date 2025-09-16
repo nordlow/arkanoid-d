@@ -44,14 +44,11 @@ void main(string[] args) @trusted {
 
 	auto game = Game(ssz);
 
-	ulong lastFrameTime = SDL_GetTicks();
-
+	auto lastFrameTimeMsecs = SDL_GetTicks(); // in msecs
 	for (uint frameCounter = 0; !game.quit; ++frameCounter) {
-		tracef("lastFrameTime: %s", lastFrameTime);
-
-		const currentFrameTime = SDL_GetTicks();
-		const deltaTime = (currentFrameTime - lastFrameTime) / 1000.0f;
-		lastFrameTime = currentFrameTime;
+		const currentFrameTimeMsecs = SDL_GetTicks(); // in msecs
+		const deltaTime = (currentFrameTimeMsecs - lastFrameTimeMsecs) / 1000.0f;
+		lastFrameTimeMsecs = currentFrameTimeMsecs;
 
 		game.processEvents();
 
@@ -103,7 +100,7 @@ void main(string[] args) @trusted {
 					continue;
 				nBallsActive++;
 
-				ball.pos += ball.vel * deltaTime;
+				ball.update(deltaTime);
 
 				// handle bounce against left|right wall
 				if (ball.pos.x <= ball.rad || ball.pos.x >= ssz.width - ball.rad)
