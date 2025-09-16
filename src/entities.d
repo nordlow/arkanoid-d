@@ -48,14 +48,11 @@ nothrow:
 	void drawIn(scope ref Renderer rdr) const scope @trusted {
 		if (!active)
 			return;
-
 		scope ref mthis = cast()this;
-
 		// center
 		mthis._verts[0].position.x = pos.x;
 		mthis._verts[0].position.y = pos.y;
 		mthis._verts[0].color = _fcolor;
-
 		// circumference
 		foreach (const int i; 0 .. Renderer.nSinCos) {
 			const auto te = rdr._sincos[i]; // table entry
@@ -65,7 +62,6 @@ nothrow:
 			mthis._verts[1 + i].position.y = pos.y + rad * sin;
 			mthis._verts[1 + i].color = _fcolor;
 		}
-
 		rdr.renderGeometry(_verts[], _circleIndices[]);
 	}
 private:
