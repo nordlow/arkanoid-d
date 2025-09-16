@@ -10,7 +10,7 @@ import sdl;
 
 struct Renderer { nothrow:
 	import std.math : sin, cos, PI;
-@il:
+nothrow @nogc @il:
 	@disable this(this);
 
 	this(scope ref Window win, immutable char[] name = null) @trusted {
@@ -28,7 +28,7 @@ struct Renderer { nothrow:
 		initTabs();
 	}
 
-	private void initTabs() scope pure nothrow @nogc {
+	private void initTabs() scope pure {
 		_sincos = SinCos(0, 2*PI);
 		_sincos.fill();
 	}
@@ -43,8 +43,17 @@ struct Renderer { nothrow:
 	~this() @nogc @trusted
 		=> SDL_DestroyRenderer(_ptr);
 
+	/++ Clear the current rendering target with the current drawing color set
+		with `setDrawColor`. +/
+	bool clear() @trusted {
+		const ret = SDL_RenderClear(_ptr);
+		if (!ret)
+			warningf("Couldn't clear, %s", SDL_GetError.fromStringz());
+		return ret;
+	}
+
 	/++ Get the drawing color. +/
-	RGBA getDrawColor() nothrow @nogc @trusted @property	{
+	RGBA getDrawColor() @trusted @property	{
 		typeof(return) ret;
 		if (!SDL_GetRenderDrawColor(_ptr, &ret.r, &ret.g, &ret.b, &ret.a))
 			warningf("Couldn't get current drawing, %s", SDL_GetError.fromStringz());
@@ -52,22 +61,20 @@ struct Renderer { nothrow:
 	}
 
 	/++ Set the drawing color. +/
-	int setDrawColor(in RGBA color) nothrow @nogc @trusted @property
+	int setDrawColor(in RGBA color) @trusted @property
 		=> SDL_SetRenderDrawColor(_ptr, color.r, color.g, color.b, color.a);
 
-	int fillRect(in SDL_FRect frect) nothrow @nogc @trusted
+	int fillRect(in SDL_FRect frect) @trusted
 		=> SDL_RenderFillRect(_ptr, &frect);
 
-	/++ Clear the current rendering target with the current drawing color set
-		with `setDrawColor`. +/
-	bool clear() nothrow @nogc @trusted {
-		const ret = SDL_RenderClear(_ptr);
+	bool renderGeometry(in Vertex *vertices, in int num_vertices) @trusted {
+		const ret = SDL_RenderGeometry(_ptr, texture: null, cast(SDL_Vertex*)vertices, num_vertices, indices: cast(int*)null, num_indices: 0);
 		if (!ret)
-			warningf("Couldn't clear, %s", SDL_GetError.fromStringz());
+			warningf("Couldn't render geometry, %s", SDL_GetError.fromStringz());
 		return ret;
 	}
 
-	bool present() nothrow @nogc @trusted {
+	bool present() @trusted {
 		const ret = SDL_RenderPresent(_ptr);
 		if (!ret)
 			warningf("Couldn't present, %s", SDL_GetError.fromStringz());
@@ -80,3 +87,5 @@ struct Renderer { nothrow:
 	SinCos _sincos;
 	invariant(_ptr);
 }
+
+alias Vertex = SDL_Vertex;

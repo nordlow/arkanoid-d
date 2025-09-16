@@ -48,6 +48,11 @@ bool SDL_RenderClear(SDL_Renderer *renderer);
 bool SDL_RenderPresent(SDL_Renderer* renderer);
 bool SDL_SetRenderVSync(SDL_Renderer* renderer, int vsync);
 
+bool SDL_RenderGeometry(SDL_Renderer *renderer,
+					 SDL_Texture *texture,
+					 const SDL_Vertex *vertices, int num_vertices,
+					 const int *indices, int num_indices);
+
 // Texture
 bool SDL_RenderTexture(SDL_Renderer* renderer, SDL_Texture* texture, const SDL_FRect* srcrect, const SDL_FRect* dstrect);
 SDL_Texture* SDL_CreateTextureFromSurface(SDL_Renderer* renderer, SDL_Surface* surface);
