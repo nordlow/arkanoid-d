@@ -45,8 +45,8 @@ nothrow:
 	void drawIn(scope ref Renderer rdr) const scope @trusted {
 		if (!active) return;
 		if (!pos.equals(_verts[0].position)) // `_verts` still in sync with `shape`
-			rdr.tesselateCircle(shape, _fcolor, (cast()this)._verts);
-		rdr.renderGeometry(_verts, _circleIndices);
+			rdr.bakeCircleFan(shape, _fcolor, (cast()this)._verts);
+		rdr.renderGeometry(_verts, indicesCircleFan);
 	}
 	private void bake() {
 		_fcolor = color.toFColor; // TODO: move to `color` @property setter
