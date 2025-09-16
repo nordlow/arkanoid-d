@@ -53,7 +53,7 @@ nothrow @nogc @il:
 	}
 
 	/++ Get the drawing color. +/
-	RGBA getDrawColor() @trusted @property	{
+	RGBA drawColor() @trusted @property	{
 		typeof(return) ret;
 		if (!SDL_GetRenderDrawColor(_ptr, &ret.r, &ret.g, &ret.b, &ret.a))
 			warningf("Couldn't get current drawing, %s", SDL_GetError.fromStringz());
