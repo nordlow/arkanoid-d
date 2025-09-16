@@ -245,8 +245,7 @@ shared static this() {
 		_circleIndices[3*i + 2] = 1 + (i + 1) % Renderer.nSinCos; // next vertex
 	}
 }
-
-private static immutable int[3 * Renderer.nSinCos] _circleIndices; // TODO: make this `static immutable` and compute in `shared static this`
+private static immutable int[3 * Renderer.nSinCos] _circleIndices;
 
 private SDL_FColor toFColor(in RGBA color) pure nothrow @nogc
 	=> typeof(return)(color.r * fColor, color.g * fColor, color.b * fColor, color.a * fColor);
