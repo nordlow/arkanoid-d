@@ -1,4 +1,4 @@
-module sdl.renderer;
+module sdl.render;
 
 import std.string : fromStringz;
 import nxt.lut;

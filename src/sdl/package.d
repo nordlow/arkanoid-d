@@ -7,7 +7,7 @@ public import nxt.logger;
 public import sdl.SDL;
 public import sdl.log;
 public import sdl.window;
-public import sdl.renderer;
+public import sdl.render;
 public import sdl.audio;
 public import sdl.joystick;
 public import sdl.pixels;
