@@ -57,6 +57,16 @@ private:
 	SDL_Vertex[1 + Renderer.nSinCos] _verts; // computed from `shape`
 }
 
+shared static this() {
+	// bake
+	foreach (const int i; 0 .. Renderer.nSinCos) {
+		_circleIndices[3*i + 0] = 0; // center
+		_circleIndices[3*i + 1] = 1 + i; // first vertex of edge
+		_circleIndices[3*i + 2] = 1 + (i + 1) % Renderer.nSinCos; // next vertex
+	}
+}
+static immutable int[3 * Renderer.nSinCos] _circleIndices;
+
 bool equals(in Pos pos, in SDL_FPoint a) pure nothrow @nogc {
 	return a.x == pos.x && a.y == pos.y;
 }

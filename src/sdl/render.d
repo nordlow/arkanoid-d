@@ -119,16 +119,6 @@ void tesselateCircle(scope ref Renderer rdr, in Cir cir, SDL_FColor fcolor, SDL_
 	}
 }
 
-shared static this() {
-	// bake
-	foreach (const int i; 0 .. Renderer.nSinCos) {
-		_circleIndices[3*i + 0] = 0; // center
-		_circleIndices[3*i + 1] = 1 + i; // first vertex of edge
-		_circleIndices[3*i + 2] = 1 + (i + 1) % Renderer.nSinCos; // next vertex
-	}
-}
-static immutable int[3 * Renderer.nSinCos] _circleIndices;
-
 SDL_FColor toFColor(in RGBA color) pure nothrow @nogc
 	=> typeof(return)(color.r * fColor, color.g * fColor, color.b * fColor, color.a * fColor);
 
