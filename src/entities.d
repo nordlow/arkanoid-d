@@ -55,7 +55,7 @@ private:
 	// Cached values:
 	SDL_FColor _fcolor; // computed from `color`
 	SDL_Vertex[1 + Renderer.nSinCos] _verts; // computed from `shape`
-	alias indices = indicesCircleFan;
+	alias indices = indicesCircleFan; // indices into `_verts`
 }
 
 bool equals(in Pos pos, in SDL_FPoint a) pure nothrow @nogc {
