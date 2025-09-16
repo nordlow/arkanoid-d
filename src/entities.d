@@ -11,7 +11,7 @@ struct Paddle {
 nothrow:
 	void update(float dt) {}
 	void drawIn(scope ref Renderer rdr) const scope @trusted {
-		rdr.setDrawColor(color);
+		rdr.drawColor = color;
 		rdr.fillRect(*cast(SDL_FRect*)&shape);
 	}
 	void moveLeft(in float deltaTime, in ScreenSize _ssz) {
@@ -35,7 +35,7 @@ nothrow:
 	void drawIn(scope ref Renderer rdr) const scope @trusted {
 		if (!active)
 			return;
-		rdr.setDrawColor(color);
+		rdr.drawColor = color;
 		const d = 2* rad;
 		rdr.fillRect(SDL_FRect(x: pos.x - rad, y: pos.y - rad, w: d, h: d));
 	}
@@ -69,7 +69,7 @@ struct Bullet {
 	void drawIn(scope ref Renderer rdr) const scope nothrow @trusted {
 		if (!active)
 			return;
-		rdr.setDrawColor(color);
+		rdr.drawColor = color;
 		const d = 2*rad;
 		rdr.fillRect(SDL_FRect(x: pos.x - rad, y: pos.y - rad, w: d, h: d));
 	}

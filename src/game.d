@@ -107,7 +107,7 @@ struct Scene {
 	Bullet[] bullets;
 	BrickGrid brickGrid;
 	void drawIn(scope ref Renderer rdr) @trusted {
-		rdr.setDrawColor(Colors.BLACK);
+		rdr.drawColor = Colors.BLACK;
 		rdr.clear();
 		brickGrid.drawIn(rdr);
 		paddle.drawIn(rdr);
