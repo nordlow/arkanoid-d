@@ -62,7 +62,9 @@ nothrow:
 			mthis._verts[1 + i].position.y = pos.y + rad * sin;
 			mthis._verts[1 + i].color = _fcolor;
 		}
-		rdr.renderGeometry(_verts[], _circleIndices[]);
+		_verts.dbg();
+		_circleIndices.dbg();
+		rdr.renderGeometry(_verts, _circleIndices);
 	}
 private:
 	// Cached values:
