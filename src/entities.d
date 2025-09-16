@@ -32,6 +32,19 @@ struct Ball {
 	RGBA color;
 	bool active;
 nothrow:
+	version(none) // TODO: this is not a flexible as I want it to be
+	auto ref opDispatch(string name)() if (__traits(hasMember, Cir, name)) {
+		// Invalidate verts on *write* access
+		// Read/write detection: return by ref allows assignment
+		static if (name == "pos") {
+			_vertsInvalid = true;
+		}
+		else static if (name == "rad") {
+			_vertsInvalid = true;
+		} else
+			static assert(0, "Handle ", name);
+		return __traits(getMember, shape, name);
+	}
 	void update(float dt) {}
 	this(Cir shape, Vel vel, RGBA color, bool active) nothrow {
 		this.shape = shape;
