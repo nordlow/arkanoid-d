@@ -69,7 +69,7 @@ Paddle[] makePaddles(uint count, Rect shape, RGBA color, uint screenWidth, uint 
 	typeof(return) ret;
 	ret.length = count;
 	foreach (const i, ref paddle; ret)
-		paddle = Paddle(shape: shape, color);
+		paddle = Paddle(shape: shape, i == 0 ? Colors.DARKRED : Colors.DARKGREEN);
 	return ret;
 }
 
