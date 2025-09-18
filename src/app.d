@@ -57,7 +57,9 @@ void main(string[] args) @trusted {
 		const bool rightHeld = keyStates[SDL_SCANCODE_RIGHT] != 0;
 
 		if (!game.over && !game.won) {
-			foreach (ref paddle; game.scene.paddles) {
+			foreach (const pi, ref paddle; game.scene.paddles) {
+				if (pi == 0)
+					continue;
 				void moveLeft() => paddle.moveLeft(deltaTime, ssz);
 				void moveRight() => paddle.moveRight(deltaTime, ssz);
 				if (game.joystick.isValid) {
