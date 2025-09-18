@@ -53,18 +53,23 @@ void main(string[] args) @trusted {
 		game.processEvents();
 
 		const keyStates = SDL_GetKeyboardState(null);
-		const bool leftHeld = keyStates[SDL_SCANCODE_LEFT] != 0;
-		const bool rightHeld = keyStates[SDL_SCANCODE_RIGHT] != 0;
 
 		if (!game.over && !game.won) {
 			foreach (const pi, ref paddle; game.scene.paddles) {
-				if (pi == 0)
-					continue;
+				bool leftHeld, rightHeld;
+				if (pi == 0) {
+					leftHeld = keyStates[SDL_SCANCODE_LEFT] != 0;
+					rightHeld = keyStates[SDL_SCANCODE_RIGHT] != 0;
+				} else {
+					leftHeld = keyStates[SDL_SCANCODE_A] != 0;
+					rightHeld = keyStates[SDL_SCANCODE_D] != 0;
+				}
+
 				void moveLeft() => paddle.moveLeft(deltaTime, ssz);
 				void moveRight() => paddle.moveRight(deltaTime, ssz);
+
 				if (game.joystick.isValid) {
 					while (const ev = game.joystick.tryNextEvent()) {
-						tracef("Read %s heldButtons:", game.joystick.getHeldButtons);
 						if (ev.type == JoystickEvent.Type.axisMoved) {
 							if (ev.buttonOrAxis == 0) {
 								if (ev.axisValue < 0) moveLeft();
@@ -77,10 +82,13 @@ void main(string[] args) @trusted {
 						}
 					}
 				}
+
 				if (leftHeld && paddle.pos.x > 0)
 					moveLeft();
+
 				if (rightHeld && paddle.pos.x < ssz.width - paddle.size.x)
 					moveRight();
+
 				if (game.spacePressed) {
 					foreach (ref bullet; game.scene.bullets) {
 						if (bullet.active)
