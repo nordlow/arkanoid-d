@@ -54,6 +54,8 @@ void main(string[] args) @trusted {
 
 		const keyStates = SDL_GetKeyboardState(null);
 
+		game.spacePressed = keyStates[SDL_SCANCODE_SPACE] != 0;
+
 		if (!game.over && !game.won) {
 			foreach (const pi, ref paddle; game.scene.paddles) {
 				bool leftHeld, rightHeld;

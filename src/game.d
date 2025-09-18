@@ -67,7 +67,6 @@ nothrow struct Game {
 					quit = true;
 					break;
 				case SDLK_SPACE:
-					spacePressed = true;
 					break;
 				case SDLK_F11:
 					win.fullscreen = !win.fullscreen;
