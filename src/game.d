@@ -25,10 +25,12 @@ nothrow struct Game {
 		this.win = Window(ssz, "Arkanoid Clone");
 		joystick = openDefaultJoystick();
 		_rng = Random(unpredictableSeed());
+		const paddleCount = 2;
 		const ballCount = 10;
 		ballVelocity = Vel(200, 200);
-		scene = Scene(paddle: Paddle(shape: Rect(pos: Pos(ssz.width / 2 - 60, ssz.height - 30), size: Dim(150, 20)),
-									 color: Colors.BLUE),
+		scene = Scene(paddles: makePaddles(paddleCount,
+										   shape: Rect(pos: Pos(ssz.width / 2 - 60, ssz.height - 30), size: Dim(150, 20)),
+										   color: Colors.BLUE, ssz.width, ssz.height),
 					  balls: makeBalls(ballCount, ballVelocity, ssz.width, ssz.height),
 					  bullets: makeBullets(30),
 					  brickGrid: BrickGrid(nRows: 20, nCols: 30));
@@ -108,7 +110,7 @@ nothrow struct Game {
 
 struct Scene {
 	@disable this(this);
-	Paddle paddle;
+	Paddle[] paddles;
 	Ball[] balls;
 	Bullet[] bullets;
 	BrickGrid brickGrid;
@@ -116,7 +118,7 @@ struct Scene {
 		rdr.drawColor = Colors.BLACK;
 		rdr.clear();
 		brickGrid.drawIn(rdr);
-		paddle.drawIn(rdr);
+		paddles.drawIn(rdr);
 		balls.drawIn(rdr);
 		bullets.drawIn(rdr);
 		rdr.present();

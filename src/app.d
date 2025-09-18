@@ -57,38 +57,38 @@ void main(string[] args) @trusted {
 		const bool rightHeld = keyStates[SDL_SCANCODE_RIGHT] != 0;
 
 		if (!game.over && !game.won) {
-			void moveLeft()
-				=> game.scene.paddle.moveLeft(deltaTime, ssz);
-			void moveRight()
-				=> game.scene.paddle.moveRight(deltaTime, ssz);
-			if (game.joystick.isValid) {
-				while (const ev = game.joystick.tryNextEvent()) {
-					tracef("Read %s heldButtons:", game.joystick.getHeldButtons);
-					if (ev.type == JoystickEvent.Type.axisMoved) {
-						if (ev.buttonOrAxis == 0) {
-							if (ev.axisValue < 0) moveLeft();
-							else if (ev.axisValue > 0) moveRight();
-						}
-						if (ev.buttonOrAxis == 6) {
-							if (ev.axisValue < 0) moveLeft();
-							else if (ev.axisValue > 0) moveRight();
+			foreach (ref paddle; game.scene.paddles) {
+				void moveLeft() => paddle.moveLeft(deltaTime, ssz);
+				void moveRight() => paddle.moveRight(deltaTime, ssz);
+				if (game.joystick.isValid) {
+					while (const ev = game.joystick.tryNextEvent()) {
+						tracef("Read %s heldButtons:", game.joystick.getHeldButtons);
+						if (ev.type == JoystickEvent.Type.axisMoved) {
+							if (ev.buttonOrAxis == 0) {
+								if (ev.axisValue < 0) moveLeft();
+								else if (ev.axisValue > 0) moveRight();
+							}
+							if (ev.buttonOrAxis == 6) {
+								if (ev.axisValue < 0) moveLeft();
+								else if (ev.axisValue > 0) moveRight();
+							}
 						}
 					}
 				}
-			}
-			if (leftHeld && game.scene.paddle.pos.x > 0)
-				moveLeft();
-			if (rightHeld && game.scene.paddle.pos.x < ssz.width - game.scene.paddle.size.x)
-				moveRight();
-			if (game.spacePressed) {
-				foreach (ref bullet; game.scene.bullets) {
-					if (bullet.active)
-						continue;
-					bullet.pos = Pos(game.scene.paddle.pos.x + game.scene.paddle.size.x / 2,
-									  game.scene.paddle.pos.y);
-					bullet.active = true;
-					game.bulletShotFx.reput();
-					break;
+				if (leftHeld && paddle.pos.x > 0)
+					moveLeft();
+				if (rightHeld && paddle.pos.x < ssz.width - paddle.size.x)
+					moveRight();
+				if (game.spacePressed) {
+					foreach (ref bullet; game.scene.bullets) {
+						if (bullet.active)
+							continue;
+						bullet.pos = Pos(paddle.pos.x + paddle.size.x / 2,
+										 paddle.pos.y);
+						bullet.active = true;
+						game.bulletShotFx.reput();
+						break;
+					}
 				}
 			}
 
@@ -122,16 +122,18 @@ void main(string[] args) @trusted {
 					ball.velocity.y = abs(ball.velocity.y); // ensure moving down
 				}
 
-				// ball bounce against paddle
-				if (ball.position.y + ball.radius >= game.scene.paddle.pos.y
+				// ball bounce against paddles
+				foreach (ref paddle; game.scene.paddles) {
+					if (ball.position.y + ball.radius >= paddle.pos.y // TODO: replace with distance between ball and paddles
 					&& ball.position.y - ball.radius
-					<= game.scene.paddle.pos.y + game.scene.paddle.size.y
-					&& ball.position.x >= game.scene.paddle.pos.x
-					&& ball.position.x <= game.scene.paddle.pos.x + game.scene.paddle.size.x) {
-					ball.velocity.y = -abs(ball.velocity.y);
-					const float hitPos = (ball.position.x - game.scene.paddle.pos.x) / game.scene.paddle.size.x;
-					ball.velocity.x = 200 * (hitPos - 0.5f) * 2;
-					game.paddleBounceFx.reput();
+					<= paddle.pos.y + paddle.size.y
+					&& ball.position.x >= paddle.pos.x
+					&& ball.position.x <= paddle.pos.x + paddle.size.x) {
+						ball.velocity.y = -abs(ball.velocity.y);
+						const float hitPos = (ball.position.x - paddle.pos.x) / paddle.size.x;
+						ball.velocity.x = 200 * (hitPos - 0.5f) * 2;
+						game.paddleBounceFx.reput();
+					}
 				}
 
 				foreach (ref brick; game.scene.brickGrid[]) {
@@ -143,11 +145,11 @@ void main(string[] args) @trusted {
 						&& ball.position.y + ball.radius >= brick.shape.pos.y
 						&& ball.position.y - ball.radius
 						<= brick.shape.pos.y + brick.shape.size.y) {
-						brick.restartFlashing();
-						game.brickFx.reput();
-						ball.velocity.y *= -1;
-						break;
-					}
+							brick.restartFlashing();
+							game.brickFx.reput();
+							ball.velocity.y *= -1;
+							break;
+						}
 				}
 				if (ball.position.y > ssz.height) {
 					ball.active = false;
@@ -192,7 +194,8 @@ void main(string[] args) @trusted {
 				ball.velocity = game.ballVelocity;
 				ball.active = true;
 			}
-			game.scene.paddle.pos = Pos(ssz.width / 2 - 60, ssz.height - 30);
+			foreach (ref paddle; game.scene.paddles)
+				paddle.pos = Pos(ssz.width / 2 - 60, ssz.height - 30);
 			foreach (ref brick; game.scene.brickGrid[]) {
 				brick.active = true;
 				brick.isFlashing = false;
