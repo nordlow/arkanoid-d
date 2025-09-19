@@ -16,7 +16,7 @@ NATIVE_SILENT_FLAG=""
 case "$BUILD_TOOL" in
 	ninja)
 		CMAKE_GENERATOR="Ninja"
-		NATIVE_SILENT_FLAG="-s"
+		NATIVE_SILENT_FLAG="--quiet"
 		;;
 	make)
 		CMAKE_GENERATOR="Unix Makefiles"
