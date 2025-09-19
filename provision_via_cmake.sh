@@ -2,6 +2,8 @@
 
 set -euo pipefail
 
+SDL_REPO_URL="https://github.com/libsdl-org/SDL.git"
+
 # Pick 'ninja' if in the $PATH, otherwise 'make'.
 if command -v ninja &> /dev/null; then
 	BUILD_TOOL="ninja"
@@ -31,7 +33,7 @@ case "$BUILD_TOOL" in
 esac
 
 if [ ! -d "SDL/.git" ]; then
-	git clone https://github.com/libsdl-org/SDL.git
+	git clone "${SDL_REPO_URL}"
 fi
 
 SDL_BUILD_DIR=SDL/build
