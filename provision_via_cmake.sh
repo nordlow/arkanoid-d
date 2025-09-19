@@ -28,7 +28,9 @@ fi
 cmake \
 	--build . \
 	--config Release \
-	--parallel
+	--parallel \
+	-- \
+	--silent > /dev/null
 
 popd &>/dev/null || exit
 popd &>/dev/null || exit
