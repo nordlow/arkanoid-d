@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-# Check if 'ninja' is in the PATH
+# Pick 'ninja' if in the $PATH, otherwise 'make'.
 if command -v ninja &> /dev/null; then
 	BUILD_TOOL="ninja"
 else
