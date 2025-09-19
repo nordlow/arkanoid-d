@@ -5,7 +5,10 @@ copyright "Copyright © 2025, Per Nordlöw"
 
 dependency "phobos-next" path="../phobos-next"
 
-# SDL
+# Build SDL to get latest version
+preBuildCommands "bash provision.sh" # ok because no-changes takes ~10ms
+preRunCommands "bash provision.sh" # ok because no-changes takes ~10ms
+
 dflags "-ISDL/include" "-P=-ISDL/include" # ImportC
 lflags "-LSDL/build" platform="posix"
 libs "SDL3" "c"
