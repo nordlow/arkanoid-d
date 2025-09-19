@@ -5,6 +5,20 @@ https://github.com/vhspace/sdl3-rs/tree/master/examples.
 
 Just type `dub` to run.
 
+## Provisioning of Dependencies
+
+```sh
+./provision_via_cmake.sh
+```
+
+or
+
+```sh
+./provision_via_apt.sh
+```
+
+This is also done automatically by `dub`.
+
 ## Core kinds of calculations in `update(float dt)`
 
 1. **Motion & Transformation**
