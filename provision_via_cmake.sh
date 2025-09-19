@@ -13,17 +13,16 @@ fi
 
 # Map the build tool to the CMake generator and native silent flag
 CMAKE_GENERATOR=""
-NATIVE_SILENT_FLAG=""
-
+BUILD_TOOL_SILENT_FLAG=""
 case "$BUILD_TOOL" in
 	ninja)
 		CMAKE_GENERATOR="Ninja"
-		NATIVE_SILENT_FLAG="--quiet"
+		BUILD_TOOL_SILENT_FLAG="--quiet"
 		BUILD_FILE="build.ninja"
 		;;
 	make)
 		CMAKE_GENERATOR="Unix Makefiles"
-		NATIVE_SILENT_FLAG="-s"
+		BUILD_TOOL_SILENT_FLAG="-s"
 		BUILD_FILE="Makefile"
 		;;
 	*)
@@ -61,6 +60,6 @@ cmake \
 	--config Release \
 	--parallel \
 	-- \
-	"$NATIVE_SILENT_FLAG" > /dev/null
+	"$BUILD_TOOL_SILENT_FLAG" > /dev/null
 
 popd &>/dev/null || exit
