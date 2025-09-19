@@ -9,7 +9,10 @@ dependency "phobos-next" path="../phobos-next"
 preBuildCommands "bash provision.sh" # ok because no-changes takes ~10ms
 preRunCommands "bash provision.sh" # ok because no-changes takes ~10ms
 
+dflags "-vcolumns" "-preview=in" "-preview=fieldwise" "-preview=rvaluerefparam" "-preview=bitfields" "-dip1000"
 dflags "-ISDL/include" "-P=-ISDL/include" # ImportC
+dflags "-Xcc=-fuse-ld=lld"				  # faster linkere
+
 lflags "-LSDL/build" platform="posix"
 libs "SDL3" "c"
 
