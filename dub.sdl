@@ -5,17 +5,14 @@ copyright "Copyright © 2025, Per Nordlöw"
 
 dependency "phobos-next" path="../phobos-next"
 
-# Build SDL to get latest version
-preBuildCommands "bash provision.sh" # ok because no-changes takes ~10ms
-preRunCommands "bash provision.sh" # ok because no-changes takes ~10ms
+# Build SDL to get latest version.
+preBuildCommands "bash provision.sh"
+preRunCommands "bash provision.sh"
 
 dflags "-vcolumns" "-preview=in"
 dflags "-preview=fieldwise" "-preview=rvaluerefparam" "-preview=bitfields" "-dip1000"
 dflags "-ISDL/include" "-P=-ISDL/include" # ImportC
 dflags "-Xcc=-fuse-ld=lld"				  # faster linker
 
-lflags "-LSDL/build" platform="posix"
+lflags "-LSDL/build" "-rpath=SDL/build" platform="posix"
 libs "SDL3" "c"
-
-# lflags "-rpath" "@executable_path/" platform="osx"
-# lflags "-rpath=$$ORIGIN" platform="linux"
