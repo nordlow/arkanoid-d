@@ -17,10 +17,12 @@ case "$BUILD_TOOL" in
 	ninja)
 		CMAKE_GENERATOR="Ninja"
 		NATIVE_SILENT_FLAG="--quiet"
+		BUILD_FILE="build.ninja"
 		;;
 	make)
 		CMAKE_GENERATOR="Unix Makefiles"
 		NATIVE_SILENT_FLAG="-s"
+		BUILD_FILE="Makefile"
 		;;
 	*)
 		echo "Error: Unknown build tool '${BUILD_TOOL}'. Supported tools are 'ninja' and 'make'." >&2
@@ -40,7 +42,7 @@ pushd "${SDL_BUILD_DIR}" &>/dev/null || exit
 DST_PREFIX="${HOME}/.local"
 INSTALL_PREFIX="${DST_PREFIX}/sdl-snapshot"
 
-if [[ ../CMakeLists.txt -nt Makefile ]]; then
+if [[ ../CMakeLists.txt -nt "${BUILD_FILE}" ]]; then
 	echo "Reconfiguring with CMake because '../CMakeLists.txt' is newer than 'Makefile'..."
 	cmake --log-level=WARNING \
 		-G "$CMAKE_GENERATOR" \
