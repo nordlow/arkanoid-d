@@ -15,19 +15,20 @@ pushd build &>/dev/null || exit
 DST_PREFIX="${HOME}/.local"
 INSTALL_PREFIX="${DST_PREFIX}/sdl-snapshot"
 
-cmake --log-level=WARNING \
-	-DCMAKE_BUILD_TYPE=Release \
-	-DCMAKE_INSTALL_PREFIX="${INSTALL_PREFIX}" \
-	-DBUILD_SHARED_LIBS=ON \
-	-DBUILD_STATIC_LIBS=ON \
-	..
+if [[ ../CMakeLists.txt -nt Makefile ]]; then
+	echo "Reconfiguring with CMake because '../CMakeLists.txt' is newer than 'Makefile' ..."
+	cmake --log-level=WARNING \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DCMAKE_INSTALL_PREFIX="${INSTALL_PREFIX}" \
+		-DBUILD_SHARED_LIBS=ON \
+		-DBUILD_STATIC_LIBS=ON \
+		..
+fi
 
 cmake \
 	--build . \
 	--config Release \
 	--parallel
 
-# cmake --install . --config Release
-
-popd
-popd
+popd &>/dev/null || exit
+popd &>/dev/null || exit
