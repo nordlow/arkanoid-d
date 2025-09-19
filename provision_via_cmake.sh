@@ -3,9 +3,9 @@
 set -euo pipefail
 
 if [ ! -d "SDL/.git" ]; then
-  git clone https://github.com/libsdl-org/SDL.git
-else
-  git -C SDL pull
+	git clone https://github.com/libsdl-org/SDL.git
+# else
+#	git -C SDL pull
 fi
 
 pushd SDL &>/dev/null || exit
