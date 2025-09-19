@@ -2,4 +2,4 @@
 
 set -euo pipefail
 
-exec dub run --compiler=dmd
+exec dub -q run --compiler=dmd
