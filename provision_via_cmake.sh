@@ -59,6 +59,6 @@ cmake \
 	--config Release \
 	--parallel \
 	-- \
-	"$NATIVE_SILENT_FLAG"
+	"$NATIVE_SILENT_FLAG" > /dev/null
 
 popd &>/dev/null || exit
