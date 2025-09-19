@@ -8,15 +8,25 @@ else
   git -C SDL pull
 fi
 
-pushd SDL
+pushd SDL &>/dev/null || exit
 mkdir -p build
-pushd build
+pushd build &>/dev/null || exit
 
 DST_PREFIX="${HOME}/.local"
 INSTALL_PREFIX="${DST_PREFIX}/sdl-snapshot"
 
-cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="${INSTALL_PREFIX}" -DBUILD_SHARED_LIBS=ON -DBUILD_STATIC_LIBS=ON ..
-cmake --build . --config Release --parallel
+cmake \
+	-DCMAKE_BUILD_TYPE=Release \
+	-DCMAKE_INSTALL_PREFIX="${INSTALL_PREFIX}" \
+	-DBUILD_SHARED_LIBS=ON \
+	-DBUILD_STATIC_LIBS=ON \
+	..
+
+cmake \
+	--build . \
+	--config Release \
+	--parallel
+
 # cmake --install . --config Release
 
 popd
