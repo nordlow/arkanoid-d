@@ -12,16 +12,16 @@ else
 fi
 
 # Map the build tool to the CMake generator and native silent flag
-CMAKE_GENERATOR=""
+CMAKE_BUILD_TOOL=""
 BUILD_TOOL_SILENT_FLAG=""
 case "$BUILD_TOOL" in
 	ninja)
-		CMAKE_GENERATOR="Ninja"
+		CMAKE_BUILD_TOOL="Ninja"
 		BUILD_TOOL_SILENT_FLAG="--quiet"
 		BUILD_FILE="build.ninja"
 		;;
 	make)
-		CMAKE_GENERATOR="Unix Makefiles"
+		CMAKE_BUILD_TOOL="Unix Makefiles"
 		BUILD_TOOL_SILENT_FLAG="-s"
 		BUILD_FILE="Makefile"
 		;;
@@ -46,7 +46,7 @@ INSTALL_PREFIX="${DST_PREFIX}/sdl-snapshot"
 if [[ ../CMakeLists.txt -nt "${BUILD_FILE}" ]]; then
 	echo "Reconfiguring with CMake because '../CMakeLists.txt' is newer than 'Makefile'..."
 	cmake --log-level=WARNING \
-		-G "$CMAKE_GENERATOR" \
+		-G "$CMAKE_BUILD_TOOL" \
 		-DCMAKE_BUILD_TYPE=Release \
 		-DCMAKE_INSTALL_PREFIX="${INSTALL_PREFIX}" \
 		-DBUILD_SHARED_LIBS=ON \
