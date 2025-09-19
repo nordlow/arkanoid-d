@@ -67,8 +67,6 @@ bool equals(in Pos pos, in SDL_FPoint a) pure nothrow @nogc {
 }
 
 Paddle[] makePaddles(uint count, Rect shape, RGBA color, uint screenWidth, uint screenHeight) {
-	import nxt.io.dbg;
-	auto rnd = Random();
 	typeof(return) ret;
 	ret.length = count;
 	foreach (const i, ref paddle; ret) {
@@ -92,7 +90,6 @@ Paddle[] makePaddles(uint count, Rect shape, RGBA color, uint screenWidth, uint 
 }
 
 Ball[] makeBalls(uint count, Vel velocity, uint screenWidth, uint screenHeight) {
-	import nxt.io.dbg;
 	auto rnd = Random();
 	typeof(return) ret;
 	ret.length = count;
