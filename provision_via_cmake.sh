@@ -15,7 +15,7 @@ pushd build &>/dev/null || exit
 DST_PREFIX="${HOME}/.local"
 INSTALL_PREFIX="${DST_PREFIX}/sdl-snapshot"
 
-cmake \
+cmake --log-level=WARNING \
 	-DCMAKE_BUILD_TYPE=Release \
 	-DCMAKE_INSTALL_PREFIX="${INSTALL_PREFIX}" \
 	-DBUILD_SHARED_LIBS=ON \
