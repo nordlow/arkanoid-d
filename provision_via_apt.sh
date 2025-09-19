@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-tools=("libsdl3-dev")
+tools=("libsdl3-dev")			# since Ubuntu 25.04
 
 install_apt_packages_of_executables() {
 	local packages=()
