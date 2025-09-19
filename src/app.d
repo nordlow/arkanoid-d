@@ -58,14 +58,8 @@ void main(string[] args) @trusted {
 
 		if (!game.over && !game.won) {
 			foreach (const pi, ref paddle; game.scene.paddles) {
-				bool leftHeld, rightHeld;
-				if (pi == 0) {
-					leftHeld = keyStates[SDL_SCANCODE_LEFT] != 0;
-					rightHeld = keyStates[SDL_SCANCODE_RIGHT] != 0;
-				} else {
-					leftHeld = keyStates[SDL_SCANCODE_A] != 0;
-					rightHeld = keyStates[SDL_SCANCODE_D] != 0;
-				}
+				const leftHeld = keyStates[paddle.leftKey] != 0;
+				const rightHeld = keyStates[paddle.rightKey] != 0;
 
 				void moveLeft() => paddle.moveLeft(deltaTime, ssz);
 				void moveRight() => paddle.moveRight(deltaTime, ssz);

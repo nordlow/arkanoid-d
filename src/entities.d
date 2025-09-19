@@ -1,5 +1,6 @@
 module entities;
 
+import sdl;
 import base;
 
 @safe:
@@ -22,6 +23,8 @@ nothrow:
 		if (pos.x < ssz.width - size.x)
 			pos.x += 800 * deltaTime;
 	}
+	SDL_Scancode leftKey;
+	SDL_Scancode rightKey;
 }
 
 // TODO: Factor out circle + color rendering into `struct Circle` here
@@ -68,8 +71,22 @@ Paddle[] makePaddles(uint count, Rect shape, RGBA color, uint screenWidth, uint 
 	auto rnd = Random();
 	typeof(return) ret;
 	ret.length = count;
-	foreach (const i, ref paddle; ret)
-		paddle = Paddle(shape: shape, i == 0 ? Colors.DARKRED : Colors.DARKGREEN);
+	foreach (const i, ref paddle; ret) {
+		paddle = Paddle(shape: shape,
+						i == 0 ? Colors.DARKRED : Colors.DARKGREEN);
+		switch (i) {
+		case 0:
+			paddle.leftKey = SDL_SCANCODE_LEFT;
+			paddle.rightKey = SDL_SCANCODE_RIGHT;
+			break;
+		case 1:
+			paddle.leftKey = SDL_SCANCODE_A;
+			paddle.rightKey = SDL_SCANCODE_D;
+			break;
+		default:
+			break;
+		}
+	}
 	return ret;
 }
 
