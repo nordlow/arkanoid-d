@@ -84,6 +84,7 @@ Paddle[] makePaddles(uint count, Rect shape, RGBA color, uint screenWidth, uint 
 			paddle.rightKey = SDL_SCANCODE_D;
 			break;
 		default:
+			warningf("No keys assigned to paddle %s", i);
 			break;
 		}
 	}
