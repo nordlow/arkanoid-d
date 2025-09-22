@@ -5,7 +5,6 @@ copyright "Copyright © 2025, Per Nordlöw"
 
 dependency "phobos-next" path="../phobos-next"
 
-# Build SDL to get latest version.
 preBuildCommands "bash provision.sh"
 preRunCommands "bash provision.sh"
 

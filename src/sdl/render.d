@@ -107,7 +107,7 @@ nothrow @nogc:
 	TODO: Move to module `tesselation`.
 	TODO: tigh this to `indicesCircleFan` somehow
  +/
-void bakeCircleFan(scope ref Renderer rdr, in Cir cir, SDL_FColor fcolor, SDL_Vertex[] verts) pure nothrow @nogc {
+void bakeCircleFan(scope ref Renderer rdr, in Cir cir, in SDL_FColor fcolor, scope SDL_Vertex[] verts) pure nothrow @nogc {
 	// center
 	verts[0].position.x = cir.pos.x;
 	verts[0].position.y = cir.pos.y;
