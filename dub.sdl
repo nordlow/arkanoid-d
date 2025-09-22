@@ -12,7 +12,7 @@ preRunCommands "bash provision.sh"
 dflags "-vcolumns" "-preview=in"
 dflags "-preview=fieldwise" "-preview=rvaluerefparam" "-preview=bitfields" "-dip1000"
 dflags "-ISDL/include" "-P=-ISDL/include" # ImportC
-dflags "-Xcc=-fuse-ld=lld"				  # faster linker
+dflags "-Xcc=-fuse-ld=lld" # faster linker
 
 lflags "-LSDL/build" "-rpath=SDL/build" platform="posix"
 libs "SDL3" "c"
