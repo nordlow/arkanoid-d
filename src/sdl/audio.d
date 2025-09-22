@@ -12,7 +12,7 @@ import sdl;
 struct AudioSpec {
 nothrow:
 	SDL_AudioSpec _spec;
-	alias this = _spec; // for now
+	alias _spec this; // for now
 }
 
 struct AudioDevice {

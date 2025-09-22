@@ -7,7 +7,7 @@ import base;
 
 struct Paddle {
 	Rect shape;
-	alias this = shape;
+	alias shape this;
 	RGBA color;
 nothrow:
 	void update(float dt) {}
@@ -30,7 +30,7 @@ nothrow:
 // TODO: Factor out circle + color rendering into `struct Circle` here
 struct Ball {
 	Cir shape;
-	alias this = shape;
+	alias shape this;
 	Vel velocity;
 	RGBA color;
 	bool active;
@@ -106,7 +106,7 @@ Ball[] makeBalls(uint count, Vel velocity, uint screenWidth, uint screenHeight) 
 
 struct Bullet {
 	Cir shape;
-	alias this = shape;
+	alias shape this;
 	Vel vel;
 	RGBA color;
 	bool active;
