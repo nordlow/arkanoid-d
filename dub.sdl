@@ -8,8 +8,8 @@ dependency "phobos-next" path="../phobos-next"
 preBuildCommands "bash provision.sh"
 preRunCommands "bash provision.sh"
 
-dflags "-vcolumns" "-preview=in"
-dflags "-preview=fieldwise" "-preview=rvaluerefparam" "-preview=bitfields" "-dip1000"
+dflags "-vcolumns"
+dflags "-preview=in" "-preview=fieldwise" "-preview=rvaluerefparam" "-preview=bitfields" "-dip1000"
 dflags "-ISDL/include" "-P=-ISDL/include" # ImportC
 dflags "-Xcc=-fuse-ld=lld" # faster linker
 
