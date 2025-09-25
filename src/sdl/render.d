@@ -109,8 +109,8 @@ nothrow @nogc:
  +/
 void bakeCircleFan(scope ref Renderer rdr, in Cir cir, in SDL_FColor fcolor, scope SDL_Vertex[] verts) pure nothrow @nogc {
 	// center
-	verts[0].position.x = cir.pos.x;
-	verts[0].position.y = cir.pos.y;
+	verts[0].position.x = cir.center.x;
+	verts[0].position.y = cir.center.y;
 	verts[0].color = fcolor;
 	// circumference
 	foreach (const int i; 0 .. Renderer.nSinCos) {
