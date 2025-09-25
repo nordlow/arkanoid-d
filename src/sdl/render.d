@@ -96,7 +96,7 @@ nothrow @nogc:
 		return ret;
 	}
 
-	SDL_Renderer* _ptr;
+	private SDL_Renderer* _ptr;
 	enum nSinCos = 16;
 	alias SinCos = CyclicLookupTable!(float, nSinCos, sin, cos);
 	SinCos _sincos;

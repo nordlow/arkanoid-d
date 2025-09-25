@@ -238,6 +238,7 @@ nothrow:
 	void update(float dt) {}
 	void drawIn(scope ref Renderer rdr) const @trusted {
 		if (active || isFlashing) {
+			// TODO: factor out to `colorAt(float dt)`:
 			RGBA drawColor = color;
 			if (isFlashing) {
 				// Alternate between the original color and a bright white/yellow
@@ -245,8 +246,8 @@ nothrow:
 				if (cast(int)(flashTimer * 10) % 2 == 0)
 					drawColor = Colors.WHITE;
 			}
-			SDL_SetRenderDrawColor(rdr._ptr, drawColor.r, drawColor.g, drawColor.b, drawColor.a);
-			SDL_RenderFillRect(rdr._ptr, cast(SDL_FRect*)&shape);
+			rdr.drawColor = drawColor;
+			rdr.fillRect(*cast(const(SDL_FRect)*)&shape);
 		}
 	}
 }
