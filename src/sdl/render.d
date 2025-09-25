@@ -104,7 +104,7 @@ nothrow @nogc:
 }
 
 /++ Tesselate `cir` to `verts`.
-	TODO: Move to module `tesselation`.
+	TODO: Move to module `nxt.tesselation`.
 	TODO: tigh this to `indicesCircleFan` somehow
  +/
 void bakeCircleFan(scope ref Renderer rdr, in Cir cir, in SDL_FColor fcolor, scope SDL_Vertex[] verts) pure nothrow @nogc {
