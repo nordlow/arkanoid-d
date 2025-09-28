@@ -20,7 +20,4 @@ dflags "-ISDL/include" "-P=-ISDL/include" # ImportC
 # static linking with SDL:
 lflags "SDL/build/libSDL3.a"
 
-libs "c"
-
-
 dflags "-Xcc=-fuse-ld=lld" # faster linker
