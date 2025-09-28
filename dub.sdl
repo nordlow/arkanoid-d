@@ -10,8 +10,8 @@ preRunCommands "bash provision.sh"
 
 dflags "-vcolumns"
 dflags "-preview=in" "-preview=fieldwise" "-preview=rvaluerefparam" "-preview=bitfields" "-dip1000"
-
 dflags "-ISDL/include" "-P=-ISDL/include" # ImportC
+dflags "-Xcc=-fuse-ld=lld" # faster linker
 
 # dynamic linking with SDL:
 # lflags "-LSDL/build" "-rpath=SDL/build" platform="posix"
@@ -19,5 +19,3 @@ dflags "-ISDL/include" "-P=-ISDL/include" # ImportC
 
 # static linking with SDL:
 lflags "SDL/build/libSDL3.a"
-
-dflags "-Xcc=-fuse-ld=lld" # faster linker
