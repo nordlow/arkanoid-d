@@ -49,6 +49,8 @@ if [[ ../CMakeLists.txt -nt "${BUILD_FILE}" ]]; then
 		-G "$CMAKE_BUILD_TOOL" \
 		-DCMAKE_BUILD_TYPE=Release \
 		-DCMAKE_INSTALL_PREFIX="${INSTALL_PREFIX}" \
+		-DSDL_SHARED=ON \
+		-DSDL_STATIC=ON \
 		-DBUILD_SHARED_LIBS=ON \
 		-DBUILD_STATIC_LIBS=ON \
 		..
