@@ -1,1 +1,1 @@
-../../../../.local/sdl-snapshot/include/SDL3/SDL.h
+#include "SDL.h"
