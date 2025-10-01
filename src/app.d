@@ -13,13 +13,13 @@ import nxt.interpolation;
 import nxt.color;
 import nxt.colors;
 import nxt.io;
+import nxt.joystick;
 
 import sdl;
 import base;
 import entities;
 import music;
 import waves;
-import joystick;
 import game;
 
 @safe:

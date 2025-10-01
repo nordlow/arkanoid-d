@@ -6,13 +6,13 @@ import nxt.interpolation;
 import nxt.color;
 import nxt.colors;
 import nxt.algorithm.searching : endsWith;
+import nxt.joystick;
 
 import sdl;
 import base;
 import entities;
 import music;
 import waves;
-import joystick;
 
 @safe:
 
