@@ -23,7 +23,7 @@ nothrow struct Game {
 
 	this(in ScreenSize ssz) @trusted {
 		this.win = Window(ssz, "Arkanoid Clone");
-		joystick = openDefaultJoystick();
+		version(none) joystick = openDefaultJoystick();
 		_rng = Random(unpredictableSeed());
 		const paddleCount = 2;
 		const ballCount = 10;

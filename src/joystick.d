@@ -1,7 +1,5 @@
 module joystick;
 
-import base;
-
 @safe:
 
 Joystick openDefaultJoystick() nothrow
@@ -25,6 +23,7 @@ struct JoystickEvent {
 }
 
 struct Joystick {
+	import core.stdc.stdio : perror;
 	import core.sys.posix.unistd : close, read;
 nothrow:
 	@disable this(this);
@@ -41,6 +40,7 @@ nothrow:
 	}
 
 	this(in char[] devicePath) @trusted {
+		import std.string : toStringz;
 		import core.sys.posix.fcntl : O_RDONLY, O_NONBLOCK, open, fcntl, F_GETFL, F_SETFL;
 		this._fd = open(devicePath.toStringz, O_RDONLY | O_NONBLOCK);
 		if (_fd == -1) {
