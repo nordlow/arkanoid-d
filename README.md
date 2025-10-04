@@ -68,8 +68,8 @@ This is also done automatically by `dub`.
 ## TODO
 
 ### Set attributes of SDL functions
-Use `pragma(attribute, "C_SYMBOL")` to set `nothrow @nogc` for all SDL
-C functions iterated via `traits(members, sdl.SDL)` and `pure` for a
+- Use `#pragma attribute(push, nothrow, nogc)`.
+- C functions iterated via `traits(members, sdl.SDL)` and `pure` for a
 subset of them typically property setters and getters.
 
 See https://dlang.org/spec/importc.html#pragma-attribute
