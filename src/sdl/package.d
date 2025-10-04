@@ -12,9 +12,9 @@ public import sdl.audio;
 public import sdl.joystick;
 public import sdl.pixels;
 
+// TODO: Use mixin to set attributes nothrow @nogc for functions
 import std.traits : isDelegate, isFunctionPointer;
 static foreach (const i, member; __traits(allMembers, sdl.SDL)) {
-// pragma(attributes)
 	static if (isFunctionPointer!(__traits(getMember, sdl.SDL, member))) {
 		/+ pragma(msg, __FILE__, "(", __LINE__, ",1): Debug: function ", member, ": ", __traits(getMember, sdl.SDL, member)); +/
 	} else static if (is(__traits(getMember, sdl.SDL, member) == delegate)) {
