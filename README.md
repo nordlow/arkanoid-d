@@ -67,11 +67,12 @@ This is also done automatically by `dub`.
 
 ## TODO
 
-### Engine
-- Add `bake()` to all `Ent`-types in `entities.d`.
-- Represent rotations using `Ang rotation`.
-- Add `float rotation` and `float rotationVelocity` entity properties.
-- Add `Vec2 rot` and `Vec2 rotVelocity` entity properties.
+### Set attributes of SDL functions
+Use `pragma(attribute, "C_SYMBOL")` to set `nothrow @nogc` for all SDL
+C functions iterated via `traits(members, sdl.SDL)` and `pure` for a
+subset of them typically property setters and getters.
+
+See https://dlang.org/spec/importc.html#pragma-attribute
 
 ### Game
 + Sten brickor som inte går sönder
@@ -80,6 +81,12 @@ This is also done automatically by `dub`.
 + Två brickor
 + Brickor spricker i bitar
 
+
+### Engine
+- Add `bake()` to all `Ent`-types in `entities.d`.
+- Represent rotations using `Ang rotation`.
+- Add `float rotation` and `float rotationVelocity` entity properties.
+- Add `Vec2 rot` and `Vec2 rotVelocity` entity properties.
 
 <!-- Local Variables: -->
 <!-- gptel-model: grok-beta -->
