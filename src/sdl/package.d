@@ -12,22 +12,19 @@ public import sdl.audio;
 public import sdl.joystick;
 public import sdl.pixels;
 
-extern(C) {
 import std.traits : isDelegate, isFunctionPointer;
 static foreach (const i, member; __traits(allMembers, sdl.SDL)) {
 	static if (isFunctionPointer!(__traits(getMember, sdl.SDL, member))) {
 		/+ pragma(msg, __FILE__, "(", __LINE__, ",1): Debug: function ", member, ": ", __traits(getMember, sdl.SDL, member)); +/
-	}
-	else static if (is(__traits(getMember, sdl.SDL, member) == delegate)) {
+	} else static if (is(__traits(getMember, sdl.SDL, member) == delegate)) {
 		/+ pragma(msg, __FILE__, "(", __LINE__, ",1): Debug: delegate ", __traits(getMember, sdl.SDL, member)); +/
-	} else static if (is(typeof(__traits(getMember, sdl.SDL, member)))) {
+	} else static if (is(__traits(getMember, sdl.SDL, member) == enum)) {
+		/+ pragma(msg, __FILE__, "(", __LINE__, ",1): Debug: delegate ", __traits(getMember, sdl.SDL, member)); +/
+	} else static if (is(__traits(getMember, sdl.SDL, member) == struct)) {
+		/+ pragma(msg, __FILE__, "(", __LINE__, ",1): Debug: delegate ", __traits(getMember, sdl.SDL, member)); +/
+	} else static if (is(typeof(__traits(getMember, sdl.SDL, member)))) { // NOTE: here are the most!
 		/+ pragma(msg, __FILE__, "(", __LINE__, ",1): Debug: other ", typeof(__traits(getMember, sdl.SDL, member))); +/
 	}
-/+ static if (is(__traits(getMember, sdl.SDL, member) == enum)) +/
-/+	pragma(msg, __FILE__, "(", __LINE__, ",1): Debug: enum ", __traits(getMember, sdl.SDL, member)); +/
-/+ static if (is(__traits(getMember, sdl.SDL, member) == struct)) +/
-/+	pragma(msg, __FILE__, "(", __LINE__, ",1): Debug: struct ", __traits(getMember, sdl.SDL, member)); +/
-}
 }
 
 struct ScreenSize { int width; int height; }
