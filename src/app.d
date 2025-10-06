@@ -6,13 +6,7 @@ import std.random : uniform, Random, unpredictableSeed;
 import std.math : abs, sqrt;
 import std.string : fromStringz;
 
-import nxt.algorithm.searching;
 import nxt.logger;
-import nxt.geometry;
-import nxt.interpolation;
-import nxt.color;
-import nxt.colors;
-import nxt.io;
 import nxt.joystick;
 
 import sdl;
@@ -27,6 +21,7 @@ import game;
 void main(string[] args) @trusted {
 	setLogLevel(LogLevel.info);
 
+	import nxt.algorithm.searching : canFindAmong;
 	if (args.canFindAmong(["-v", "--verbose"]))
 		SDL_SetLogPriorities(SDL_LogPriority.SDL_LOG_PRIORITY_TRACE);
 	if (args.canFindAmong(["-h", "--help"]))

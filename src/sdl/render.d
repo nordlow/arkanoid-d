@@ -1,6 +1,5 @@
 module sdl.render;
 
-import std.string : fromStringz;
 import base;
 import nxt.lut;
 import nxt.logger;
