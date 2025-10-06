@@ -2,10 +2,6 @@ import core.time : Duration;
 import core.stdc.stdio;
 import core.stdc.math : fabs, sqrtf;
 
-import std.random : uniform, Random, unpredictableSeed;
-import std.math : abs, sqrt;
-import std.string : fromStringz;
-
 import nxt.logger;
 import nxt.joystick;
 
