@@ -1,15 +1,7 @@
-import core.time : Duration;
-import core.stdc.stdio;
-import core.stdc.math : fabs, sqrtf;
-
-import nxt.logger;
 import nxt.joystick;
-
 import sdl;
 import base;
 import entities;
-import music;
-import waves;
 import game;
 
 @safe:
