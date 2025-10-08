@@ -13,20 +13,20 @@ public import sdl.joystick;
 public import sdl.pixels;
 
 // TODO: Factor out into template mixin nxt.meta.setAttributesOfFunctionsIn(Module, AliasSeq attributes).
-static foreach (const i, member; __traits(allMembers, sdl.SDL)) {
-	import std.traits : isDelegate, isFunctionPointer;
-	static if (is(typeof(__traits(getMember, sdl.SDL, member)) == function)) {
-		/+ pragma(msg, __FILE__, "(", __LINE__, ",1): Debug: delegate ", __traits(getMember, sdl.SDL, member)); +/
-	} else static if (is(__traits(getMember, sdl.SDL, member) == struct)) {
-		/+ pragma(msg, __FILE__, "(", __LINE__, ",1): Debug: delegate ", __traits(getMember, sdl.SDL, member)); +/
-	} else static if (is(__traits(getMember, sdl.SDL, member) == enum)) {
-		/+ pragma(msg, __FILE__, "(", __LINE__, ",1): Debug: delegate ", __traits(getMember, sdl.SDL, member)); +/
-	} else static if (is(__traits(getMember, sdl.SDL, member) == delegate)) {
-		/+ pragma(msg, __FILE__, "(", __LINE__, ",1): Debug: delegate ", __traits(getMember, sdl.SDL, member)); +/
-	} else static if (isFunctionPointer!(__traits(getMember, sdl.SDL, member))) {
-		/+ pragma(msg, __FILE__, "(", __LINE__, ",1): Debug: function ", member, ": ", __traits(getMember, sdl.SDL, member)); +/
-	} else static if (is(typeof(__traits(getMember, sdl.SDL, member)))) { // NOTE: here are the most!
-		/+ pragma(msg, __FILE__, "(", __LINE__, ",1): Debug: other ", typeof(__traits(getMember, sdl.SDL, member))); +/
+static foreach (const i, mb; __traits(allMembers, sdl.SDL)) {
+	import std.traits : isDelegate;
+	static if (is(typeof(__traits(getMember, sdl.SDL, mb)) == function)) {
+		/+ pragma(msg, __FILE__, "(", __LINE__, ",1): Debug: delegate ", __traits(getMember, sdl.SDL, mb)); +/
+	} static if (is(typeof(*__traits(getMember, sdl.SDL, mb)) == function)) /+isFunctionPointer+/ {
+		/+ pragma(msg, __FILE__, "(", __LINE__, ",1): Debug: delegate ", __traits(getMember, sdl.SDL, mb)); +/
+	} else static if (is(__traits(getMember, sdl.SDL, mb) == struct)) {
+		/+ pragma(msg, __FILE__, "(", __LINE__, ",1): Debug: delegate ", __traits(getMember, sdl.SDL, mb)); +/
+	} else static if (is(__traits(getMember, sdl.SDL, mb) == enum)) {
+		/+ pragma(msg, __FILE__, "(", __LINE__, ",1): Debug: delegate ", __traits(getMember, sdl.SDL, mb)); +/
+	} else static if (is(__traits(getMember, sdl.SDL, mb) == delegate)) {
+		/+ pragma(msg, __FILE__, "(", __LINE__, ",1): Debug: delegate ", __traits(getMember, sdl.SDL, mb)); +/
+	} else static if (is(typeof(__traits(getMember, sdl.SDL, mb)))) { // NOTE: here are the most!
+		/+ pragma(msg, __FILE__, "(", __LINE__, ",1): Debug: other ", typeof(__traits(getMember, sdl.SDL, mb))); +/
 	}
 }
 
