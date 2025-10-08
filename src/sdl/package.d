@@ -18,7 +18,7 @@ static foreach (const i, mb; __traits(allMembers, sdl.SDL)) {
 	import std.traits : isDelegate;
 	static if (is(typeof(__traits(getMember, sdl.SDL, mb)) == function)) {
 		/+ pragma(msg, __FILE__, "(", __LINE__, ",1): Debug: function: ", __traits(getMember, sdl.SDL, mb)); +/
-	} static if (is(typeof(*__traits(getMember, sdl.SDL, mb)) == function)) /+isFunctionPointer+/ {
+	} static if (is(typeof(*__traits(getMember, sdl.SDL, mb)) == function)) {
 		/+ pragma(msg, __FILE__, "(", __LINE__, ",1): Debug: function pointer: ", typeof(*__traits(getMember, sdl.SDL, mb))); +/
 	} else static if (is(__traits(getMember, sdl.SDL, mb) == struct)) {
 		/+ pragma(msg, __FILE__, "(", __LINE__, ",1): Debug: struct: ", __traits(getMember, sdl.SDL, mb)); +/
