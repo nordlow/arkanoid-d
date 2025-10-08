@@ -16,15 +16,15 @@ public import sdl.pixels;
 static foreach (const i, mb; __traits(allMembers, sdl.SDL)) {
 	import std.traits : isDelegate;
 	static if (is(typeof(__traits(getMember, sdl.SDL, mb)) == function)) {
-		/+ pragma(msg, __FILE__, "(", __LINE__, ",1): Debug: function ", __traits(getMember, sdl.SDL, mb)); +/
+		/+ pragma(msg, __FILE__, "(", __LINE__, ",1): Debug: function: ", __traits(getMember, sdl.SDL, mb)); +/
 	} static if (is(typeof(*__traits(getMember, sdl.SDL, mb)) == function)) /+isFunctionPointer+/ {
-		/+ pragma(msg, __FILE__, "(", __LINE__, ",1): Debug: function pointer ", __traits(getMember, sdl.SDL, mb)); +/
+		/+ pragma(msg, __FILE__, "(", __LINE__, ",1): Debug: function pointer: ", typeof(*__traits(getMember, sdl.SDL, mb))); +/
 	} else static if (is(__traits(getMember, sdl.SDL, mb) == struct)) {
-		/+ pragma(msg, __FILE__, "(", __LINE__, ",1): Debug: struct ", __traits(getMember, sdl.SDL, mb)); +/
+		/+ pragma(msg, __FILE__, "(", __LINE__, ",1): Debug: struct: ", __traits(getMember, sdl.SDL, mb)); +/
 	} else static if (is(__traits(getMember, sdl.SDL, mb) == enum)) {
-		/+ pragma(msg, __FILE__, "(", __LINE__, ",1): Debug: enum ", __traits(getMember, sdl.SDL, mb)); +/
+		/+ pragma(msg, __FILE__, "(", __LINE__, ",1): Debug: enum: ", __traits(getMember, sdl.SDL, mb)); +/
 	} else static if (is(__traits(getMember, sdl.SDL, mb) == delegate)) {
-		/+ pragma(msg, __FILE__, "(", __LINE__, ",1): Debug: delegate ", __traits(getMember, sdl.SDL, mb)); +/
+		/+ pragma(msg, __FILE__, "(", __LINE__, ",1): Debug: delegate: ", __traits(getMember, sdl.SDL, mb)); +/
 	} else static if (is(typeof(__traits(getMember, sdl.SDL, mb)))) { // NOTE: here are the most!
 		/+ pragma(msg, __FILE__, "(", __LINE__, ",1): Debug: other ", typeof(__traits(getMember, sdl.SDL, mb))); +/
 	}
