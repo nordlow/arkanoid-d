@@ -13,6 +13,7 @@ public import sdl.joystick;
 public import sdl.pixels;
 
 // TODO: Factor out into template mixin nxt.meta.setAttributesOfFunctionsIn(Module, AliasSeq attributes).
+version(none)
 static foreach (const i, mb; __traits(allMembers, sdl.SDL)) {
 	import std.traits : isDelegate;
 	static if (is(typeof(__traits(getMember, sdl.SDL, mb)) == function)) {
