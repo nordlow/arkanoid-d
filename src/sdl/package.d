@@ -16,7 +16,7 @@ public import sdl.pixels;
 static foreach (const i, mb; __traits(allMembers, sdl.SDL)) {
 	import std.traits : isDelegate;
 	static if (is(typeof(__traits(getMember, sdl.SDL, mb)) == function)) {
-		/+ pragma(msg, __FILE__, "(", __LINE__, ",1): Debug: function: ", __traits(getMember, sdl.SDL, mb)); +/
+		/+ pragma(msg, __FILE__, "(", __LINE__, ",1): Debug: function: ", typeof(__traits(getMember, sdl.SDL, mb))); +/
 	} static if (is(typeof(*__traits(getMember, sdl.SDL, mb)) == function)) {
 		/+ pragma(msg, __FILE__, "(", __LINE__, ",1): Debug: pointer to function: ", typeof(*__traits(getMember, sdl.SDL, mb))); +/
 	} else static if (is(__traits(getMember, sdl.SDL, mb) == struct)) {
