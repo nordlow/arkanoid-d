@@ -1,4 +1,4 @@
-/++ Common normalizations for audio samples. +/
+/++ Common normalizations for (audio) samples. +/
 module normalization;
 
 import base;
