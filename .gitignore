@@ -8,3 +8,4 @@
 /SDL
 docs/
 dub.selections.json
+bin/arkanoid
