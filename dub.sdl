@@ -2,6 +2,8 @@ name "arkanoid"
 description "Arkandoid Clone in D"
 authors "Per Nordlöw"
 copyright "Copyright © 2025, Per Nordlöw"
+targetPath "bin"
+mainSourceFile "src/app.d"
 
 dependency "nx-d" path="../nwx/nx-d"
 
