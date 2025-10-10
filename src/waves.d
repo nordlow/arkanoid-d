@@ -3,7 +3,7 @@ module waves;
 import base;
 
 import waveform;
-import normalization;
+import nxt.normalization;
 
 alias SampleRate = uint;
 alias FrameCount = uint;
