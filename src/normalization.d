@@ -1,4 +1,4 @@
-/++ Common normalizations for (audio) samples. +/
+/++ Common normalizations. +/
 module normalization;
 
 import base;
@@ -6,58 +6,59 @@ import waves : Sample;
 
 @safe:
 
-T[] peakNormalize(T)(scope return T[] data, in T targetLevel = 1) pure nothrow @nogc {
-	T peak = 0;
+float[] peakNormalize(scope return float[] data, in float targetLevel = 1.0f) pure nothrow @nogc {
+	float peak = 0.0f;
 	foreach (const ref sample; data) {
-		const T absSample = abs(sample);
-		if (absSample > peak)
+		const float absSample = abs(sample);
+		if (absSample > peak) {
 			peak = absSample;
+		}
 	}
-	if (peak == 0)
+	if (peak == 0.0f)
 		return data; // avoid division by zero
-	const T scaleFactor = targetLevel / peak;
+	const float scaleFactor = targetLevel / peak;
 	foreach (ref sample; data)
 		sample *= scaleFactor;
 	return data;
 }
 
-T[] peakNormalizeAlgorithmic(T)(scope return T[] data, in T targetLevel = 1) pure nothrow {
+float[] peakNormalizeAlgorithmic(scope return float[] data, in float targetLevel = 1.0f) pure nothrow {
 	const peak = data.map!(x => abs(x)).maxElement;
-	if (peak == 0)
+	if (peak == 0.0f)
 		return data;
-	const T scaleFactor = targetLevel / peak;
+	const float scaleFactor = targetLevel / peak;
 	foreach (ref sample; data)
 		sample *= scaleFactor;
 	return data;
 }
 
 /++ Method 2: RMS Normalization (for perceived loudness) +/
-T[] rmsNormalize(T)(scope return T[] data, in T targetRMS = 0.25) pure nothrow {
+float[] rmsNormalize(scope return float[] data, in float targetRMS = 0.25f) pure nothrow {
 	// Calculate RMS (Root Mean Square)
-	T sumSquares = 0;
+	float sumSquares = 0.0f;
 	foreach (const ref sample; data)
 		sumSquares += sample * sample;
-	const T rms = sqrt(sumSquares / data.length);
+	const float rms = sqrt(sumSquares / data.length);
 	if (rms == 0)
 		return data; // avoid division by zero
-	const T scaleFactor = targetRMS / rms;
+	const float scaleFactor = targetRMS / rms;
 	foreach (ref sample; data) {
 		sample *= scaleFactor;
-		sample = sample.clamp(-1, 1);
+		sample = sample.clamp(-1.0f, 1.0f);
 	}
 	return data;
 }
 
 // Method 3: Soft Limiting (prevents harsh clipping)
-Sample softLimit(T)(T input, T threshold = 0.95) pure nothrow {
-	const T absInput = abs(input);
+Sample softLimit(float input, float threshold = 0.95f) pure nothrow {
+	const float absInput = abs(input);
 	if (absInput <= threshold) {
 		return cast(Sample)(input * Sample.max);
 	} else {
 		// soft compression above threshold
-		const T excess = absInput - threshold;
-		const T compressed = threshold + excess / (1 + excess * 2);
-		const T sign = input >= 0 ? 1 : -1;
+		const float excess = absInput - threshold;
+		const float compressed = threshold + excess / (1.0f + excess * 2.0f);
+		const float sign = input >= 0.0f ? 1.0f : -1.0f;
 		return cast(Sample)(sign * compressed * Sample.max);
 	}
 }
