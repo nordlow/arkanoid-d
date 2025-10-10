@@ -10,9 +10,8 @@ T[] peakNormalize(T)(scope return T[] data, in T targetLevel = 1) pure nothrow @
 	T peak = 0;
 	foreach (const ref sample; data) {
 		const T absSample = abs(sample);
-		if (absSample > peak) {
+		if (absSample > peak)
 			peak = absSample;
-		}
 	}
 	if (peak == 0)
 		return data; // avoid division by zero
