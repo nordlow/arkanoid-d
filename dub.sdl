@@ -3,7 +3,7 @@ description "Arkandoid Clone in D"
 authors "Per Nordlöw"
 copyright "Copyright © 2025, Per Nordlöw"
 
-dependency "phobos-next" path="../phobos-next"
+dependency "nx-d" path="../nwx/nx-d"
 
 preBuildCommands "bash provision.sh"
 preRunCommands "bash provision.sh"
