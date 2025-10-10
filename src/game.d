@@ -11,7 +11,7 @@ import nxt.joystick;
 import sdl;
 import base;
 import entities;
-import music;
+import nxt.music;
 import waves;
 
 @safe:
