@@ -34,25 +34,25 @@ struct AudioDevice {
 			close();
 	}
 	/++ Bind `stream`. +/
-	void bind(ref AudioStream stream) @trusted {
+	void bind(ref AudioStream stream) @trusted in(_id) {
 		if (!SDL_BindAudioStream(_id, stream._ptr))
 			errorf("Failed to bind %s to device %s: %s", stream._ptr, _id,
 				   SDL_GetError().fromStringz);
 	}
-	void close() @trusted {
+	void close() @trusted in(_id) {
 		tracef("Closing audio device %s", _id);
 		SDL_CloseAudioDevice(_id);
 	}
 	/// Resume all audio playback associated with `this` device.
-	void resume() @trusted @il { SDL_ResumeAudioDevice(_id); }
+	void resume() @trusted @il in(_id) { SDL_ResumeAudioDevice(_id); }
 	/// Pause all audio playback associated with `this` device.
-	void pause() @trusted @il { SDL_PauseAudioDevice(_id); }
+	void pause() @trusted @il in(_id) { SDL_PauseAudioDevice(_id); }
 @property:
 	/// Get gain.
-	float gain() const scope @trusted
+	float gain() const scope @trusted in(_id)
 		=> SDL_GetAudioDeviceGain(_id);
 	/// Set gain.
-	void gain(in float f) const scope @trusted {
+	void gain(in float f) const scope @trusted in(_id) {
 		if (!SDL_SetAudioDeviceGain(_id, f))
 			errorf("Failed to set gain %s on device %s: %s", f, _id,
 				   SDL_GetError().fromStringz);
