@@ -120,7 +120,8 @@ void main(string[] args) @trusted {
 						ball.velocity.y = -abs(ball.velocity.y);
 						const float hitPos = (ball.position.x - paddle.pos.x) / paddle.size.x;
 						ball.velocity.x = 200 * (hitPos - 0.5f) * 2;
-						game.paddleBounceFx.reput();
+						if (game.adev)
+							game.paddleBounceFx.reput();
 					}
 				}
 

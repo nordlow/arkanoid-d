@@ -83,6 +83,7 @@ struct AudioStream {
 	}
 	void put(in AudioBuffer buf) scope @trusted @il {
 		if (!SDL_PutAudioStreamData(_ptr, buf._ptr, cast(int)buf._length)) {
+			assert(0);
 			errorf("Failed to queue audio data: %s", SDL_GetError().fromStringz);
 			return;
 		}

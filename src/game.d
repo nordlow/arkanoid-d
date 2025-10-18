@@ -104,7 +104,7 @@ nothrow struct Game {
 	bool spacePressed, rPressed;
 	bool quit, won, over, paused;
 	Joystick joystick;
-	private AudioDevice adev;
+	AudioDevice adev;
 	private Random _rng;
 	version(none) static immutable soundSampleRate = 44100;
 	AudioFx brickFx, paddleBounceFx, bulletShotFx;
