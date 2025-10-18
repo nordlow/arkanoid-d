@@ -21,7 +21,6 @@ void main(string[] args) @trusted {
 	auto ssz = ScreenSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 	if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO)) {
 		warningf("SDL could not initialize! SDL_Error: %s", SDL_GetError().fromStringz());
-		return;
 	}
 	scope(exit) { SDL_Quit(); }
 

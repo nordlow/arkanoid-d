@@ -42,10 +42,13 @@ nothrow struct Game {
 		paddleBounceFx = AudioFx(FP("sound/ball_gone.wav"));
 		bulletShotFx = AudioFx(FP("sound/bullet_shot.wav"));
 		adev = AudioDevice(brickFx.buffer.spec);
-		// TODO: Remove then needed for this explicit call:
-		adev.bind(brickFx.stream);
-		adev.bind(paddleBounceFx.stream);
-		adev.bind(bulletShotFx.stream);
+		if (adev) {
+			// TODO: Remove then needed for this explicit call:
+			adev.bind(brickFx.stream);
+			adev.bind(paddleBounceFx.stream);
+			adev.bind(bulletShotFx.stream);
+
+		}
 	}
 
 	~this() {}
@@ -141,7 +144,7 @@ void animateBullets(scope ref Game game, float deltaTime) @trusted {
 							&& bullet.pos.y - bullet.rad
 							<= brick.shape.pos.y + brick.shape.size.y) {
 								brick.restartFlashing();
-								game.brickFx.reput();
+								if(game.adev) game.brickFx.reput();
 								bullet.active = false;
 								break;
 							}

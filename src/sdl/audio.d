@@ -47,18 +47,19 @@ struct AudioDevice {
 	void resume() @trusted @il { SDL_ResumeAudioDevice(_id); }
 	/// Pause all audio playback associated with `this` device.
 	void pause() @trusted @il { SDL_PauseAudioDevice(_id); }
+@property:
 	/// Get gain.
-	float gain() const scope @property @trusted
+	float gain() const scope @trusted
 		=> SDL_GetAudioDeviceGain(_id);
 	/// Set gain.
-	void gain(in float f) const scope @property @trusted {
+	void gain(in float f) const scope @trusted {
 		if (!SDL_SetAudioDeviceGain(_id, f))
 			errorf("Failed to set gain %s on device %s: %s", f, _id,
 				   SDL_GetError().fromStringz);
 
 	}
+	bool opCast(T : bool)() const scope => _id != 0;
 	SDL_AudioDeviceID _id;
-	invariant(_id);
 }
 
 struct AudioStream {
