@@ -5,6 +5,68 @@ https://github.com/vhspace/sdl3-rs/tree/master/examples.
 
 Just type `dub` to run.
 
+## Set log-level via CLI flag:
+
+The most common GNU-style command-line flags for adjusting log level are:
+
+1. **`-v, --verbose`** - Increase verbosity (most common)
+   - Often can be repeated: `-v`, `-vv`, `-vvv` for increasing levels
+
+2. **`--debug`** - Enable debug output
+
+3. **`-q, --quiet` or `--silent`** - Decrease verbosity/suppress output
+
+4. **`--log-level=LEVEL`** - Explicitly set log level
+   - Common values: `error`, `warning`, `info`, `debug`, `trace`
+
+The **`-v/--verbose`** flag is by far the most standard and widely recognized across GNU tools (like `tar`, `gcc`, `curl`, etc.). It's the de facto standard for "make the output more detailed."
+
+For applications that need more granular control, `--log-level` is also very common, especially in modern tools.
+
+If you're designing a CLI, I'd recommend:
+- `-v/--verbose` for simple verbosity increase
+- `--log-level=LEVEL` if you need precise control over multiple levels
+
+### Propagate to log-level for libsdl
+
+For SDL3, you can set the log level using:
+
+**1. Environment Variable (before running your application):**
+```bash
+export SDL_LOG=verbose
+```
+
+**2. In Code (C/C++):**
+```c
+#include <SDL3/SDL.h>
+
+// Set global log priority
+SDL_SetLogPriority(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_VERBOSE);
+
+// Or set for all categories
+SDL_SetLogPriorities(SDL_LOG_PRIORITY_DEBUG);
+```
+
+**Available Log Levels:**
+- `SDL_LOG_PRIORITY_VERBOSE` (or `verbose` for env var)
+- `SDL_LOG_PRIORITY_DEBUG` (or `debug`)
+- `SDL_LOG_PRIORITY_INFO` (or `info`)
+- `SDL_LOG_PRIORITY_WARN` (or `warn`)
+- `SDL_LOG_PRIORITY_ERROR` (or `error`)
+- `SDL_LOG_PRIORITY_CRITICAL` (or `critical`)
+
+**Log Categories** (you can set different levels per category):
+- `SDL_LOG_CATEGORY_APPLICATION`
+- `SDL_LOG_CATEGORY_ERROR`
+- `SDL_LOG_CATEGORY_SYSTEM`
+- `SDL_LOG_CATEGORY_AUDIO`
+- `SDL_LOG_CATEGORY_VIDEO`
+- `SDL_LOG_CATEGORY_RENDER`
+- `SDL_LOG_CATEGORY_INPUT`
+- And more...
+
+The environment variable approach is useful for debugging without recompiling.
+
 ## Provisioning of Dependencies
 
 ```sh
