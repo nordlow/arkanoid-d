@@ -10,8 +10,9 @@ dependency "nx-d" path="../nwx/nx-d"
 preBuildCommands "bash provision.sh"
 preRunCommands "bash provision.sh"
 
-dflags "-vcolumns" "-verrors=simple"
-dflags "-preview=in" "-preview=fieldwise" "-preview=rvaluerefparam" "-preview=bitfields" "-dip1000"
+dflags "-vcolumns" "-verrors=simple" "-preview=in" "-preview=fieldwise" "-preview=rvaluerefparam" "-preview=bitfields" "-dip1000"
+dflags "-preview=fastdfa" platform="dmd"
+
 dflags "-ISDL/include" "-P=-ISDL/include" # ImportC
 dflags "-Xcc=-fuse-ld=lld" # faster linker
 
