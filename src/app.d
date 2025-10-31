@@ -74,7 +74,8 @@ void main(string[] args) @trusted {
 						bullet.pos = Pos(paddle.pos.x + paddle.size.x / 2,
 										 paddle.pos.y);
 						bullet.active = true;
-						game.bulletShotFx.reput();
+						if (game.bulletShotFx)
+							game.bulletShotFx.reput();
 						break;
 					}
 				}

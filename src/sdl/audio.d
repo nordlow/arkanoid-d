@@ -157,7 +157,7 @@ struct AudioBuffer {
 pure nothrow @property:
 	AudioSpec spec() const scope => _spec;
 	const(void)[] opSlice() const return scope @trusted => _ptr[0 .. _length];
-	bool opCast(T : bool)() const scope => _ptr !is null;
+	bool opCast(T : bool)() const scope => _ptr && _length;
 private:
 	AudioSpec _spec;
 	void* _ptr;
