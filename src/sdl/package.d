@@ -34,9 +34,7 @@ struct ScreenSize { int width; int height; }
 alias RGBA = ColorRGBA;
 alias HSV = ColorHSV;
 
-nothrow @nogc:
-
-extern(C):
+extern(C) nothrow @nogc:
 
 // Window flags
 enum uint SDL_WINDOW_RESIZABLE = 0x00000020;

@@ -59,3 +59,5 @@ struct Window {
 	bool inFullscreen;
 }
 
+extern(C) {
+}
