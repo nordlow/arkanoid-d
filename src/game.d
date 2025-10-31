@@ -137,17 +137,13 @@ void animateBullets(scope ref Game game, float deltaTime) @trusted {
 		foreach (ref brick; game.scene.brickGrid[]) {
 			if (!brick.active || brick.isFlashing)
 				continue;
-			if (bullet.pos.x + bullet.rad >= brick.shape.pos.x
-							&& bullet.pos.x - bullet.rad
-							<= brick.shape.pos.x + brick.shape.size.x
-							&& bullet.pos.y + bullet.rad >= brick.shape.pos.y
-							&& bullet.pos.y - bullet.rad
-							<= brick.shape.pos.y + brick.shape.size.y) {
-								brick.restartFlashing();
-								if(game.adev) game.brickFx.reput();
-								bullet.active = false;
-								break;
-							}
+			if (bullet.pos.x + bullet.rad >= brick.shape.pos.x && bullet.pos.x - bullet.rad <= brick.shape.pos.x + brick.shape.size.x && bullet.pos.y + bullet.rad >= brick.shape.pos.y && bullet.pos.y - bullet.rad <= brick.shape.pos.y + brick.shape.size.y) {
+				brick.restartFlashing();
+				if(game.adev)
+					game.brickFx.reput();
+				bullet.active = false;
+				break;
+			}
 		}
 	}
 }
