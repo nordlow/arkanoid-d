@@ -63,7 +63,7 @@ struct AudioDevice {
 }
 
 struct AudioStream {
-/+ nothrow: +/
+/+nothrow+/ @il:
 	@disable this(this);
 	this(in AudioSpec spec) @trusted {
 		// TODO: this cast shouldn' be needed. Add extern(C) to override.
@@ -77,11 +77,11 @@ struct AudioStream {
 		SDL_DestroyAudioStream(_ptr);
 	}
 	/++ Unbind `this`. +/
-	void unbind() @trusted @il {
+	void unbind() @trusted {
 		tracef("Unbinding %s ...", _ptr);
 		return SDL_UnbindAudioStream(_ptr);
 	}
-	void put(in AudioBuffer buf) scope @trusted @il {
+	void put(in AudioBuffer buf) scope @trusted {
 		if (!SDL_PutAudioStreamData(_ptr, buf._ptr, cast(int)buf._length)) {
 			assert(0);
 			errorf("Failed to queue audio data: %s", SDL_GetError().fromStringz);
@@ -89,35 +89,35 @@ struct AudioStream {
 		}
 	}
 	alias opCall = put;
-	void clearAndPut(in AudioBuffer buf) scope @trusted @il {
+	void clearAndPut(in AudioBuffer buf) scope @trusted {
 		clear();
 		return put(buf);
 	}
 	/++ Tell the stream that you're done sending data, and anything being
 		buffered should be converted/resampled and made available
 		immediately. +/
-	void flush() scope @trusted @il {
+	void flush() scope @trusted {
 		if (!SDL_FlushAudioStream(_ptr))
 			return errorf("Failed to flush %s: %s", _ptr, SDL_GetError().fromStringz);
 	}
 	/++ Clear|Drop any queued|pending data in the stream. +/
-	void clear() scope @trusted @il {
+	void clear() scope @trusted {
 		if (!SDL_ClearAudioStream(_ptr))
 			return errorf("Failed to clear %s: %s", _ptr, SDL_GetError().fromStringz);
 	}
 	/++ Lock `this` for serialized access. +/
-	void lock() scope @trusted @il {
+	void lock() scope @trusted {
 		if (!SDL_LockAudioStream(_ptr))
 			return errorf("Failed to lock %s: %s", _ptr, SDL_GetError().fromStringz);
 	}
 	/++ Unlock `this` for serialized access. +/
-	void unlock() scope @trusted @il {
+	void unlock() scope @trusted {
 		if (!SDL_LockAudioStream(_ptr))
 			return errorf("Failed to unlock %s: %s", _ptr, SDL_GetError().fromStringz);
 	}
 @property:
 	/++ Get gain (volume), defaulted to 1.0. +/
-	float gain() const scope @trusted @il {
+	float gain() const scope @trusted {
 		const ret = SDL_GetAudioStreamGain((cast()this)._ptr);
 		if (ret == -1)
 			errorf("Failed to get gain on stream %s: %s", _ptr,
@@ -125,16 +125,16 @@ struct AudioStream {
 		return ret;
 	}
 	/++ Set gain (volume) to `f` in range 0.0 to 1.0. +/
-	void gain(float f) scope @trusted @il {
+	void gain(float f) scope @trusted {
 		if (!SDL_SetAudioStreamGain((cast()this)._ptr, f))
 			errorf("Failed to set gain %s on device %s: %s", f, _ptr,
 				   SDL_GetError().fromStringz);
 	}
 	/++	Returns: amount of converted audio data, in bytes, currently available to be retrieved from the stream.	+/
-	int availableByteCount() const scope @trusted @il
+	int availableByteCount() const scope @trusted
 		=> SDL_GetAudioStreamAvailable((cast()this)._ptr);
 	/++	Returns: amount of raw, unconverted audio data, in bytes, currently queued in the stream. +/
-	int queuedByteCount() const scope @trusted @il
+	int queuedByteCount() const scope @trusted
 		=> SDL_GetAudioStreamQueued((cast()this)._ptr);
 
 	private SDL_AudioStream* _ptr;
