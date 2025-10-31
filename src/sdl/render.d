@@ -40,7 +40,7 @@ nothrow @nogc:
 		return ret;
 	}
 
-	~this() @nogc @trusted @il
+	~this() nothrow @nogc @trusted @il
 		=> SDL_DestroyRenderer(_ptr);
 
 	/++ Clear the current rendering target with the current drawing color set
