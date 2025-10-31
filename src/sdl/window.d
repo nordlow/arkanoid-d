@@ -25,7 +25,7 @@ struct Window {
 		fullscreen = true;
 	}
 
-	~this() @trusted @il
+	~this() @trusted @il /+ nothrow @nogc +/
 		=> SDL_DestroyWindow(_ptr);
 
 	ScreenSize size() const scope nothrow @nogc @property @trusted @il  {
