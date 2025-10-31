@@ -137,7 +137,7 @@ struct AudioStream {
 	/++	Returns: amount of raw, unconverted audio data, in bytes, currently queued in the stream. +/
 	int queuedByteCount() const scope @trusted
 		=> SDL_GetAudioStreamQueued((cast()this)._ptr);
-
+	bool opCast(T : bool)() const scope => _ptr != null;
 	private SDL_AudioStream* _ptr;
 }
 
