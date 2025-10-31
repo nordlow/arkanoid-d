@@ -16,9 +16,10 @@ nothrow:
 }
 
 struct AudioDevice {
-	/+ nothrow: +/
+/+nothrow+/ @il:
 	@disable this(this);
 	this(in AudioSpec desiredSpec, uint devid = SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK) @trusted {
+		pragma(inline);
 		int allowed_changes;
 		// TODO: this cast shouldn' be needed. Add extern(C) to override.
 		_id = SDL_OpenAudioDevice(devid, cast(SDL_AudioSpec*)(&desiredSpec._spec));
@@ -44,9 +45,9 @@ struct AudioDevice {
 		SDL_CloseAudioDevice(_id);
 	}
 	/// Resume all audio playback associated with `this` device.
-	void resume() @trusted @il in(_id) { SDL_ResumeAudioDevice(_id); }
+	void resume() @trusted in(_id) { SDL_ResumeAudioDevice(_id); }
 	/// Pause all audio playback associated with `this` device.
-	void pause() @trusted @il in(_id) { SDL_PauseAudioDevice(_id); }
+	void pause() @trusted in(_id) { SDL_PauseAudioDevice(_id); }
 @property:
 	/// Get gain.
 	float gain() const scope @trusted in(_id)
