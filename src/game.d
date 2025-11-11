@@ -26,6 +26,7 @@ nothrow struct Game {
 		this.win = Window(ssz, "Arkanoid Clone");
 		joystick = openDefaultJoystick();
 		spacemouse = openDefaultSpaceMouse();
+		spacemouse.tryOpen(nonBlocking: true);
 		_rng = Random(unpredictableSeed());
 		const paddleCount = 2;
 		const ballCount = 10;
@@ -90,6 +91,7 @@ nothrow struct Game {
 				break;
 			}
 		}
+		while (spacemouse.readStateFrame()) {}
 	}
 
 	void togglePause() {
