@@ -92,8 +92,7 @@ nothrow struct Game {
 			}
 		}
 		if (spacemouse.isOpen) {
-			while (spacemouse.readStateFrame()) {
-				// TODO: Use spacemouse.state
+			while (spacemouse.tryReadNextEvent()) {
 				info("TODO: Use state: ", spacemouse.state);
 			}
 		}
