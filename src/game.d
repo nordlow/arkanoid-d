@@ -91,9 +91,9 @@ nothrow struct Game {
 				break;
 			}
 		}
-		dbg("here");
 		while (spacemouse.readStateFrame()) {
-			info("state:", spacemouse.state);
+			// TODO: Use spacemouse.state
+			info("TODO: Use state: ", spacemouse.state);
 		}
 	}
 
