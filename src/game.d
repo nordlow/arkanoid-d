@@ -91,6 +91,7 @@ nothrow struct Game {
 				break;
 			}
 		}
+		// TODO: SDL3 detects SpaceMouse automatically so choose either SDL3 or `nxt.spacemouse`.
 		if (spacemouse.isOpen) {
 			while (spacemouse.tryReadNextEvent()) {
 				info("TODO: Use state: ", spacemouse.state);
