@@ -7,7 +7,7 @@ import nxt.color;
 import nxt.colors;
 import nxt.algorithm.searching : endsWith;
 import nxt.joystick;
-import nxt.space_mouse;
+import nxt.spacemouse;
 
 import sdl;
 import base;
