@@ -91,7 +91,10 @@ nothrow struct Game {
 				break;
 			}
 		}
-		while (spacemouse.readStateFrame()) {}
+		dbg("here");
+		while (spacemouse.readStateFrame()) {
+			info("state:", spacemouse.state);
+		}
 	}
 
 	void togglePause() {
