@@ -24,7 +24,8 @@ nothrow struct Game {
 
 	this(in ScreenSize ssz) @trusted {
 		this.win = Window(ssz, "Arkanoid Clone");
-		version(none) joystick = openDefaultJoystick();
+		joystick = openDefaultJoystick();
+		spacemouse = openDefaultSpaceMouse();
 		_rng = Random(unpredictableSeed());
 		const paddleCount = 2;
 		const ballCount = 10;
@@ -105,6 +106,7 @@ nothrow struct Game {
 	bool spacePressed, rPressed;
 	bool quit, won, over, paused;
 	Joystick joystick;
+	SpaceMouse spacemouse;
 	AudioDevice adev;
 	private Random _rng;
 	version(none) static immutable soundSampleRate = 44100;
